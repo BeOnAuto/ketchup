@@ -147,8 +147,59 @@ Session only`,
     );
 
     const context: ReminderContext = { hook: 'SessionStart' };
-    const result = loadReminders(remindersDir, context);
+    const result = loadReminders([remindersDir], context);
 
     expect(result.map((r) => r.name)).toEqual(['high-priority', 'always']);
+  });
+
+  it('loads from multiple directories and deduplicates by filename', () => {
+    const dir1 = path.join(tempDir, 'plugin-reminders');
+    const dir2 = path.join(tempDir, 'project-reminders');
+    fs.mkdirSync(dir1);
+    fs.mkdirSync(dir2);
+
+    fs.writeFileSync(
+      path.join(dir1, 'shared.md'),
+      `---
+priority: 100
+---
+Plugin version`,
+    );
+    fs.writeFileSync(
+      path.join(dir2, 'shared.md'),
+      `---
+priority: 50
+---
+Project version (should be skipped)`,
+    );
+    fs.writeFileSync(
+      path.join(dir2, 'project-only.md'),
+      `---
+priority: 10
+---
+Project only`,
+    );
+
+    const result = loadReminders([dir1, dir2], { hook: 'SessionStart' });
+
+    expect(result.map((r) => r.name)).toEqual(['shared', 'project-only']);
+    expect(result.find((r) => r.name === 'shared')?.content).toBe('Plugin version');
+  });
+
+  it('skips non-existent directories in the list', () => {
+    const existingDir = path.join(tempDir, 'existing');
+    fs.mkdirSync(existingDir);
+    fs.writeFileSync(
+      path.join(existingDir, 'reminder.md'),
+      `---
+priority: 10
+---
+Content`,
+    );
+
+    const result = loadReminders([path.join(tempDir, 'nonexistent'), existingDir], { hook: 'SessionStart' });
+
+    expect(result).toHaveLength(1);
+    expect(result[0].name).toBe('reminder');
   });
 });

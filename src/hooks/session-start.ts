@@ -17,12 +17,12 @@ export interface SessionStartDiagnostics {
 }
 
 export async function handleSessionStart(
-  claudeDir: string,
+  claudeDirOrPaths: string | ResolvedPaths,
   sessionId: string = '',
   agentType?: string,
 ): Promise<HookResult & { diagnostics: SessionStartDiagnostics }> {
-  const paths = await resolvePaths(claudeDir);
-  const reminderFiles = scanReminders(paths.remindersDir);
+  const paths = typeof claudeDirOrPaths === 'string' ? await resolvePaths(claudeDirOrPaths) : claudeDirOrPaths;
+  const reminderFiles = paths.remindersDirs.flatMap((dir) => scanReminders(dir));
 
   if (agentType === 'validator') {
     activityLog(paths.autoDir, sessionId, 'session-start', 'skipped reminders for validator session');
@@ -41,7 +41,7 @@ export async function handleSessionStart(
     };
   }
 
-  const reminders = loadReminders(paths.remindersDir, { hook: 'SessionStart' });
+  const reminders = loadReminders(paths.remindersDirs, { hook: 'SessionStart' });
 
   activityLog(paths.autoDir, sessionId, 'session-start', `loaded ${reminders.length} reminders`);
 

@@ -6,8 +6,8 @@ export interface ResolvedPaths {
   projectRoot: string;
   claudeDir: string;
   autoDir: string;
-  remindersDir: string;
-  validatorsDir: string;
+  remindersDirs: string[];
+  validatorsDirs: string[];
 }
 
 export function resolveClaudeDirFromScript(scriptDir: string): string {
@@ -26,7 +26,30 @@ export async function resolvePaths(claudeDir: string): Promise<ResolvedPaths> {
     projectRoot,
     claudeDir,
     autoDir,
-    remindersDir: path.join(autoDir, 'reminders'),
-    validatorsDir: path.join(autoDir, 'validators'),
+    remindersDirs: [path.join(autoDir, 'reminders')],
+    validatorsDirs: [path.join(autoDir, 'validators')],
   };
+}
+
+export async function resolvePathsFromEnv(): Promise<ResolvedPaths> {
+  const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT;
+  const pluginData = process.env.CLAUDE_PLUGIN_DATA;
+
+  if (pluginRoot && pluginData) {
+    const projectRoot = process.cwd();
+    const claudeDir = path.join(projectRoot, '.claude');
+    const projectAutoDir = path.join(projectRoot, DEFAULT_AUTO_DIR);
+    const autoDir = projectAutoDir;
+
+    return {
+      projectRoot,
+      claudeDir,
+      autoDir,
+      remindersDirs: [path.join(pluginRoot, 'reminders'), path.join(projectAutoDir, 'reminders')],
+      validatorsDirs: [path.join(pluginRoot, 'validators'), path.join(projectAutoDir, 'validators')],
+    };
+  }
+
+  const claudeDir = resolveClaudeDirFromScript(__dirname);
+  return resolvePaths(claudeDir);
 }

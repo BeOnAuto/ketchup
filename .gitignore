@@ -15,12 +15,13 @@ docs/.vitepress/cache
 .playwright-mcp
 .claude/
 .claude.old
-.claude-plugin/
 .vscode/
 .idea/
 
 # Local install artifacts
 .claude-auto/scripts/
+.claude-auto/validators/
+.claude-auto/reminders/
 
 # Temp files
 .changeset-prompt-*.txt

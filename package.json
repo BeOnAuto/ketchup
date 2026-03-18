@@ -84,7 +84,11 @@
     "templates/",
     "scripts/",
     "commands/",
-    ".claude-auto/"
+    ".claude-plugin/",
+    "hooks/",
+    "validators/",
+    "reminders/",
+    "agents/"
   ],
   "engines": {
     "node": ">=18.0.0"

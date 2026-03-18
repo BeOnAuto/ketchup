@@ -58,13 +58,21 @@ export function sortByPriority(reminders: Reminder[]): Reminder[] {
   return [...reminders].sort((a, b) => b.priority - a.priority);
 }
 
-export function loadReminders(remindersDir: string, context: ReminderContext): Reminder[] {
-  const filenames = scanReminders(remindersDir);
+export function loadReminders(dirs: string[], context: ReminderContext): Reminder[] {
+  const reminders: Reminder[] = [];
+  const seen = new Set<string>();
 
-  const reminders = filenames.map((filename) => {
-    const content = fs.readFileSync(path.join(remindersDir, filename), 'utf8');
-    return parseReminder(content, filename);
-  });
+  for (const dir of dirs) {
+    const filenames = scanReminders(dir);
+    for (const filename of filenames) {
+      if (seen.has(filename)) {
+        continue;
+      }
+      seen.add(filename);
+      const content = fs.readFileSync(path.join(dir, filename), 'utf8');
+      reminders.push(parseReminder(content, filename));
+    }
+  }
 
   const matched = matchReminders(reminders, context);
   return sortByPriority(matched);

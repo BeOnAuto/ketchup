@@ -6,20 +6,21 @@ import { isCommitCommand } from '../src/commit-validator.js';
 import { parseHookInput } from '../src/hook-input.js';
 import { writeHookLog } from '../src/hook-logger.js';
 import { handlePreToolUse } from '../src/hooks/pre-tool-use.js';
-import { resolveClaudeDirFromScript, resolvePaths } from '../src/path-resolver.js';
+import { resolvePathsFromEnv } from '../src/path-resolver.js';
+import { logPluginDiagnostics } from '../src/plugin-debug.js';
 
 const input = parseHookInput(fs.readFileSync(0, 'utf-8'));
-const claudeDir = resolveClaudeDirFromScript(__dirname);
 const startTime = Date.now();
 
 (async () => {
-  const { autoDir } = await resolvePaths(claudeDir);
+  const paths = await resolvePathsFromEnv();
+  logPluginDiagnostics('PreToolUse', paths);
   try {
     const toolInput = input.tool_input || {};
     const command = toolInput.command as string | undefined;
-    const result = await handlePreToolUse(claudeDir, input.session_id, toolInput, { cwd: input.cwd });
+    const result = await handlePreToolUse(paths, input.session_id, toolInput, { cwd: input.cwd });
     if (command && isCommitCommand(command)) {
-      writeHookLog(autoDir, {
+      writeHookLog(paths.autoDir, {
         hookName: 'pre-tool-use',
         timestamp: new Date().toISOString(),
         input,
@@ -30,8 +31,8 @@ const startTime = Date.now();
     console.log(JSON.stringify(result));
     process.exit(0);
   } catch (err) {
-    activityLog(autoDir, input.session_id, 'pre-tool-use', `error: ${String(err)}`);
-    writeHookLog(autoDir, {
+    activityLog(paths.autoDir, input.session_id, 'pre-tool-use', `error: ${String(err)}`);
+    writeHookLog(paths.autoDir, {
       hookName: 'pre-tool-use',
       timestamp: new Date().toISOString(),
       input,

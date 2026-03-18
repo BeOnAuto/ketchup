@@ -18,12 +18,12 @@ export interface UserPromptSubmitDiagnostics {
 }
 
 export async function handleUserPromptSubmit(
-  claudeDir: string,
+  claudeDirOrPaths: string | ResolvedPaths,
   sessionId: string,
   prompt?: string,
 ): Promise<HookResult & { diagnostics: UserPromptSubmitDiagnostics }> {
-  const paths = await resolvePaths(claudeDir);
-  const reminderFiles = scanReminders(paths.remindersDir);
+  const paths = typeof claudeDirOrPaths === 'string' ? await resolvePaths(claudeDirOrPaths) : claudeDirOrPaths;
+  const reminderFiles = paths.remindersDirs.flatMap((dir) => scanReminders(dir));
 
   if (isValidatorSession(prompt)) {
     activityLog(paths.autoDir, sessionId, 'user-prompt-submit', 'skipped reminders for validator session');
@@ -42,7 +42,7 @@ export async function handleUserPromptSubmit(
     };
   }
 
-  const reminders = loadReminders(paths.remindersDir, { hook: 'UserPromptSubmit' });
+  const reminders = loadReminders(paths.remindersDirs, { hook: 'UserPromptSubmit' });
 
   const reminderContent = reminders.map((r) => r.content).join('\n\n');
 

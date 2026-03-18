@@ -5,7 +5,7 @@ import { describe, expect, it } from 'vitest';
 import { loadValidators } from './validator-loader.js';
 
 describe('default validators', () => {
-  const validatorsDir = path.resolve(__dirname, '..', '.claude-auto', 'validators');
+  const validatorsDir = path.resolve(__dirname, '..', 'validators');
 
   it('no-dangerous-git.md exists and is a valid enabled validator', () => {
     const validators = loadValidators([validatorsDir]);

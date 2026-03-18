@@ -25,13 +25,31 @@ Claude Auto installs a quality loop into Claude Code via hooks. Validators gate 
 
 ## Installation
 
+Claude Auto supports two installation modes:
+
+### As a Claude Code Plugin (recommended)
+
+```bash
+claude --plugin-dir /path/to/claude-auto
+```
+
+In plugin mode, Claude Code sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` automatically. Validators and reminders load from the plugin package, with optional project-local overrides from `.claude-auto/`. State and logs go to the project's `.claude-auto/` directory.
+
+### Legacy Install (copies into project)
+
 ```bash
 npx claude-auto install
 ```
 
+Copies scripts, validators, reminders, and agents into the project's `.claude-auto/` directory and creates `.claude/settings.json` with hook configuration.
+
 ## Quick Start
 
 ```bash
+# Plugin mode
+claude --plugin-dir /path/to/claude-auto
+
+# Or legacy mode
 npx claude-auto install
 npx claude-auto doctor
 ```
@@ -202,6 +220,20 @@ flowchart LR
 
 Hook scripts read JSON from stdin, delegate to handlers in `src/hooks/`, log results, and output JSON to stdout. Validators are batched (default 3 per Claude CLI call) for efficient parallel validation. Reminders are matched by hook type, mode, and tool name, then injected as `<system-reminder>` blocks.
 
+### Dual-Mode Architecture
+
+Claude Auto detects its runtime mode via environment variables:
+
+| | Plugin Mode | Legacy Mode |
+|---|---|---|
+| **Detection** | `CLAUDE_PLUGIN_ROOT` is set | Environment variable absent |
+| **Validators/Reminders** | Loaded from plugin package + project `.claude-auto/` | Loaded from project `.claude-auto/` (copied at install) |
+| **State/Logs** | Project `.claude-auto/` | Project `.claude-auto/` |
+| **Deny-list** | Project `.claude/deny-list.*.txt` | Project `.claude/deny-list.*.txt` |
+| **Script execution** | `$CLAUDE_PLUGIN_ROOT/dist/bundle/scripts/` | `$PROJECT/.claude-auto/scripts/` |
+
+In plugin mode, validators and reminders are loaded from **both** the plugin package and the project's `.claude-auto/` directory (if it exists), allowing project-specific overrides. Plugin versions take precedence when filenames collide.
+
 ---
 
 ## Troubleshooting
@@ -235,9 +267,10 @@ npx claude-auto repair
 
 ```bash
 DEBUG=claude-auto npx claude-auto install
+CLAUDE_AUTO_DEBUG=1 claude --plugin-dir /path/to/claude-auto
 ```
 
-Debug logs write to `.claude-auto/logs/claude-auto/debug.log`.
+`CLAUDE_AUTO_DEBUG` writes diagnostics to `.claude-auto/logs/plugin-debug.log`.
 
 ---
 
@@ -261,17 +294,25 @@ Debug logs write to `.claude-auto/logs/claude-auto/debug.log`.
 ## Architecture
 
 ```
+.claude-plugin/
+└── plugin.json           # Plugin manifest (name, version, description)
+hooks/
+└── hooks.json            # Plugin hook definitions (SessionStart, PreToolUse, etc.)
+validators/               # Default commit validators (17 rules)
+reminders/                # Default context-injection reminders (10 files)
+agents/                   # Sub-agent definitions (validator agent)
 src/
 ├── cli/                  # CLI commands (install, doctor, repair, status, reminders, tui)
 │   └── tui/              # Full-screen terminal UI with live log tailing
 ├── hooks/                # Hook handlers (session-start, pre-tool-use, user-prompt-submit, auto-continue)
+├── path-resolver.ts      # Dual-mode path resolution (plugin vs legacy)
 ├── commit-validator.ts   # Batched commit validation with appeal support
 ├── config-loader.ts      # Cosmiconfig-based configuration
 ├── deny-list.ts          # File protection via micromatch patterns
-├── reminder-loader.ts    # Markdown + YAML frontmatter reminder system
+├── reminder-loader.ts    # Multi-directory reminder system with deduplication
 ├── settings-merger.ts    # Three-layer settings merge with lock-file caching
 ├── hook-state.ts         # Hook state management (.claude.hooks.json)
-├── validator-loader.ts   # Markdown validator loader
+├── validator-loader.ts   # Multi-directory validator loader
 └── index.ts              # Public API barrel exports
 scripts/
 ├── session-start.ts      # SessionStart hook entry-point
