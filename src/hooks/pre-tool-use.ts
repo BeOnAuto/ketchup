@@ -97,6 +97,17 @@ async function handleCommitValidation(
   gitCwd: string,
 ): Promise<HookResult> {
   const state = createHookState(paths.autoDir).read();
+
+  if (state.validateCommit.mode === 'off') {
+    activityLog(paths.autoDir, sessionId, 'pre-tool-use', 'commit allowed (validation off)');
+    return {
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'allow',
+      },
+    };
+  }
+
   const allValidators = loadValidators(paths.validatorsDirs, state.overrides.validators);
   const validators = allValidators.filter((v) => v.name !== 'appeal-system');
 
