@@ -1,5 +1,21 @@
 # claude-ketchup
 
+## 0.17.0
+
+### Minor Changes
+
+- 7f1c8a4: - Added runtime configuration management for validators and reminders via overrides in hook state
+  - Added /claude-auto:config skill for managing configuration
+  - Added first-setup guidance displayed on initial plugin use
+  - Documented custom validators and reminders in README
+- cdc45a8: - Added native Claude Code plugin support as an alternative to the legacy install method
+  - Runtime automatically detects which mode is active via CLAUDE_PLUGIN_ROOT environment variable
+  - Existing installations continue to work without changes
+
+### Patch Changes
+
+- 57a518f: - Fixed commit validation ignoring the "off" setting, so disabling validators now works as expected
+
 ## 0.16.0
 
 ### Minor Changes
