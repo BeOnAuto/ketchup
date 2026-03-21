@@ -147,17 +147,11 @@ export async function install(targetPath?: string, options?: { local?: boolean }
 
   const commands = copyDir(path.join(pkgRoot, 'commands'), path.join(claudeDir, 'commands'));
 
-  const validators = local
-    ? emptyResult
-    : copyDir(path.join(pkgRoot, '.claude-auto', 'validators'), path.join(autoDir, 'validators'));
+  const validators = local ? emptyResult : copyDir(path.join(pkgRoot, 'validators'), path.join(autoDir, 'validators'));
 
-  const reminders = local
-    ? emptyResult
-    : copyDir(path.join(pkgRoot, '.claude-auto', 'reminders'), path.join(autoDir, 'reminders'));
+  const reminders = local ? emptyResult : copyDir(path.join(pkgRoot, 'reminders'), path.join(autoDir, 'reminders'));
 
-  const agents = local
-    ? emptyResult
-    : copyDir(path.join(pkgRoot, '.claude-auto', 'agents'), path.join(claudeDir, 'agents'));
+  const agents = local ? emptyResult : copyDir(path.join(pkgRoot, 'agents'), path.join(claudeDir, 'agents'));
 
   // Initialize hook state with defaults if it doesn't exist
   const hookState = createHookState(autoDir);

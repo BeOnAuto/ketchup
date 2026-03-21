@@ -5,17 +5,18 @@ import { activityLog } from '../src/activity-logger.js';
 import { parseHookInput } from '../src/hook-input.js';
 import { writeHookLog } from '../src/hook-logger.js';
 import { handleUserPromptSubmit } from '../src/hooks/user-prompt-submit.js';
-import { resolveClaudeDirFromScript, resolvePaths } from '../src/path-resolver.js';
+import { resolvePathsFromEnv } from '../src/path-resolver.js';
+import { logPluginDiagnostics } from '../src/plugin-debug.js';
 
 const input = parseHookInput(fs.readFileSync(0, 'utf-8'));
-const claudeDir = resolveClaudeDirFromScript(__dirname);
 const startTime = Date.now();
 
 (async () => {
-  const { autoDir } = await resolvePaths(claudeDir);
+  const paths = await resolvePathsFromEnv();
+  logPluginDiagnostics('UserPromptSubmit', paths);
   try {
-    const { diagnostics, ...result } = await handleUserPromptSubmit(claudeDir, input.session_id, input.prompt);
-    writeHookLog(autoDir, {
+    const { diagnostics, ...result } = await handleUserPromptSubmit(paths, input.session_id, input.prompt);
+    writeHookLog(paths.autoDir, {
       hookName: 'user-prompt-submit',
       timestamp: new Date().toISOString(),
       input: { ...input, prompt: input.prompt ? `[${input.prompt.length} chars]` : undefined },
@@ -28,8 +29,8 @@ const startTime = Date.now();
     console.log(JSON.stringify(result));
     process.exit(0);
   } catch (err) {
-    activityLog(autoDir, input.session_id, 'user-prompt-submit', `error: ${String(err)}`);
-    writeHookLog(autoDir, {
+    activityLog(paths.autoDir, input.session_id, 'user-prompt-submit', `error: ${String(err)}`);
+    writeHookLog(paths.autoDir, {
       hookName: 'user-prompt-submit',
       timestamp: new Date().toISOString(),
       input: { ...input, prompt: input.prompt ? `[${input.prompt.length} chars]` : undefined },

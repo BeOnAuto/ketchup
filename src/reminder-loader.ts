@@ -3,6 +3,8 @@ import * as path from 'node:path';
 
 import matter from 'gray-matter';
 
+import type { ReminderOverride } from './hook-state.js';
+
 export interface ReminderWhen {
   hook?: string;
   mode?: string;
@@ -58,13 +60,35 @@ export function sortByPriority(reminders: Reminder[]): Reminder[] {
   return [...reminders].sort((a, b) => b.priority - a.priority);
 }
 
-export function loadReminders(remindersDir: string, context: ReminderContext): Reminder[] {
-  const filenames = scanReminders(remindersDir);
+export function loadReminders(
+  dirs: string[],
+  context: ReminderContext,
+  overrides?: Record<string, ReminderOverride>,
+): Reminder[] {
+  const reminders: Reminder[] = [];
+  const seen = new Set<string>();
 
-  const reminders = filenames.map((filename) => {
-    const content = fs.readFileSync(path.join(remindersDir, filename), 'utf8');
-    return parseReminder(content, filename);
-  });
+  for (const dir of dirs) {
+    const filenames = scanReminders(dir);
+    for (const filename of filenames) {
+      if (seen.has(filename)) {
+        continue;
+      }
+      seen.add(filename);
+      const content = fs.readFileSync(path.join(dir, filename), 'utf8');
+      const reminder = parseReminder(content, filename);
+
+      const override = overrides?.[reminder.name];
+      if (override?.enabled === false) {
+        continue;
+      }
+      if (override?.priority !== undefined) {
+        reminder.priority = override.priority;
+      }
+
+      reminders.push(reminder);
+    }
+  }
 
   const matched = matchReminders(reminders, context);
   return sortByPriority(matched);

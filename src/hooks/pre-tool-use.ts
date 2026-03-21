@@ -9,7 +9,7 @@ import {
 import { debugLog } from '../debug-logger.js';
 import { isDenied, loadDenyPatterns } from '../deny-list.js';
 import { createHookState } from '../hook-state.js';
-import { resolvePaths } from '../path-resolver.js';
+import { type ResolvedPaths, resolvePaths } from '../path-resolver.js';
 import { loadReminders } from '../reminder-loader.js';
 import { loadValidators } from '../validator-loader.js';
 
@@ -31,20 +31,20 @@ interface PreToolUseOptions {
 }
 
 export async function handlePreToolUse(
-  claudeDir: string,
+  claudeDirOrPaths: string | ResolvedPaths,
   sessionId: string,
   toolInput: ToolInput,
   options: PreToolUseOptions = {},
 ): Promise<HookResult> {
-  const paths = await resolvePaths(claudeDir);
+  const paths = typeof claudeDirOrPaths === 'string' ? await resolvePaths(claudeDirOrPaths) : claudeDirOrPaths;
   const command = toolInput.command as string | undefined;
 
   if (command && isCommitCommand(command)) {
     const gitCwd = options.cwd ?? process.cwd();
-    return handleCommitValidation(claudeDir, sessionId, command, options, paths.autoDir, gitCwd);
+    return handleCommitValidation(paths, sessionId, command, options, gitCwd);
   }
 
-  const patterns = loadDenyPatterns(claudeDir);
+  const patterns = loadDenyPatterns(paths.claudeDir);
   const filePath = toolInput.file_path as string;
 
   if (filePath && isDenied(filePath, patterns)) {
@@ -59,10 +59,15 @@ export async function handlePreToolUse(
     };
   }
 
-  const reminders = loadReminders(paths.remindersDir, {
-    hook: 'PreToolUse',
-    toolName: options.toolName,
-  });
+  const state = createHookState(paths.autoDir).read();
+  const reminders = loadReminders(
+    paths.remindersDirs,
+    {
+      hook: 'PreToolUse',
+      toolName: options.toolName,
+    },
+    state.overrides.reminders,
+  );
 
   const reminderContent = reminders.map((r) => r.content).join('\n\n');
 
@@ -85,19 +90,29 @@ export async function handlePreToolUse(
 }
 
 async function handleCommitValidation(
-  claudeDir: string,
+  paths: ResolvedPaths,
   sessionId: string,
   command: string,
   options: PreToolUseOptions,
-  autoDir: string,
   gitCwd: string,
 ): Promise<HookResult> {
-  const paths = await resolvePaths(claudeDir);
-  const allValidators = loadValidators([paths.validatorsDir]);
+  const state = createHookState(paths.autoDir).read();
+
+  if (state.validateCommit.mode === 'off') {
+    activityLog(paths.autoDir, sessionId, 'pre-tool-use', 'commit allowed (validation off)');
+    return {
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'allow',
+      },
+    };
+  }
+
+  const allValidators = loadValidators(paths.validatorsDirs, state.overrides.validators);
   const validators = allValidators.filter((v) => v.name !== 'appeal-system');
 
   if (validators.length === 0) {
-    activityLog(autoDir, sessionId, 'pre-tool-use', 'commit allowed (no validators)');
+    activityLog(paths.autoDir, sessionId, 'pre-tool-use', 'commit allowed (no validators)');
     return {
       hookSpecificOutput: {
         hookEventName: 'PreToolUse',
@@ -107,9 +122,8 @@ async function handleCommitValidation(
   }
 
   const context = getCommitContext(gitCwd, command);
-  const state = createHookState(autoDir).read();
   const onLog: ValidatorLogger = (event, name, detail) => {
-    activityLog(autoDir, sessionId, 'pre-tool-use', `validator ${event}: ${name} → ${detail}`);
+    activityLog(paths.autoDir, sessionId, 'pre-tool-use', `validator ${event}: ${name} → ${detail}`);
   };
   const results = await validateCommit(validators, context, options.executor, onLog, state.validateCommit.batchCount);
 
@@ -117,8 +131,8 @@ async function handleCommitValidation(
 
   if (nacks.length > 0) {
     const reasons = nacks.map((n) => `${n.validator}: ${n.reason}`).join('\n');
-    activityLog(autoDir, sessionId, 'pre-tool-use', `commit blocked: ${reasons}`);
-    debugLog(autoDir, 'pre-tool-use', `commit blocked: ${reasons}`);
+    activityLog(paths.autoDir, sessionId, 'pre-tool-use', `commit blocked: ${reasons}`);
+    debugLog(paths.autoDir, 'pre-tool-use', `commit blocked: ${reasons}`);
     return {
       hookSpecificOutput: {
         hookEventName: 'PreToolUse',
@@ -128,8 +142,8 @@ async function handleCommitValidation(
     };
   }
 
-  activityLog(autoDir, sessionId, 'pre-tool-use', 'commit allowed');
-  debugLog(autoDir, 'pre-tool-use', 'commit allowed');
+  activityLog(paths.autoDir, sessionId, 'pre-tool-use', 'commit allowed');
+  debugLog(paths.autoDir, 'pre-tool-use', 'commit allowed');
   return {
     hookSpecificOutput: {
       hookEventName: 'PreToolUse',

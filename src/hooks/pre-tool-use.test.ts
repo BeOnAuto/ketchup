@@ -112,6 +112,32 @@ describe('pre-tool-use hook', () => {
     });
   });
 
+  it('skips validation when validateCommit.mode is off', async () => {
+    const validatorsDir = path.join(autoDir, 'validators');
+    fs.mkdirSync(validatorsDir);
+    fs.writeFileSync(
+      path.join(validatorsDir, 'test.md'),
+      `---
+name: test-validator
+description: Test
+enabled: true
+---
+Validate this commit`,
+    );
+    fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify({ validateCommit: { mode: 'off' } }));
+
+    const result = await handlePreToolUse(claudeDir, 'session-off', {
+      command: 'git commit -m "test: skip validation"',
+    });
+
+    expect(result).toEqual({
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'allow',
+      },
+    });
+  });
+
   it('routes Bash git commit to validator and blocks on NACK', async () => {
     const validatorsDir = path.join(autoDir, 'validators');
     fs.mkdirSync(validatorsDir);

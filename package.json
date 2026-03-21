@@ -22,7 +22,7 @@
   },
   "scripts": {
     "build": "tsc && pnpm build:bundle",
-    "build:bundle": "esbuild scripts/session-start.ts scripts/pre-tool-use.ts scripts/user-prompt-submit.ts scripts/auto-continue.ts --bundle --platform=node --target=node18 --format=cjs --outdir=dist/bundle/scripts --external:typescript",
+    "build:bundle": "esbuild scripts/session-start.ts scripts/pre-tool-use.ts scripts/user-prompt-submit.ts scripts/auto-continue.ts scripts/config.ts --bundle --platform=node --target=node18 --format=cjs --outdir=dist/bundle/scripts --external:typescript",
     "test": "vitest run",
     "test:watch": "vitest",
     "type-check": "tsc --noEmit",
@@ -84,7 +84,12 @@
     "templates/",
     "scripts/",
     "commands/",
-    ".claude-auto/"
+    "skills/",
+    ".claude-plugin/",
+    "hooks/",
+    "validators/",
+    "reminders/",
+    "agents/"
   ],
   "engines": {
     "node": ">=18.0.0"
