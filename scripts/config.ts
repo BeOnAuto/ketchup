@@ -1,5 +1,7 @@
 #!/usr/bin/env npx tsx
 
+import * as path from 'node:path';
+
 import {
   addReminder,
   listReminders,
@@ -13,6 +15,10 @@ import {
 } from '../src/config-manager.js';
 import type { ResolvedPaths } from '../src/path-resolver.js';
 import { resolvePathsFromEnv } from '../src/path-resolver.js';
+
+function derivePluginRoot(): string {
+  return path.resolve(__dirname, '..', '..', '..');
+}
 
 const args = process.argv.slice(2);
 const subcommand = args[0];
@@ -231,7 +237,7 @@ function handleReminders(paths: ResolvedPaths): void {
 }
 
 (async () => {
-  const paths = await resolvePathsFromEnv();
+  const paths = await resolvePathsFromEnv(derivePluginRoot());
 
   switch (subcommand) {
     case 'show':

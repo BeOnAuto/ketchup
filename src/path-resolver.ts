@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 
-import { DEFAULT_AUTO_DIR, loadConfig } from './config-loader.js';
+const AUTO_DIR = '.claude-auto';
 
 export interface ResolvedPaths {
   projectRoot: string;
@@ -10,46 +10,22 @@ export interface ResolvedPaths {
   validatorsDirs: string[];
 }
 
-export function resolveClaudeDirFromScript(scriptDir: string): string {
-  const projectRoot = path.resolve(scriptDir, '..', '..');
-  return path.join(projectRoot, '.claude');
-}
+export async function resolvePathsFromEnv(explicitPluginRoot?: string): Promise<ResolvedPaths> {
+  const pluginRoot = explicitPluginRoot || process.env.CLAUDE_PLUGIN_ROOT;
 
-export async function resolvePaths(claudeDir: string): Promise<ResolvedPaths> {
-  const projectRoot = path.dirname(claudeDir);
-  const config = await loadConfig(projectRoot);
+  if (!pluginRoot) {
+    throw new Error('CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.');
+  }
 
-  const autoDirName = config.autoDir ?? DEFAULT_AUTO_DIR;
-  const autoDir = path.join(projectRoot, autoDirName);
+  const projectRoot = process.cwd();
+  const claudeDir = path.join(projectRoot, '.claude');
+  const autoDir = path.join(projectRoot, AUTO_DIR);
 
   return {
     projectRoot,
     claudeDir,
     autoDir,
-    remindersDirs: [path.join(autoDir, 'reminders')],
-    validatorsDirs: [path.join(autoDir, 'validators')],
+    remindersDirs: [path.join(pluginRoot, 'reminders'), path.join(autoDir, 'reminders')],
+    validatorsDirs: [path.join(pluginRoot, 'validators'), path.join(autoDir, 'validators')],
   };
-}
-
-export async function resolvePathsFromEnv(): Promise<ResolvedPaths> {
-  const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT;
-  const pluginData = process.env.CLAUDE_PLUGIN_DATA;
-
-  if (pluginRoot && pluginData) {
-    const projectRoot = process.cwd();
-    const claudeDir = path.join(projectRoot, '.claude');
-    const projectAutoDir = path.join(projectRoot, DEFAULT_AUTO_DIR);
-    const autoDir = projectAutoDir;
-
-    return {
-      projectRoot,
-      claudeDir,
-      autoDir,
-      remindersDirs: [path.join(pluginRoot, 'reminders'), path.join(projectAutoDir, 'reminders')],
-      validatorsDirs: [path.join(pluginRoot, 'validators'), path.join(projectAutoDir, 'validators')],
-    };
-  }
-
-  const claudeDir = resolveClaudeDirFromScript(__dirname);
-  return resolvePaths(claudeDir);
 }

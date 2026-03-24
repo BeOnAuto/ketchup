@@ -1,5 +1,8 @@
 node_modules/
-dist/
+dist/*
+!dist/bundle/
+dist/bundle/*
+!dist/bundle/scripts/
 *.log
 .DS_Store
 coverage/

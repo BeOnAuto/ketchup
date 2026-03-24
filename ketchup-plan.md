@@ -1,33 +1,23 @@
-# Ketchup Plan: Fix cwd-based Resolution & Remove HookState Variability
+# Ketchup Plan: Remove Legacy NPX Installation
 
 ## TODO
 
-- [x] Burst 1: Add resolveClaudeDirFromScript to path-resolver [depends: none] (8d843c8)
-- [x] Burst 2: Update 4 hook scripts to use __dirname [depends: 1] (3d72b69)
-- [x] Burst 3: Remove volatile fields from HookState [depends: none] (d71265f)
-- [x] Burst 4: Add runtime.json to gitignore patterns [depends: none] (315df64)
-- [x] Burst 5: Delete stale root .claude.hooks.json [depends: none] (3f3f793)
-- [x] Burst 6: Rebuild and verify [depends: 1-5]
-
 ## DONE
 
-- [x] Burst 1: Add CopyResult type to copyDir for tracking changes (a164689)
-- [x] Burst 2: Add granular install update messaging with added/updated/removed tracking (bc061bd)
-
-## Previous Phase: Fix spawnAsync inheriting CLAUDECODE env var
-
-- [x] Burst 1: spawnAsync strips CLAUDECODE from child process env [depends: none]
-
-## Phase 2: Skip Reminders for Validator Subagents
-
-- [x] Burst 1: Add agent_type to HookInput type [depends: none]
-- [x] Burst 2: Create .claude-auto/agents/validator.md agent definition [depends: none]
-- [x] Burst 3: Update commit-validator.ts to pass --agent validator [depends: none]
-- [x] Burst 4: Update handleSessionStart to check agent_type instead of prompt [depends: 1]
-- [x] Burst 5: Update install.ts to copy agents/ directory [depends: 2]
-
-## Phase 1: Validator Session Detection
-
-- [x] Burst 1: Create isValidatorSession function that detects validator prompts [depends: none]
-- [x] Burst 2: Update handleSessionStart to skip reminders when isValidatorSession returns true [depends: 1]
-- [x] Burst 3: Update handleUserPromptSubmit to skip reminders when isValidatorSession returns true [depends: 1]
+- [x] Burst 1: Delete src/cli/ directory (all 26 files)
+- [x] Burst 2: Delete bin/cli.ts
+- [x] Burst 3: Delete templates/ directory (settings.json, settings.local.json)
+- [x] Burst 4: Delete src/settings-merger.ts and src/settings-merger.test.ts
+- [x] Burst 5: Delete src/settings-template.test.ts
+- [x] Burst 6: Delete src/e2e.test.ts
+- [x] Burst 7: Delete src/linker.ts and src/linker.test.ts
+- [x] Burst 8: Delete src/gitignore-manager.ts and src/gitignore-manager.test.ts
+- [x] Burst 9: Delete src/state-manager.ts and src/state-manager.test.ts
+- [x] Burst 10: Delete src/root-finder.ts and src/root-finder.test.ts
+- [x] Burst 11: Remove legacy fallback from path-resolver.ts, remove config-loader.ts, update tests
+- [x] Burst 12: Clean up index.ts barrel exports
+- [x] Burst 13: Remove commander/cosmiconfig/yaml deps, bin entry, legacy scripts from package.json
+- [x] Burst 14: Update README.md and CLAUDE.md
+- [x] Burst 15: Fix resolvePathsFromEnv for skills context (CLAUDE_PLUGIN_ROOT only)
+- [x] Burst 16: Add explicit pluginRoot parameter to resolvePathsFromEnv, use in config.ts
+- [x] Burst 17: Update all docs, delete npm-package-test.yml, delete install-local-spec.md, clean stale dist

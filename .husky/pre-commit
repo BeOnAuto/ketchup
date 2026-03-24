@@ -1,2 +1,4 @@
 npx lint-staged
 pnpm turbo run type-check test
+pnpm build:bundle
+git add dist/bundle/scripts/
