@@ -1,33 +1,20 @@
-# Ketchup Plan: Fix cwd-based Resolution & Remove HookState Variability
+# Ketchup Plan: Remove Legacy NPX Installation
 
 ## TODO
 
-- [x] Burst 1: Add resolveClaudeDirFromScript to path-resolver [depends: none] (8d843c8)
-- [x] Burst 2: Update 4 hook scripts to use __dirname [depends: 1] (3d72b69)
-- [x] Burst 3: Remove volatile fields from HookState [depends: none] (d71265f)
-- [x] Burst 4: Add runtime.json to gitignore patterns [depends: none] (315df64)
-- [x] Burst 5: Delete stale root .claude.hooks.json [depends: none] (3f3f793)
-- [x] Burst 6: Rebuild and verify [depends: 1-5]
+- [ ] Burst 1: Delete src/cli/ directory (all 26 files) [depends: none]
+- [ ] Burst 2: Delete bin/cli.ts [depends: none]
+- [ ] Burst 3: Delete templates/ directory (settings.json, settings.local.json) [depends: none]
+- [ ] Burst 4: Delete src/settings-merger.ts and src/settings-merger.test.ts [depends: none]
+- [ ] Burst 5: Delete src/settings-template.test.ts [depends: 3]
+- [ ] Burst 6: Delete src/e2e.test.ts [depends: 1]
+- [ ] Burst 7: Delete src/linker.ts and src/linker.test.ts (symlink utils, legacy only) [depends: none]
+- [ ] Burst 8: Delete src/gitignore-manager.ts and src/gitignore-manager.test.ts (legacy only) [depends: none]
+- [ ] Burst 9: Delete src/state-manager.ts and src/state-manager.test.ts (legacy only) [depends: none]
+- [ ] Burst 10: Delete src/root-finder.ts and src/root-finder.test.ts (legacy only) [depends: none]
+- [ ] Burst 11: Remove legacy fallback from src/path-resolver.ts, update tests [depends: none]
+- [ ] Burst 12: Clean up src/index.ts barrel exports (remove deleted modules) [depends: 1,4,7,8,9,10]
+- [ ] Burst 13: Remove commander dependency, bin entry, legacy scripts from package.json [depends: 1,2,3]
+- [ ] Burst 14: Rewrite README.md (remove all legacy CLI references) [depends: all]
 
 ## DONE
-
-- [x] Burst 1: Add CopyResult type to copyDir for tracking changes (a164689)
-- [x] Burst 2: Add granular install update messaging with added/updated/removed tracking (bc061bd)
-
-## Previous Phase: Fix spawnAsync inheriting CLAUDECODE env var
-
-- [x] Burst 1: spawnAsync strips CLAUDECODE from child process env [depends: none]
-
-## Phase 2: Skip Reminders for Validator Subagents
-
-- [x] Burst 1: Add agent_type to HookInput type [depends: none]
-- [x] Burst 2: Create .claude-auto/agents/validator.md agent definition [depends: none]
-- [x] Burst 3: Update commit-validator.ts to pass --agent validator [depends: none]
-- [x] Burst 4: Update handleSessionStart to check agent_type instead of prompt [depends: 1]
-- [x] Burst 5: Update install.ts to copy agents/ directory [depends: 2]
-
-## Phase 1: Validator Session Detection
-
-- [x] Burst 1: Create isValidatorSession function that detects validator prompts [depends: none]
-- [x] Burst 2: Update handleSessionStart to skip reminders when isValidatorSession returns true [depends: 1]
-- [x] Burst 3: Update handleUserPromptSubmit to skip reminders when isValidatorSession returns true [depends: 1]
