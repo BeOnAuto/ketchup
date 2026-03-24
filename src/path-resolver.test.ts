@@ -34,17 +34,23 @@ describe('resolvePathsFromEnv', () => {
     delete process.env.CLAUDE_PLUGIN_DATA;
 
     await expect(resolvePathsFromEnv()).rejects.toThrow(
-      'CLAUDE_PLUGIN_ROOT and CLAUDE_PLUGIN_DATA must be set. Claude Auto requires plugin mode.',
+      'CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.',
     );
   });
 
-  it('throws when only CLAUDE_PLUGIN_ROOT is set', async () => {
+  it('works when only CLAUDE_PLUGIN_ROOT is set (skills context)', async () => {
     vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/claude-auto');
     delete process.env.CLAUDE_PLUGIN_DATA;
 
-    await expect(resolvePathsFromEnv()).rejects.toThrow(
-      'CLAUDE_PLUGIN_ROOT and CLAUDE_PLUGIN_DATA must be set. Claude Auto requires plugin mode.',
-    );
+    const result = await resolvePathsFromEnv();
+
+    expect(result).toEqual({
+      projectRoot: process.cwd(),
+      claudeDir: path.join(process.cwd(), '.claude'),
+      autoDir: path.join(process.cwd(), '.claude-auto'),
+      validatorsDirs: ['/plugins/claude-auto/validators', path.join(process.cwd(), '.claude-auto', 'validators')],
+      remindersDirs: ['/plugins/claude-auto/reminders', path.join(process.cwd(), '.claude-auto', 'reminders')],
+    });
   });
 
   it('includes project-local dirs for multi-dir loading', async () => {

@@ -12,10 +12,9 @@ export interface ResolvedPaths {
 
 export async function resolvePathsFromEnv(): Promise<ResolvedPaths> {
   const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT;
-  const pluginData = process.env.CLAUDE_PLUGIN_DATA;
 
-  if (!pluginRoot || !pluginData) {
-    throw new Error('CLAUDE_PLUGIN_ROOT and CLAUDE_PLUGIN_DATA must be set. Claude Auto requires plugin mode.');
+  if (!pluginRoot) {
+    throw new Error('CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.');
   }
 
   const projectRoot = process.cwd();

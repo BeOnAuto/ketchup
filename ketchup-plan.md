@@ -2,6 +2,8 @@
 
 ## TODO
 
+- [ ] Burst 15: resolvePathsFromEnv works when only CLAUDE_PLUGIN_ROOT is set (skills context) [depends: none]
+
 ## DONE
 
 - [x] Burst 1: Delete src/cli/ directory (all 26 files)

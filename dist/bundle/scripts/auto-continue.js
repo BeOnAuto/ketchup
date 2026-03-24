@@ -239,9 +239,8 @@ var path4 = __toESM(require("node:path"));
 var AUTO_DIR = ".claude-auto";
 async function resolvePathsFromEnv() {
   const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT;
-  const pluginData = process.env.CLAUDE_PLUGIN_DATA;
-  if (!pluginRoot || !pluginData) {
-    throw new Error("CLAUDE_PLUGIN_ROOT and CLAUDE_PLUGIN_DATA must be set. Claude Auto requires plugin mode.");
+  if (!pluginRoot) {
+    throw new Error("CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.");
   }
   const projectRoot = process.cwd();
   const claudeDir = path4.join(projectRoot, ".claude");
