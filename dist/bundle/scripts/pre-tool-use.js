@@ -6881,8 +6881,8 @@ async function handleCommitValidation(paths, sessionId, command, options2, gitCw
 // src/path-resolver.ts
 var path8 = __toESM(require("node:path"));
 var AUTO_DIR = ".claude-auto";
-async function resolvePathsFromEnv() {
-  const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT;
+async function resolvePathsFromEnv(explicitPluginRoot) {
+  const pluginRoot = explicitPluginRoot || process.env.CLAUDE_PLUGIN_ROOT;
   if (!pluginRoot) {
     throw new Error("CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.");
   }

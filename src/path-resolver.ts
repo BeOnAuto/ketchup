@@ -10,8 +10,8 @@ export interface ResolvedPaths {
   validatorsDirs: string[];
 }
 
-export async function resolvePathsFromEnv(): Promise<ResolvedPaths> {
-  const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT;
+export async function resolvePathsFromEnv(explicitPluginRoot?: string): Promise<ResolvedPaths> {
+  const pluginRoot = explicitPluginRoot || process.env.CLAUDE_PLUGIN_ROOT;
 
   if (!pluginRoot) {
     throw new Error('CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.');

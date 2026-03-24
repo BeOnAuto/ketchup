@@ -29,13 +29,28 @@ describe('resolvePathsFromEnv', () => {
     });
   });
 
-  it('throws when env vars are not set', async () => {
+  it('throws when env vars are not set and no pluginRoot provided', async () => {
     delete process.env.CLAUDE_PLUGIN_ROOT;
     delete process.env.CLAUDE_PLUGIN_DATA;
 
     await expect(resolvePathsFromEnv()).rejects.toThrow(
       'CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.',
     );
+  });
+
+  it('uses explicit pluginRoot when env var is not set', async () => {
+    delete process.env.CLAUDE_PLUGIN_ROOT;
+    delete process.env.CLAUDE_PLUGIN_DATA;
+
+    const result = await resolvePathsFromEnv('/explicit/plugin-root');
+
+    expect(result).toEqual({
+      projectRoot: process.cwd(),
+      claudeDir: path.join(process.cwd(), '.claude'),
+      autoDir: path.join(process.cwd(), '.claude-auto'),
+      validatorsDirs: ['/explicit/plugin-root/validators', path.join(process.cwd(), '.claude-auto', 'validators')],
+      remindersDirs: ['/explicit/plugin-root/reminders', path.join(process.cwd(), '.claude-auto', 'reminders')],
+    });
   });
 
   it('works when only CLAUDE_PLUGIN_ROOT is set (skills context)', async () => {

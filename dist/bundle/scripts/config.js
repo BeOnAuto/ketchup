@@ -3509,6 +3509,9 @@ var require_gray_matter = __commonJS({
   }
 });
 
+// scripts/config.ts
+var path4 = __toESM(require("node:path"));
+
 // src/config-manager.ts
 var fs4 = __toESM(require("node:fs"));
 var path2 = __toESM(require("node:path"));
@@ -3800,8 +3803,8 @@ ${formatYaml(val, indent + 1)}`;
 // src/path-resolver.ts
 var path3 = __toESM(require("node:path"));
 var AUTO_DIR = ".claude-auto";
-async function resolvePathsFromEnv() {
-  const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT;
+async function resolvePathsFromEnv(explicitPluginRoot) {
+  const pluginRoot = explicitPluginRoot || process.env.CLAUDE_PLUGIN_ROOT;
   if (!pluginRoot) {
     throw new Error("CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.");
   }
@@ -3818,6 +3821,9 @@ async function resolvePathsFromEnv() {
 }
 
 // scripts/config.ts
+function derivePluginRoot() {
+  return path4.resolve(__dirname, "..", "..", "..");
+}
 var args = process.argv.slice(2);
 var subcommand = args[0];
 function usage() {
@@ -4013,7 +4019,7 @@ function handleReminders(paths) {
   }
 }
 (async () => {
-  const paths = await resolvePathsFromEnv();
+  const paths = await resolvePathsFromEnv(derivePluginRoot());
   switch (subcommand) {
     case "show":
       handleShow(paths);

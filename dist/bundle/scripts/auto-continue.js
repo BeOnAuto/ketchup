@@ -237,8 +237,8 @@ function handleStop(autoDir, input2) {
 // src/path-resolver.ts
 var path4 = __toESM(require("node:path"));
 var AUTO_DIR = ".claude-auto";
-async function resolvePathsFromEnv() {
-  const pluginRoot = process.env.CLAUDE_PLUGIN_ROOT;
+async function resolvePathsFromEnv(explicitPluginRoot) {
+  const pluginRoot = explicitPluginRoot || process.env.CLAUDE_PLUGIN_ROOT;
   if (!pluginRoot) {
     throw new Error("CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.");
   }
