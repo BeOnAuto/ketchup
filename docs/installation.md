@@ -7,8 +7,8 @@ Claude Auto is a plugin for Claude Code. There are two ways to install it.
 ## Option 1: Marketplace (Recommended)
 
 ```
-/plugin marketplace add BeOnAuto/claude-auto
-/plugin install claude-auto@beon-auto
+/plugin marketplace add BeOnAuto/auto-plugins
+/plugin install claude-auto
 ```
 
 This installs the plugin and registers all hooks and skills automatically.

@@ -71,7 +71,7 @@ Both are markdown files with YAML frontmatter. Validators gate commits (ACK/NACK
 
 ### Installation Model
 
-Claude Auto runs as a Claude Code plugin. Install via `/plugin marketplace add BeOnAuto/claude-auto` or `claude --plugin-dir /path/to/claude-auto`. The plugin provides validators, reminders, and hook scripts. Projects can add local overrides in `.claude-auto/`.
+Claude Auto runs as a Claude Code plugin. Install via `/plugin marketplace add BeOnAuto/auto-plugins` or `claude --plugin-dir /path/to/claude-auto`. The plugin provides validators, reminders, and hook scripts. Projects can add local overrides in `.claude-auto/`.
 
 ## Coding Patterns
 

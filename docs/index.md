@@ -94,8 +94,8 @@ The bottleneck becomes defining requirements, not executing them.
 From within a Claude Code session:
 
 ```
-/plugin marketplace add BeOnAuto/claude-auto
-/plugin install claude-auto@beon-auto
+/plugin marketplace add BeOnAuto/auto-plugins
+/plugin install claude-auto
 ```
 
 That's it! The plugin sets up everything you need.

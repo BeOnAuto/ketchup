@@ -30,8 +30,8 @@ Claude Auto installs a quality loop into Claude Code via hooks. Validators gate 
 Inside any Claude Code session:
 
 ```
-/plugin marketplace add BeOnAuto/claude-auto
-/plugin install claude-auto@beon-auto
+/plugin marketplace add BeOnAuto/auto-plugins
+/plugin install claude-auto
 ```
 
 ### As a Local Plugin
@@ -46,8 +46,8 @@ Claude Code sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` automatically. Va
 
 ```bash
 # Marketplace (inside Claude Code)
-/plugin marketplace add BeOnAuto/claude-auto
-/plugin install claude-auto@beon-auto
+/plugin marketplace add BeOnAuto/auto-plugins
+/plugin install claude-auto
 
 # Or local plugin mode
 claude --plugin-dir /path/to/claude-auto
@@ -189,7 +189,7 @@ Hook scripts read JSON from stdin, delegate to handlers in `src/hooks/`, log res
 **Solution:**
 
 ```
-/plugin install claude-auto@beon-auto
+/plugin install claude-auto
 ```
 
 ### Enable Debug Logging
