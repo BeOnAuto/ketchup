@@ -24,8 +24,8 @@ Install Claude Auto in 5 minutes.
 From within a Claude Code session:
 
 ```
-/plugin marketplace add BeOnAuto/claude-auto
-/plugin install claude-auto@beon-auto
+/plugin marketplace add BeOnAuto/auto-plugins
+/plugin install claude-auto
 ```
 
 Or for local development:

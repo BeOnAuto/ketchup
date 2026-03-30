@@ -21,7 +21,7 @@
   - Automated version synchronization between plugin and marketplace during releases
 - 315480a: - Fixed skills not working when run as shell commands by automatically detecting the plugin location from the script path instead of relying on environment variables
 - 3f2c4b8: - Removed the entire CLI system including install, doctor, repair, status, and TUI commands
-  - Claude Auto now requires plugin mode exclusively — install via `/plugin marketplace add BeOnAuto/claude-auto`
+  - Claude Auto now requires plugin mode exclusively — install via `/plugin marketplace add BeOnAuto/auto-plugins`
   - Removed legacy dependencies (commander, cosmiconfig, yaml) reducing package size
 
 ## 0.17.0
