@@ -6783,14 +6783,28 @@ function loadValidators(dirs, overrides) {
 }
 
 // src/hooks/pre-tool-use.ts
+function isProtectedPath(filePath, validatorsDirs) {
+  return validatorsDirs.some((dir) => filePath.startsWith(`${dir}/`));
+}
 async function handlePreToolUse(paths, sessionId, toolInput, options2 = {}) {
   const command = toolInput.command;
   if (command && isCommitCommand(command)) {
     const gitCwd = options2.cwd ?? process.cwd();
     return handleCommitValidation(paths, sessionId, command, options2, gitCwd);
   }
-  const patterns = loadDenyPatterns(paths.claudeDir);
   const filePath = toolInput.file_path;
+  if (filePath && isProtectedPath(filePath, paths.validatorsDirs)) {
+    activityLog(paths.autoDir, sessionId, "pre-tool-use", `blocked protected: ${filePath}`);
+    debugLog(paths.autoDir, "pre-tool-use", `${filePath} blocked (immutable validator)`);
+    return {
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "deny",
+        permissionDecisionReason: `Validator files are immutable: ${filePath}`
+      }
+    };
+  }
+  const patterns = loadDenyPatterns(paths.claudeDir);
   if (filePath && isDenied(filePath, patterns)) {
     activityLog(paths.autoDir, sessionId, "pre-tool-use", `blocked: ${filePath}`);
     debugLog(paths.autoDir, "pre-tool-use", `${filePath} blocked by deny-list`);

@@ -322,6 +322,20 @@ Validate this commit`,
     }
   });
 
+  it('denies Edit/Write to validator files', async () => {
+    const toolInput = { file_path: path.join(autoDir, 'validators', 'burst-atomicity.md') };
+
+    const result = await handlePreToolUse(resolvedPaths, 'session-protect', toolInput);
+
+    expect(result).toEqual({
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'deny',
+        permissionDecisionReason: `Validator files are immutable: ${toolInput.file_path}`,
+      },
+    });
+  });
+
   describe('isProtectedPath', () => {
     it('returns true for file inside a validatorsDirs path', () => {
       const validatorsDirs = ['/plugin/validators', '/project/.claude-auto/validators'];

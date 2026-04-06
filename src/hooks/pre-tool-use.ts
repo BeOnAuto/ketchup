@@ -47,8 +47,21 @@ export async function handlePreToolUse(
     return handleCommitValidation(paths, sessionId, command, options, gitCwd);
   }
 
-  const patterns = loadDenyPatterns(paths.claudeDir);
   const filePath = toolInput.file_path as string;
+
+  if (filePath && isProtectedPath(filePath, paths.validatorsDirs)) {
+    activityLog(paths.autoDir, sessionId, 'pre-tool-use', `blocked protected: ${filePath}`);
+    debugLog(paths.autoDir, 'pre-tool-use', `${filePath} blocked (immutable validator)`);
+    return {
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'deny',
+        permissionDecisionReason: `Validator files are immutable: ${filePath}`,
+      },
+    };
+  }
+
+  const patterns = loadDenyPatterns(paths.claudeDir);
 
   if (filePath && isDenied(filePath, patterns)) {
     activityLog(paths.autoDir, sessionId, 'pre-tool-use', `blocked: ${filePath}`);
