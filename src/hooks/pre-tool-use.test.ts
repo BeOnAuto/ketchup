@@ -5,7 +5,7 @@ import * as path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { ResolvedPaths } from '../path-resolver.js';
-import { handlePreToolUse } from './pre-tool-use.js';
+import { handlePreToolUse, isProtectedPath } from './pre-tool-use.js';
 
 const DEFAULT_AUTO_DIR = '.claude-auto';
 
@@ -320,6 +320,22 @@ Validate this commit`,
     } finally {
       cwdSpy.mockRestore();
     }
+  });
+
+  describe('isProtectedPath', () => {
+    it('returns true for file inside a validatorsDirs path', () => {
+      const validatorsDirs = ['/plugin/validators', '/project/.claude-auto/validators'];
+
+      expect(isProtectedPath('/project/.claude-auto/validators/burst-atomicity.md', validatorsDirs)).toBe(true);
+      expect(isProtectedPath('/plugin/validators/coverage-rules.md', validatorsDirs)).toBe(true);
+    });
+
+    it('returns false for file outside validatorsDirs', () => {
+      const validatorsDirs = ['/plugin/validators', '/project/.claude-auto/validators'];
+
+      expect(isProtectedPath('/project/src/hooks/pre-tool-use.ts', validatorsDirs)).toBe(false);
+      expect(isProtectedPath('/project/.claude-auto/reminders/tcr.md', validatorsDirs)).toBe(false);
+    });
   });
 
   it('injects reminders matching PreToolUse hook and toolName', async () => {

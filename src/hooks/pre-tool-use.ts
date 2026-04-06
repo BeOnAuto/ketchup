@@ -13,6 +13,10 @@ import type { ResolvedPaths } from '../path-resolver.js';
 import { loadReminders } from '../reminder-loader.js';
 import { loadValidators } from '../validator-loader.js';
 
+export function isProtectedPath(filePath: string, validatorsDirs: string[]): boolean {
+  return validatorsDirs.some((dir) => filePath.startsWith(`${dir}/`));
+}
+
 type ToolInput = Record<string, unknown>;
 
 type HookResult = {
