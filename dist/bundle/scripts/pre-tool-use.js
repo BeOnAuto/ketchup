@@ -6786,11 +6786,36 @@ function loadValidators(dirs, overrides) {
 function isProtectedPath(filePath, validatorsDirs) {
   return validatorsDirs.some((dir) => filePath.startsWith(`${dir}/`));
 }
+function commandTargetsProtectedPath(command, validatorsDirs) {
+  for (const dir of validatorsDirs) {
+    if (command.includes(`${dir}/`)) {
+      const idx = command.indexOf(`${dir}/`);
+      const rest = command.slice(idx);
+      const match = rest.match(/^(\S+)/);
+      if (match) return match[1];
+    }
+  }
+  return void 0;
+}
 async function handlePreToolUse(paths, sessionId, toolInput, options2 = {}) {
   const command = toolInput.command;
   if (command && isCommitCommand(command)) {
     const gitCwd = options2.cwd ?? process.cwd();
     return handleCommitValidation(paths, sessionId, command, options2, gitCwd);
+  }
+  if (command) {
+    const targetedPath = commandTargetsProtectedPath(command, paths.validatorsDirs);
+    if (targetedPath) {
+      activityLog(paths.autoDir, sessionId, "pre-tool-use", `blocked protected: ${targetedPath}`);
+      debugLog(paths.autoDir, "pre-tool-use", `${targetedPath} blocked (immutable validator)`);
+      return {
+        hookSpecificOutput: {
+          hookEventName: "PreToolUse",
+          permissionDecision: "deny",
+          permissionDecisionReason: `Validator files are immutable: ${targetedPath}`
+        }
+      };
+    }
   }
   const filePath = toolInput.file_path;
   if (filePath && isProtectedPath(filePath, paths.validatorsDirs)) {
