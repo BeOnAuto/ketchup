@@ -3549,9 +3549,11 @@ var DEFAULT_HOOK_STATE = {
 function createHookState(autoDir) {
   const stateFile = path.join(autoDir, ".claude.hooks.json");
   function read() {
+    if (!fs.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
     if (!fs.existsSync(stateFile)) {
-      const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
-      const initialState = isPluginMode ? { ...DEFAULT_HOOK_STATE, firstSetupRequired: true } : { ...DEFAULT_HOOK_STATE };
+      const initialState = { ...DEFAULT_HOOK_STATE };
       fs.writeFileSync(stateFile, `${JSON.stringify(initialState, null, 2)}
 `);
       return JSON.parse(JSON.stringify(initialState));

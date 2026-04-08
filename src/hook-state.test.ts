@@ -27,6 +27,15 @@ describe('hook-state', () => {
       expect(fs.existsSync(nonExistentDir)).toBe(false);
     });
 
+    it('read returns DEFAULT_HOOK_STATE when autoDir does not exist', () => {
+      const nonExistentDir = path.join(tempDir, 'not-created');
+      const hookState = createHookState(nonExistentDir);
+      const state = hookState.read();
+
+      expect(state).toEqual(DEFAULT_HOOK_STATE);
+      expect(fs.existsSync(nonExistentDir)).toBe(false);
+    });
+
     it('exists returns false before read and true after read', () => {
       const hookState = createHookState(autoDir);
 
@@ -37,21 +46,13 @@ describe('hook-state', () => {
       expect(hookState.exists()).toBe(true);
     });
 
-    it('sets firstSetupRequired when created in plugin mode', () => {
+    it('does not set firstSetupRequired even in plugin mode', () => {
       vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/claude-auto');
       const hookState = createHookState(autoDir);
       const state = hookState.read();
 
-      expect(state.firstSetupRequired).toBe(true);
-      vi.unstubAllEnvs();
-    });
-
-    it('does not set firstSetupRequired when created in legacy mode', () => {
-      delete process.env.CLAUDE_PLUGIN_ROOT;
-      const hookState = createHookState(autoDir);
-      const state = hookState.read();
-
       expect(state.firstSetupRequired).toBeUndefined();
+      vi.unstubAllEnvs();
     });
 
     it('creates state file with defaults when not exists', () => {

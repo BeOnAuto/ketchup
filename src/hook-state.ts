@@ -94,11 +94,12 @@ export function createHookState(autoDir: string): HookStateManager {
   const stateFile = path.join(autoDir, '.claude.hooks.json');
 
   function read(): HookState {
+    if (!fs.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
+
     if (!fs.existsSync(stateFile)) {
-      const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
-      const initialState = isPluginMode
-        ? { ...DEFAULT_HOOK_STATE, firstSetupRequired: true }
-        : { ...DEFAULT_HOOK_STATE };
+      const initialState = { ...DEFAULT_HOOK_STATE };
       fs.writeFileSync(stateFile, `${JSON.stringify(initialState, null, 2)}\n`);
       return JSON.parse(JSON.stringify(initialState)) as HookState;
     }
