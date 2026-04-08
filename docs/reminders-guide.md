@@ -391,7 +391,7 @@ Commit project reminders (not personal preferences):
 See which reminders are active from within a Claude Code session:
 
 ```
-/claude-auto:config reminders
+/claude-auto-config reminders
 ```
 
 ### Test Reminder Loading

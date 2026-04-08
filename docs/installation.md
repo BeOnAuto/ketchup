@@ -25,19 +25,27 @@ claude --plugin-dir /path/to/claude-auto
 
 ---
 
-## What Gets Created
+## Activating in a Project
 
-After the plugin activates, the following structure is created in your project:
+After installing the plugin, Claude will mention that claude-auto is available. To activate it:
+
+```
+/claude-auto-init
+```
+
+This creates the following structure in your project:
 
 ```
 your-project/
 ├── .claude-auto/
-│   ├── reminders/          # Context injection files (*.md)
-│   ├── validators/         # Commit validation rules (*.md)
 │   ├── .claude.hooks.json  # Hook behavior state
+│   ├── reminders/          # Custom context injection files (*.md)
+│   ├── validators/         # Custom commit validation rules (*.md)
 │   └── logs/
 │       └── activity.log    # Activity log
 ```
+
+You can add `.claude-auto` to `.gitignore` for personal use, or commit it for the whole team.
 
 See the [Reminders Guide](/reminders-guide) and [Validators Guide](/validators-guide) for the complete list of built-in reminders and validators.
 
@@ -48,20 +56,20 @@ See the [Reminders Guide](/reminders-guide) and [Validators Guide](/validators-g
 After installing the plugin, use the config skill to check the current state:
 
 ```
-/claude-auto:config show
+/claude-auto-config show
 ```
 
 ---
 
 ## Configuration
 
-All configuration is managed via the `/claude-auto:config` skill:
+All configuration is managed via the `/claude-auto-config` skill:
 
 ```
-/claude-auto:config show          # View current configuration
-/claude-auto:config set <key> <value>  # Update a setting
-/claude-auto:config validators    # List active validators
-/claude-auto:config reminders     # List active reminders
+/claude-auto-config show          # View current configuration
+/claude-auto-config set <key> <value>  # Update a setting
+/claude-auto-config validators    # List active validators
+/claude-auto-config reminders     # List active reminders
 ```
 
 Configuration is stored in `.claude-auto/.claude.hooks.json`.
@@ -126,6 +134,6 @@ After installation:
 
 If you run into issues:
 
-1. Run `/claude-auto:config show` to check configuration state
+1. Run `/claude-auto-config show` to check configuration state
 2. Check `.claude-auto/logs/` for detailed error messages
 3. Report persistent issues at [GitHub Issues](https://github.com/BeOnAuto/claude-auto/issues)

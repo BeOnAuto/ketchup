@@ -367,7 +367,7 @@ Consider NACK only if performance is critical for this change.
 From within a Claude Code session:
 
 ```
-/claude-auto:config validators
+/claude-auto-config validators
 ```
 
 ### Temporarily Disable
