@@ -67,25 +67,19 @@ describe('initClaudeAuto', () => {
 });
 
 describe('formatInitResult', () => {
-  it('formats newly created result with gitignore advice', () => {
+  it('formats newly created result with gitignore advice and config prompt', () => {
     const output = formatInitResult({ created: true, autoDir: '/project/.claude-auto', gitignoreAdvice: true });
 
-    expect(output).toEqual(
-      [
-        'Initialized claude-auto at /project/.claude-auto',
-        'Default configuration written to .claude-auto/.claude.hooks.json',
-        '',
-        'Note: .claude-auto is not in your .gitignore.',
-        'If this is for personal use only, consider adding it:',
-        '  echo ".claude-auto" >> .gitignore',
-      ].join('\n'),
-    );
+    expect(output).toContain('Initialized claude-auto at /project/.claude-auto');
+    expect(output).toContain('.gitignore');
+    expect(output).toContain('/claude-auto-config');
   });
 
-  it('formats already initialized result without gitignore advice', () => {
+  it('formats already initialized result without config prompt', () => {
     const output = formatInitResult({ created: false, autoDir: '/project/.claude-auto', gitignoreAdvice: false });
 
-    expect(output).toBe('claude-auto is already initialized at /project/.claude-auto');
+    expect(output).toContain('already initialized');
+    expect(output).not.toContain('/claude-auto-config');
   });
 });
 

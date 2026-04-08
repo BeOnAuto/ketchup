@@ -73,14 +73,17 @@ function formatInitResult(result2) {
   if (result2.created) {
     lines.push(`Initialized claude-auto at ${result2.autoDir}`);
     lines.push("Default configuration written to .claude-auto/.claude.hooks.json");
+    if (result2.gitignoreAdvice) {
+      lines.push("");
+      lines.push("Note: .claude-auto is not in your .gitignore.");
+      lines.push("If this is for personal use only, consider adding it:");
+      lines.push('  echo ".claude-auto" >> .gitignore');
+    }
+    lines.push("");
+    lines.push("Ask the user if they would like to review or customize the configuration.");
+    lines.push("If yes, run /claude-auto-config show to display current settings.");
   } else {
     lines.push(`claude-auto is already initialized at ${result2.autoDir}`);
-  }
-  if (result2.gitignoreAdvice) {
-    lines.push("");
-    lines.push("Note: .claude-auto is not in your .gitignore.");
-    lines.push("If this is for personal use only, consider adding it:");
-    lines.push('  echo ".claude-auto" >> .gitignore');
   }
   return lines.join("\n");
 }
