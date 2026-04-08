@@ -18,6 +18,10 @@ function sanitizeForFilename(hookName: string): string {
 }
 
 export function writeHookLog(autoDir: string, entry: HookLogEntry): void {
+  if (!fs.existsSync(autoDir)) {
+    return;
+  }
+
   const logsDir = path.join(autoDir, 'logs', 'hooks');
   if (!fs.existsSync(logsDir)) {
     fs.mkdirSync(logsDir, { recursive: true });

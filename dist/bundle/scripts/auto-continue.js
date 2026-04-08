@@ -48,6 +48,9 @@ function matchesFilter(hookName, message) {
   return includes.some((pattern) => searchText.includes(pattern));
 }
 function activityLog(autoDir, sessionId, hookName, message) {
+  if (!import_node_fs.default.existsSync(autoDir)) {
+    return;
+  }
   if (!matchesFilter(hookName, message)) {
     return;
   }
@@ -76,6 +79,9 @@ function sanitizeForFilename(hookName) {
   return hookName.replace(/[^a-zA-Z0-9-]/g, "-").toLowerCase();
 }
 function writeHookLog(autoDir, entry) {
+  if (!fs2.existsSync(autoDir)) {
+    return;
+  }
   const logsDir = path2.join(autoDir, "logs", "hooks");
   if (!fs2.existsSync(logsDir)) {
     fs2.mkdirSync(logsDir, { recursive: true });
@@ -284,9 +290,11 @@ function logPluginDiagnostics(hookName, paths) {
   if (isDebug) {
     console.error(message);
   }
-  const logsDir = path5.join(paths.autoDir, "logs");
-  fs4.mkdirSync(logsDir, { recursive: true });
-  fs4.appendFileSync(path5.join(logsDir, "plugin-debug.log"), message);
+  if (fs4.existsSync(paths.autoDir)) {
+    const logsDir = path5.join(paths.autoDir, "logs");
+    fs4.mkdirSync(logsDir, { recursive: true });
+    fs4.appendFileSync(path5.join(logsDir, "plugin-debug.log"), message);
+  }
 }
 
 // scripts/auto-continue.ts
