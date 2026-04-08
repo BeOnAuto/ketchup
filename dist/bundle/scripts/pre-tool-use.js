@@ -6654,7 +6654,6 @@ function createHookState(autoDir) {
     const content = fs5.readFileSync(stateFile, "utf-8");
     const partial = JSON.parse(content);
     return {
-      ...partial.firstSetupRequired !== void 0 ? { firstSetupRequired: partial.firstSetupRequired } : {},
       autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, ...partial.autoContinue },
       validateCommit: { ...DEFAULT_HOOK_STATE.validateCommit, ...partial.validateCommit },
       denyList: { ...DEFAULT_HOOK_STATE.denyList, ...partial.denyList },
