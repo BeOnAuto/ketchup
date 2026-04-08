@@ -46,7 +46,6 @@ export interface OverridesState {
 }
 
 export interface HookState {
-  firstSetupRequired?: boolean;
   autoContinue: AutoContinueState;
   validateCommit: ValidateCommitState;
   denyList: DenyListState;
@@ -108,7 +107,6 @@ export function createHookState(autoDir: string): HookStateManager {
     const partial = JSON.parse(content) as Partial<HookState>;
 
     return {
-      ...(partial.firstSetupRequired !== undefined ? { firstSetupRequired: partial.firstSetupRequired } : {}),
       autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, ...partial.autoContinue },
       validateCommit: { ...DEFAULT_HOOK_STATE.validateCommit, ...partial.validateCommit },
       denyList: { ...DEFAULT_HOOK_STATE.denyList, ...partial.denyList },

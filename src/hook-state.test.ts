@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { createHookState, DEFAULT_HOOK_STATE, type HookState } from './hook-state.js';
 
@@ -44,15 +44,6 @@ describe('hook-state', () => {
       hookState.read();
 
       expect(hookState.exists()).toBe(true);
-    });
-
-    it('does not set firstSetupRequired even in plugin mode', () => {
-      vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/claude-auto');
-      const hookState = createHookState(autoDir);
-      const state = hookState.read();
-
-      expect(state.firstSetupRequired).toBeUndefined();
-      vi.unstubAllEnvs();
     });
 
     it('creates state file with defaults when not exists', () => {
