@@ -1,5 +1,5 @@
 ---
-name: init
+name: claude-auto-init
 description: Initialize claude-auto in the current repository
 user-invocable: true
 ---

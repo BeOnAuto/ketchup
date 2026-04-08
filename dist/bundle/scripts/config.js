@@ -3831,7 +3831,7 @@ function derivePluginRoot() {
 var args = process.argv.slice(2);
 var subcommand = args[0];
 function usage() {
-  return `Usage: /claude-auto:config <subcommand> [args]
+  return `Usage: /claude-auto-config <subcommand> [args]
 
 Subcommands:
   show                              Show all current configuration
