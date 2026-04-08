@@ -1,3 +1,4 @@
+import { execSync } from 'node:child_process';
 import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
@@ -85,5 +86,25 @@ describe('formatInitResult', () => {
     const output = formatInitResult({ created: false, autoDir: '/project/.claude-auto', gitignoreAdvice: false });
 
     expect(output).toBe('claude-auto is already initialized at /project/.claude-auto');
+  });
+});
+
+describe('scripts/init.ts', () => {
+  let tempDir: string;
+
+  beforeEach(() => {
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-auto-script-init-'));
+  });
+
+  afterEach(() => {
+    fs.rmSync(tempDir, { recursive: true, force: true });
+  });
+
+  it('creates .claude-auto and prints initialization message', () => {
+    const scriptPath = path.resolve(__dirname, '..', 'scripts', 'init.ts');
+    const output = execSync(`npx tsx ${scriptPath}`, { cwd: tempDir, encoding: 'utf-8' });
+
+    expect(output).toContain('Initialized claude-auto');
+    expect(fs.existsSync(path.join(tempDir, '.claude-auto', '.claude.hooks.json'))).toBe(true);
   });
 });
