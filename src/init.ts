@@ -24,6 +24,26 @@ export function initClaudeAuto(projectRoot: string): InitResult {
   return { created: true, autoDir, gitignoreAdvice: checkGitignoreAdvice(projectRoot) };
 }
 
+export function formatInitResult(result: InitResult): string {
+  const lines: string[] = [];
+
+  if (result.created) {
+    lines.push(`Initialized claude-auto at ${result.autoDir}`);
+    lines.push('Default configuration written to .claude-auto/.claude.hooks.json');
+  } else {
+    lines.push(`claude-auto is already initialized at ${result.autoDir}`);
+  }
+
+  if (result.gitignoreAdvice) {
+    lines.push('');
+    lines.push('Note: .claude-auto is not in your .gitignore.');
+    lines.push('If this is for personal use only, consider adding it:');
+    lines.push('  echo ".claude-auto" >> .gitignore');
+  }
+
+  return lines.join('\n');
+}
+
 function checkGitignoreAdvice(projectRoot: string): boolean {
   const gitignorePath = path.join(projectRoot, '.gitignore');
 

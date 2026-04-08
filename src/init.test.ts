@@ -5,7 +5,7 @@ import * as path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { DEFAULT_HOOK_STATE } from './hook-state.js';
-import { initClaudeAuto } from './init.js';
+import { formatInitResult, initClaudeAuto } from './init.js';
 
 describe('initClaudeAuto', () => {
   let tempDir: string;
@@ -62,5 +62,28 @@ describe('initClaudeAuto', () => {
       autoDir: path.join(tempDir, '.claude-auto'),
       gitignoreAdvice: false,
     });
+  });
+});
+
+describe('formatInitResult', () => {
+  it('formats newly created result with gitignore advice', () => {
+    const output = formatInitResult({ created: true, autoDir: '/project/.claude-auto', gitignoreAdvice: true });
+
+    expect(output).toEqual(
+      [
+        'Initialized claude-auto at /project/.claude-auto',
+        'Default configuration written to .claude-auto/.claude.hooks.json',
+        '',
+        'Note: .claude-auto is not in your .gitignore.',
+        'If this is for personal use only, consider adding it:',
+        '  echo ".claude-auto" >> .gitignore',
+      ].join('\n'),
+    );
+  });
+
+  it('formats already initialized result without gitignore advice', () => {
+    const output = formatInitResult({ created: false, autoDir: '/project/.claude-auto', gitignoreAdvice: false });
+
+    expect(output).toBe('claude-auto is already initialized at /project/.claude-auto');
   });
 });

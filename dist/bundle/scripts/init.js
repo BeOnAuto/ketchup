@@ -57,19 +57,35 @@ var DEFAULT_HOOK_STATE = {
 };
 
 // src/init.ts
-function initClaudeAuto(projectRoot2) {
-  const autoDir = path.join(projectRoot2, ".claude-auto");
+function initClaudeAuto(projectRoot) {
+  const autoDir = path.join(projectRoot, ".claude-auto");
   if (fs.existsSync(autoDir)) {
-    return { created: false, autoDir, gitignoreAdvice: checkGitignoreAdvice(projectRoot2) };
+    return { created: false, autoDir, gitignoreAdvice: checkGitignoreAdvice(projectRoot) };
   }
   fs.mkdirSync(autoDir, { recursive: true });
   const stateFile = path.join(autoDir, ".claude.hooks.json");
   fs.writeFileSync(stateFile, `${JSON.stringify(DEFAULT_HOOK_STATE, null, 2)}
 `);
-  return { created: true, autoDir, gitignoreAdvice: checkGitignoreAdvice(projectRoot2) };
+  return { created: true, autoDir, gitignoreAdvice: checkGitignoreAdvice(projectRoot) };
 }
-function checkGitignoreAdvice(projectRoot2) {
-  const gitignorePath = path.join(projectRoot2, ".gitignore");
+function formatInitResult(result2) {
+  const lines = [];
+  if (result2.created) {
+    lines.push(`Initialized claude-auto at ${result2.autoDir}`);
+    lines.push("Default configuration written to .claude-auto/.claude.hooks.json");
+  } else {
+    lines.push(`claude-auto is already initialized at ${result2.autoDir}`);
+  }
+  if (result2.gitignoreAdvice) {
+    lines.push("");
+    lines.push("Note: .claude-auto is not in your .gitignore.");
+    lines.push("If this is for personal use only, consider adding it:");
+    lines.push('  echo ".claude-auto" >> .gitignore');
+  }
+  return lines.join("\n");
+}
+function checkGitignoreAdvice(projectRoot) {
+  const gitignorePath = path.join(projectRoot, ".gitignore");
   if (!fs.existsSync(gitignorePath)) {
     return true;
   }
@@ -79,17 +95,5 @@ function checkGitignoreAdvice(projectRoot2) {
 }
 
 // scripts/init.ts
-var projectRoot = process.cwd();
-var result = initClaudeAuto(projectRoot);
-if (result.created) {
-  console.log(`Initialized claude-auto at ${result.autoDir}`);
-  console.log("Default configuration written to .claude-auto/.claude.hooks.json");
-} else {
-  console.log(`claude-auto is already initialized at ${result.autoDir}`);
-}
-if (result.gitignoreAdvice) {
-  console.log("");
-  console.log("Note: .claude-auto is not in your .gitignore.");
-  console.log("If this is for personal use only, consider adding it:");
-  console.log('  echo ".claude-auto" >> .gitignore');
-}
+var result = initClaudeAuto(process.cwd());
+console.log(formatInitResult(result));
