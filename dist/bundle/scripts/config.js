@@ -3547,9 +3547,6 @@ var DEFAULT_HOOK_STATE = {
   }
 };
 function createHookState(autoDir) {
-  if (!fs.existsSync(autoDir)) {
-    fs.mkdirSync(autoDir, { recursive: true });
-  }
   const stateFile = path.join(autoDir, ".claude.hooks.json");
   function read() {
     if (!fs.existsSync(stateFile)) {

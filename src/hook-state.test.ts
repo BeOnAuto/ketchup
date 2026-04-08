@@ -21,6 +21,12 @@ describe('hook-state', () => {
   });
 
   describe('createHookState', () => {
+    it('does not create autoDir when it does not exist', () => {
+      const nonExistentDir = path.join(tempDir, 'not-created');
+      createHookState(nonExistentDir);
+      expect(fs.existsSync(nonExistentDir)).toBe(false);
+    });
+
     it('exists returns false before read and true after read', () => {
       const hookState = createHookState(autoDir);
 

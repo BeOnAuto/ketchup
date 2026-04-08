@@ -91,9 +91,6 @@ export interface HookStateManager {
 }
 
 export function createHookState(autoDir: string): HookStateManager {
-  if (!fs.existsSync(autoDir)) {
-    fs.mkdirSync(autoDir, { recursive: true });
-  }
   const stateFile = path.join(autoDir, '.claude.hooks.json');
 
   function read(): HookState {
