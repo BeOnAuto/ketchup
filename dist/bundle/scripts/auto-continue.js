@@ -131,6 +131,9 @@ function writeHookLog(autoDir, entry) {
 `);
 }
 
+// src/hooks/auto-continue.ts
+var import_node_fs2 = require("node:fs");
+
 // src/hook-state.ts
 var fs3 = __toESM(require("node:fs"));
 var path3 = __toESM(require("node:path"));
@@ -229,6 +232,9 @@ function createHookState(autoDir) {
 
 // src/hooks/auto-continue.ts
 function handleStop(autoDir, input2) {
+  if (!(0, import_node_fs2.existsSync)(autoDir)) {
+    return { decision: "allow", reason: "auto-continue disabled" };
+  }
   const stateManager = createHookState(autoDir);
   const state = stateManager.read();
   const { mode, skipModes } = state.autoContinue;

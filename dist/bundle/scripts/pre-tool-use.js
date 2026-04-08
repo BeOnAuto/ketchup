@@ -6150,7 +6150,7 @@ var require_parse3 = __commonJS({
 var require_gray_matter = __commonJS({
   "node_modules/.pnpm/gray-matter@4.0.3/node_modules/gray-matter/index.js"(exports2, module2) {
     "use strict";
-    var fs10 = require("fs");
+    var fs11 = require("fs");
     var sections = require_section_matter();
     var defaults = require_defaults();
     var stringify = require_stringify2();
@@ -6234,7 +6234,7 @@ var require_gray_matter = __commonJS({
       return stringify(file, data, options2);
     };
     matter3.read = function(filepath, options2) {
-      const str2 = fs10.readFileSync(filepath, "utf8");
+      const str2 = fs11.readFileSync(filepath, "utf8");
       const file = matter3(str2, options2);
       file.path = filepath;
       return file;
@@ -6263,7 +6263,7 @@ var require_gray_matter = __commonJS({
 });
 
 // scripts/pre-tool-use.ts
-var fs9 = __toESM(require("node:fs"));
+var fs10 = __toESM(require("node:fs"));
 
 // src/activity-logger.ts
 var import_node_fs = __toESM(require("node:fs"));
@@ -6564,6 +6564,9 @@ function writeHookLog(autoDir, entry) {
 `);
 }
 
+// src/hooks/pre-tool-use.ts
+var fs8 = __toESM(require("node:fs"));
+
 // src/debug-logger.ts
 var import_node_fs2 = __toESM(require("node:fs"));
 var import_node_path2 = __toESM(require("node:path"));
@@ -6798,6 +6801,14 @@ function loadValidators(dirs, overrides) {
 
 // src/hooks/pre-tool-use.ts
 async function handlePreToolUse(paths, sessionId, toolInput, options2 = {}) {
+  if (!fs8.existsSync(paths.autoDir)) {
+    return {
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "allow"
+      }
+    };
+  }
   const command = toolInput.command;
   if (command && isCommitCommand(command)) {
     const gitCwd = options2.cwd ?? process.cwd();
@@ -6913,7 +6924,7 @@ async function resolvePathsFromEnv(explicitPluginRoot) {
 }
 
 // src/plugin-debug.ts
-var fs8 = __toESM(require("node:fs"));
+var fs9 = __toESM(require("node:fs"));
 var path9 = __toESM(require("node:path"));
 function logPluginDiagnostics(hookName, paths) {
   const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
@@ -6937,15 +6948,15 @@ function logPluginDiagnostics(hookName, paths) {
   if (isDebug) {
     console.error(message);
   }
-  if (fs8.existsSync(paths.autoDir)) {
+  if (fs9.existsSync(paths.autoDir)) {
     const logsDir = path9.join(paths.autoDir, "logs");
-    fs8.mkdirSync(logsDir, { recursive: true });
-    fs8.appendFileSync(path9.join(logsDir, "plugin-debug.log"), message);
+    fs9.mkdirSync(logsDir, { recursive: true });
+    fs9.appendFileSync(path9.join(logsDir, "plugin-debug.log"), message);
   }
 }
 
 // scripts/pre-tool-use.ts
-var input = parseHookInput(fs9.readFileSync(0, "utf-8"));
+var input = parseHookInput(fs10.readFileSync(0, "utf-8"));
 var startTime = Date.now();
 (async () => {
   const paths = await resolvePathsFromEnv();

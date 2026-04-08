@@ -155,6 +155,16 @@ describe('auto-continue hook', () => {
   });
 
   describe('handleStop', () => {
+    it('returns allow (stop) when autoDir does not exist', () => {
+      const nonExistentDir = path.join(tempDir, 'not-created');
+      const input: StopHookInput = { session_id: 'test-session' };
+
+      const result = handleStop(nonExistentDir, input);
+
+      expect(result).toEqual({ decision: 'allow', reason: 'auto-continue disabled' });
+      expect(fs.existsSync(nonExistentDir)).toBe(false);
+    });
+
     it('returns allow when mode is off', () => {
       const autoDir = path.join(tempDir, '.claude-auto');
       fs.mkdirSync(autoDir, { recursive: true });
