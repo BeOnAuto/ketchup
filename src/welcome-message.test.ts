@@ -1,14 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
-import { FIRST_SETUP_MESSAGE } from './welcome-message.js';
+import { INIT_HINT_MESSAGE } from './welcome-message.js';
 
-describe('FIRST_SETUP_MESSAGE', () => {
-  it('contains setup directive with config skill reference', () => {
-    expect(FIRST_SETUP_MESSAGE).toContain('/claude-auto:config show');
-    expect(FIRST_SETUP_MESSAGE).toContain('CRITICAL');
+describe('INIT_HINT_MESSAGE', () => {
+  it('contains init instruction', () => {
+    expect(INIT_HINT_MESSAGE).toContain('/claude-auto init');
   });
 
-  it('instructs to not proceed with user request', () => {
-    expect(FIRST_SETUP_MESSAGE).toContain('DO NOT proceed');
+  it('is non-blocking and does not contain CRITICAL or DO NOT', () => {
+    expect(INIT_HINT_MESSAGE).not.toContain('CRITICAL');
+    expect(INIT_HINT_MESSAGE).not.toContain('DO NOT');
   });
 });

@@ -3397,7 +3397,7 @@ var require_parse = __commonJS({
 var require_gray_matter = __commonJS({
   "node_modules/.pnpm/gray-matter@4.0.3/node_modules/gray-matter/index.js"(exports2, module2) {
     "use strict";
-    var fs8 = require("fs");
+    var fs9 = require("fs");
     var sections = require_section_matter();
     var defaults = require_defaults();
     var stringify = require_stringify();
@@ -3481,7 +3481,7 @@ var require_gray_matter = __commonJS({
       return stringify(file, data, options2);
     };
     matter2.read = function(filepath, options2) {
-      const str2 = fs8.readFileSync(filepath, "utf8");
+      const str2 = fs9.readFileSync(filepath, "utf8");
       const file = matter2(str2, options2);
       file.path = filepath;
       return file;
@@ -3510,7 +3510,7 @@ var require_gray_matter = __commonJS({
 });
 
 // scripts/session-start.ts
-var fs7 = __toESM(require("node:fs"));
+var fs8 = __toESM(require("node:fs"));
 
 // src/activity-logger.ts
 var import_node_fs = __toESM(require("node:fs"));
@@ -3621,6 +3621,9 @@ function writeHookLog(autoDir, entry) {
   fs2.appendFileSync(logPath, `${lines.join("\n")}
 `);
 }
+
+// src/hooks/session-start.ts
+var fs6 = __toESM(require("node:fs"));
 
 // src/debug-logger.ts
 var import_node_fs2 = __toESM(require("node:fs"));
@@ -3798,8 +3801,24 @@ function loadReminders(dirs, context, overrides) {
   return sortByPriority(matched);
 }
 
+// src/welcome-message.ts
+var INIT_HINT_MESSAGE = "claude-auto is available for this repo. Run /claude-auto init to enable project-local config, validators, and logging.";
+
 // src/hooks/session-start.ts
 async function handleSessionStart(paths, sessionId = "", agentType) {
+  if (!fs6.existsSync(paths.autoDir)) {
+    return {
+      hookSpecificOutput: {
+        hookEventName: "SessionStart",
+        additionalContext: INIT_HINT_MESSAGE
+      },
+      diagnostics: {
+        resolvedPaths: paths,
+        reminderFiles: [],
+        matchedReminders: []
+      }
+    };
+  }
   const reminderFiles = paths.remindersDirs.flatMap((dir) => scanReminders(dir));
   if (agentType === "validator") {
     activityLog(paths.autoDir, sessionId, "session-start", "skipped reminders for validator session");
@@ -3855,7 +3874,7 @@ async function resolvePathsFromEnv(explicitPluginRoot) {
 }
 
 // src/plugin-debug.ts
-var fs6 = __toESM(require("node:fs"));
+var fs7 = __toESM(require("node:fs"));
 var path7 = __toESM(require("node:path"));
 function logPluginDiagnostics(hookName, paths) {
   const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
@@ -3879,15 +3898,15 @@ function logPluginDiagnostics(hookName, paths) {
   if (isDebug) {
     console.error(message);
   }
-  if (fs6.existsSync(paths.autoDir)) {
+  if (fs7.existsSync(paths.autoDir)) {
     const logsDir = path7.join(paths.autoDir, "logs");
-    fs6.mkdirSync(logsDir, { recursive: true });
-    fs6.appendFileSync(path7.join(logsDir, "plugin-debug.log"), message);
+    fs7.mkdirSync(logsDir, { recursive: true });
+    fs7.appendFileSync(path7.join(logsDir, "plugin-debug.log"), message);
   }
 }
 
 // scripts/session-start.ts
-var input = parseHookInput(fs7.readFileSync(0, "utf-8"));
+var input = parseHookInput(fs8.readFileSync(0, "utf-8"));
 var startTime = Date.now();
 (async () => {
   const paths = await resolvePathsFromEnv();

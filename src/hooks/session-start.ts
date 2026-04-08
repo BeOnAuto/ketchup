@@ -1,8 +1,11 @@
+import * as fs from 'node:fs';
+
 import { activityLog } from '../activity-logger.js';
 import { debugLog } from '../debug-logger.js';
 import { createHookState } from '../hook-state.js';
 import type { ResolvedPaths } from '../path-resolver.js';
 import { loadReminders, scanReminders } from '../reminder-loader.js';
+import { INIT_HINT_MESSAGE } from '../welcome-message.js';
 
 type HookResult = {
   hookSpecificOutput: {
@@ -22,6 +25,20 @@ export async function handleSessionStart(
   sessionId: string = '',
   agentType?: string,
 ): Promise<HookResult & { diagnostics: SessionStartDiagnostics }> {
+  if (!fs.existsSync(paths.autoDir)) {
+    return {
+      hookSpecificOutput: {
+        hookEventName: 'SessionStart',
+        additionalContext: INIT_HINT_MESSAGE,
+      },
+      diagnostics: {
+        resolvedPaths: paths,
+        reminderFiles: [],
+        matchedReminders: [],
+      },
+    };
+  }
+
   const reminderFiles = paths.remindersDirs.flatMap((dir) => scanReminders(dir));
 
   if (agentType === 'validator') {

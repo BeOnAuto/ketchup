@@ -3397,7 +3397,7 @@ var require_parse = __commonJS({
 var require_gray_matter = __commonJS({
   "node_modules/.pnpm/gray-matter@4.0.3/node_modules/gray-matter/index.js"(exports2, module2) {
     "use strict";
-    var fs8 = require("fs");
+    var fs9 = require("fs");
     var sections = require_section_matter();
     var defaults = require_defaults();
     var stringify = require_stringify();
@@ -3481,7 +3481,7 @@ var require_gray_matter = __commonJS({
       return stringify(file, data, options2);
     };
     matter2.read = function(filepath, options2) {
-      const str2 = fs8.readFileSync(filepath, "utf8");
+      const str2 = fs9.readFileSync(filepath, "utf8");
       const file = matter2(str2, options2);
       file.path = filepath;
       return file;
@@ -3510,7 +3510,7 @@ var require_gray_matter = __commonJS({
 });
 
 // scripts/user-prompt-submit.ts
-var fs7 = __toESM(require("node:fs"));
+var fs8 = __toESM(require("node:fs"));
 
 // src/activity-logger.ts
 var import_node_fs = __toESM(require("node:fs"));
@@ -3621,6 +3621,9 @@ function writeHookLog(autoDir, entry) {
   fs2.appendFileSync(logPath, `${lines.join("\n")}
 `);
 }
+
+// src/hooks/user-prompt-submit.ts
+var fs6 = __toESM(require("node:fs"));
 
 // src/debug-logger.ts
 var import_node_fs2 = __toESM(require("node:fs"));
@@ -3807,32 +3810,21 @@ function isValidatorSession(prompt) {
   return hasDiff && hasCommitMessage && hasFiles;
 }
 
-// src/welcome-message.ts
-var FIRST_SETUP_MESSAGE = `CRITICAL INSTRUCTION \u2014 DO THIS BEFORE ANYTHING ELSE:
-
-The claude-auto plugin has just been installed in this project for the first time. You MUST guide the user through setup before doing any work.
-
-DO NOT proceed with the user's request yet. Instead:
-
-1. Greet the user and explain that claude-auto is now active
-2. Briefly explain what it does:
-   - Commit validation (17 validators enforce TDD, coverage, code quality)
-   - Reminders injected into prompts (TCR workflow, testing rules)
-   - File protection via deny-lists
-   - Auto-continue to keep working until the plan is done
-3. Run /claude-auto:config show to display the current configuration
-4. Ask the user if they want to customize anything, or proceed with defaults
-5. ONLY AFTER the user confirms, proceed with their original request
-
-The default workflow follows the Ketchup Technique:
-- Create ketchup-plan.md with TODO/DONE sections before coding
-- One failing test \u2192 minimal passing code \u2192 commit (TCR)
-- 100% test coverage, no exceptions
-
-This setup runs once. After this, normal reminders will guide the workflow.`;
-
 // src/hooks/user-prompt-submit.ts
 async function handleUserPromptSubmit(paths, sessionId, prompt) {
+  if (!fs6.existsSync(paths.autoDir)) {
+    return {
+      hookSpecificOutput: {
+        hookEventName: "UserPromptSubmit",
+        additionalContext: ""
+      },
+      diagnostics: {
+        resolvedPaths: paths,
+        reminderFiles: [],
+        matchedReminders: []
+      }
+    };
+  }
   const reminderFiles = paths.remindersDirs.flatMap((dir) => scanReminders(dir));
   if (isValidatorSession(prompt)) {
     activityLog(paths.autoDir, sessionId, "user-prompt-submit", "skipped reminders for validator session");
@@ -3849,26 +3841,7 @@ async function handleUserPromptSubmit(paths, sessionId, prompt) {
       }
     };
   }
-  const stateManager = createHookState(paths.autoDir);
-  const state = stateManager.read();
-  if (state.firstSetupRequired) {
-    const updated = stateManager.read();
-    delete updated.firstSetupRequired;
-    stateManager.write(updated);
-    activityLog(paths.autoDir, sessionId, "user-prompt-submit", "first-setup directive injected");
-    debugLog(paths.autoDir, "user-prompt-submit", "first-setup directive injected");
-    return {
-      hookSpecificOutput: {
-        hookEventName: "UserPromptSubmit",
-        additionalContext: FIRST_SETUP_MESSAGE
-      },
-      diagnostics: {
-        resolvedPaths: paths,
-        reminderFiles,
-        matchedReminders: []
-      }
-    };
-  }
+  const state = createHookState(paths.autoDir).read();
   const reminders = loadReminders(paths.remindersDirs, { hook: "UserPromptSubmit" }, state.overrides.reminders);
   const reminderContent = reminders.map((r) => r.content).join("\n\n");
   activityLog(
@@ -3917,7 +3890,7 @@ async function resolvePathsFromEnv(explicitPluginRoot) {
 }
 
 // src/plugin-debug.ts
-var fs6 = __toESM(require("node:fs"));
+var fs7 = __toESM(require("node:fs"));
 var path7 = __toESM(require("node:path"));
 function logPluginDiagnostics(hookName, paths) {
   const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
@@ -3941,15 +3914,15 @@ function logPluginDiagnostics(hookName, paths) {
   if (isDebug) {
     console.error(message);
   }
-  if (fs6.existsSync(paths.autoDir)) {
+  if (fs7.existsSync(paths.autoDir)) {
     const logsDir = path7.join(paths.autoDir, "logs");
-    fs6.mkdirSync(logsDir, { recursive: true });
-    fs6.appendFileSync(path7.join(logsDir, "plugin-debug.log"), message);
+    fs7.mkdirSync(logsDir, { recursive: true });
+    fs7.appendFileSync(path7.join(logsDir, "plugin-debug.log"), message);
   }
 }
 
 // scripts/user-prompt-submit.ts
-var input = parseHookInput(fs7.readFileSync(0, "utf-8"));
+var input = parseHookInput(fs8.readFileSync(0, "utf-8"));
 var startTime = Date.now();
 (async () => {
   const paths = await resolvePathsFromEnv();

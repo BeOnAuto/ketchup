@@ -5,7 +5,6 @@ import * as path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import type { ResolvedPaths } from '../path-resolver.js';
-import { FIRST_SETUP_MESSAGE } from '../welcome-message.js';
 
 const DEFAULT_AUTO_DIR = '.claude-auto';
 
@@ -123,14 +122,13 @@ Remember to follow coding standards.`,
     expect(content).toContain('injected 1 reminder');
   });
 
-  it('injects first-setup directive when firstSetupRequired is true', async () => {
-    fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify({ firstSetupRequired: true }));
+  it('returns empty when autoDir does not exist', async () => {
+    const nonExistentPaths = { ...resolvedPaths, autoDir: path.join(tempDir, 'not-created') };
 
-    const result = await handleUserPromptSubmit(resolvedPaths, 'setup-session', 'do something');
+    const result = await handleUserPromptSubmit(nonExistentPaths, 'session-1');
 
-    expect(result.hookSpecificOutput.additionalContext).toBe(FIRST_SETUP_MESSAGE);
-    const state = JSON.parse(fs.readFileSync(path.join(autoDir, '.claude.hooks.json'), 'utf-8'));
-    expect(state.firstSetupRequired).toBeUndefined();
+    expect(result.hookSpecificOutput.additionalContext).toBe('');
+    expect(result.diagnostics.matchedReminders).toEqual([]);
   });
 
   it('skips reminders for validator subagent sessions', async () => {
