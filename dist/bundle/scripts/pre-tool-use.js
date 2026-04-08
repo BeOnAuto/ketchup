@@ -6655,10 +6655,16 @@ function createHookState(autoDir) {
     };
   }
   function write(state) {
+    if (!fs5.existsSync(autoDir)) {
+      return;
+    }
     fs5.writeFileSync(stateFile, `${JSON.stringify(state, null, 2)}
 `);
   }
   function update(updates) {
+    if (!fs5.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
     const current = read();
     const newState = {
       ...current,

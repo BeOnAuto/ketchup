@@ -122,10 +122,16 @@ export function createHookState(autoDir: string): HookStateManager {
   }
 
   function write(state: HookState): void {
+    if (!fs.existsSync(autoDir)) {
+      return;
+    }
     fs.writeFileSync(stateFile, `${JSON.stringify(state, null, 2)}\n`);
   }
 
   function update(updates: Partial<HookState>): HookState {
+    if (!fs.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
     const current = read();
     const newState: HookState = {
       ...current,

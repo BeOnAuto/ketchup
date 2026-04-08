@@ -126,6 +126,15 @@ describe('hook-state', () => {
   });
 
   describe('write', () => {
+    it('is a no-op when autoDir does not exist', () => {
+      const nonExistentDir = path.join(tempDir, 'not-created');
+      const hookState = createHookState(nonExistentDir);
+
+      hookState.write({ ...DEFAULT_HOOK_STATE, autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, mode: 'off' } });
+
+      expect(fs.existsSync(nonExistentDir)).toBe(false);
+    });
+
     it('writes state to .claude-auto/.claude.hooks.json', () => {
       const hookState = createHookState(autoDir);
       const newState: HookState = {
@@ -153,6 +162,16 @@ describe('hook-state', () => {
   });
 
   describe('update', () => {
+    it('returns defaults and does not create files when autoDir does not exist', () => {
+      const nonExistentDir = path.join(tempDir, 'not-created');
+      const hookState = createHookState(nonExistentDir);
+
+      const result = hookState.update({ autoContinue: { mode: 'off', skipModes: [], maxIterations: 0 } });
+
+      expect(result).toEqual(DEFAULT_HOOK_STATE);
+      expect(fs.existsSync(nonExistentDir)).toBe(false);
+    });
+
     it('updates specific fields and preserves others', () => {
       const hookState = createHookState(autoDir);
 

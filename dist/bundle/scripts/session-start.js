@@ -3693,10 +3693,16 @@ function createHookState(autoDir) {
     };
   }
   function write(state) {
+    if (!fs4.existsSync(autoDir)) {
+      return;
+    }
     fs4.writeFileSync(stateFile, `${JSON.stringify(state, null, 2)}
 `);
   }
   function update(updates) {
+    if (!fs4.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
     const current = read();
     const newState = {
       ...current,

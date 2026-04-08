@@ -183,10 +183,16 @@ function createHookState(autoDir) {
     };
   }
   function write(state) {
+    if (!fs3.existsSync(autoDir)) {
+      return;
+    }
     fs3.writeFileSync(stateFile, `${JSON.stringify(state, null, 2)}
 `);
   }
   function update(updates) {
+    if (!fs3.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
     const current = read();
     const newState = {
       ...current,

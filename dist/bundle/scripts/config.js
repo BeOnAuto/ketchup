@@ -3574,10 +3574,16 @@ function createHookState(autoDir) {
     };
   }
   function write(state) {
+    if (!fs.existsSync(autoDir)) {
+      return;
+    }
     fs.writeFileSync(stateFile, `${JSON.stringify(state, null, 2)}
 `);
   }
   function update(updates) {
+    if (!fs.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
     const current = read();
     const newState = {
       ...current,
