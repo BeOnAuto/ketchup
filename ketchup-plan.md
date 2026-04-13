@@ -2,6 +2,8 @@
 
 ## TODO
 
+- [ ] Burst 6.2: `INIT_HINT_MESSAGE` uses emojis for visibility
+
 ## DONE
 
 - [x] Burst 6.1: `formatInitResult` uses emojis and does not instruct Claude to ask the user
