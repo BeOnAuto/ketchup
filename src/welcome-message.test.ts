@@ -8,4 +8,8 @@ describe('INIT_HINT_MESSAGE', () => {
     expect(INIT_HINT_MESSAGE).toContain('do not block');
     expect(INIT_HINT_MESSAGE).not.toContain('CRITICAL');
   });
+
+  it('uses emojis for visibility', () => {
+    expect(INIT_HINT_MESSAGE).toMatch(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u);
+  });
 });

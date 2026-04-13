@@ -2,11 +2,10 @@
 
 ## TODO
 
-- [ ] Burst 6.2: `INIT_HINT_MESSAGE` uses emojis for visibility
-
 ## DONE
 
 - [x] Burst 6.1: `formatInitResult` uses emojis and does not instruct Claude to ask the user
+- [x] Burst 6.2: `INIT_HINT_MESSAGE` uses emojis for visibility
 
 - [x] Burst 1.1: `createHookState` does not create autoDir (6fe15c2)
 - [x] Burst 1.2: `read()` returns defaults when autoDir missing (7ee52cd)

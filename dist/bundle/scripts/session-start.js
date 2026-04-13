@@ -3804,7 +3804,7 @@ function loadReminders(dirs, context, overrides) {
 var INIT_HINT_MESSAGE = `The claude-auto plugin is installed but not yet initialized in this project.
 
 When you first respond to the user, briefly mention:
-"claude-auto is available but not active in this repo. Run /claude-auto-init to enable commit validation, workflow reminders, and auto-continue."
+"\u{1F4A1} claude-auto is available but not active in this repo. \u2728 Run /claude-auto-init to enable \u2705 commit validation, \u{1F514} workflow reminders, and \u26A1 auto-continue."
 
 Keep it to one line, do not block the user's request, and do not repeat this in subsequent messages.`;
 
