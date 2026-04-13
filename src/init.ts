@@ -28,21 +28,20 @@ export function formatInitResult(result: InitResult): string {
   const lines: string[] = [];
 
   if (result.created) {
-    lines.push(`Initialized claude-auto at ${result.autoDir}`);
-    lines.push('Default configuration written to .claude-auto/.claude.hooks.json');
+    lines.push(`✅ Initialized claude-auto at ${result.autoDir}`);
+    lines.push('🎯 Default configuration written to .claude-auto/.claude.hooks.json');
 
     if (result.gitignoreAdvice) {
       lines.push('');
-      lines.push('Note: .claude-auto is not in your .gitignore.');
-      lines.push('If this is for personal use only, consider adding it:');
-      lines.push('  echo ".claude-auto" >> .gitignore');
+      lines.push('📌 Note: .claude-auto is not in your .gitignore.');
+      lines.push('   If this is for personal use only, consider adding it:');
+      lines.push('     echo ".claude-auto" >> .gitignore');
     }
 
     lines.push('');
-    lines.push('Ask the user if they would like to review or customize the configuration.');
-    lines.push('If yes, run /claude-auto-config show to display current settings.');
+    lines.push('💡 Defaults are active — run /claude-auto-config show anytime to review or customize.');
   } else {
-    lines.push(`claude-auto is already initialized at ${result.autoDir}`);
+    lines.push(`✅ claude-auto is already initialized at ${result.autoDir}`);
   }
 
   return lines.join('\n');

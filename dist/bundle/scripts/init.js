@@ -71,19 +71,18 @@ function initClaudeAuto(projectRoot) {
 function formatInitResult(result2) {
   const lines = [];
   if (result2.created) {
-    lines.push(`Initialized claude-auto at ${result2.autoDir}`);
-    lines.push("Default configuration written to .claude-auto/.claude.hooks.json");
+    lines.push(`\u2705 Initialized claude-auto at ${result2.autoDir}`);
+    lines.push("\u{1F3AF} Default configuration written to .claude-auto/.claude.hooks.json");
     if (result2.gitignoreAdvice) {
       lines.push("");
-      lines.push("Note: .claude-auto is not in your .gitignore.");
-      lines.push("If this is for personal use only, consider adding it:");
-      lines.push('  echo ".claude-auto" >> .gitignore');
+      lines.push("\u{1F4CC} Note: .claude-auto is not in your .gitignore.");
+      lines.push("   If this is for personal use only, consider adding it:");
+      lines.push('     echo ".claude-auto" >> .gitignore');
     }
     lines.push("");
-    lines.push("Ask the user if they would like to review or customize the configuration.");
-    lines.push("If yes, run /claude-auto-config show to display current settings.");
+    lines.push("\u{1F4A1} Defaults are active \u2014 run /claude-auto-config show anytime to review or customize.");
   } else {
-    lines.push(`claude-auto is already initialized at ${result2.autoDir}`);
+    lines.push(`\u2705 claude-auto is already initialized at ${result2.autoDir}`);
   }
   return lines.join("\n");
 }
