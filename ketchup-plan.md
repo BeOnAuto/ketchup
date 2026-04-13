@@ -2,6 +2,8 @@
 
 ## TODO
 
+- [ ] Burst 6.1: `formatInitResult` uses emojis and does not instruct Claude to ask the user
+
 ## DONE
 
 - [x] Burst 1.1: `createHookState` does not create autoDir (6fe15c2)
