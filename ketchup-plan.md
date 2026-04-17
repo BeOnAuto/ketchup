@@ -1,29 +1,41 @@
-# Ketchup Plan: Make claude-auto opt-in per repository
+# Ketchup Plan: Event Store — Claude session transcripts as domain events
+
+Translate `~/.claude/projects/**/*.jsonl` transcripts into a domain event stream
+stored in Emmett (SQLite backend). One stream per `sessionId`. Events preserve
+interleave by order; raw jsonl line is stashed on each event under `source`.
+
+**Design decisions (locked):**
+
+- Domain-first vocabulary (noise types folded or dropped; raw line kept on `source`)
+- SQLite backend via `@event-driven-io/emmett-sqlite`
+- `ThoughtRecorded` events kept (privacy revisit later if needed)
+- `AssistantResponded` emitted per text segment (interleave preserved by order)
+- Ingestion: on-demand CLI + Stop hook piggyback (live tail deferred)
+
+**Event vocabulary:**
+`SessionStarted` · `PromptSubmitted` · `AssistantResponded` · `ThoughtRecorded` ·
+`ToolInvoked` · `ToolInvocationSucceeded` · `ToolInvocationFailed` ·
+`FileModified` · `HookExecuted` · `SubagentSpawned` · `SubagentCompleted` ·
+`SessionCompacted` · `SessionEnded`
 
 ## TODO
 
+- [ ] Burst 1: `parseSessionStarted` — jsonl `SessionStart` progress line → `SessionStarted` event [depends: none]
+- [ ] Burst 2: `parsePromptSubmitted` — `user` message line → `PromptSubmitted` event [depends: none]
+- [ ] Burst 3: `parseAssistantResponded` — `assistant` text segment → `AssistantResponded` event [depends: none]
+- [ ] Burst 4: `parseThoughtRecorded` — `thinking` line → `ThoughtRecorded` event [depends: none]
+- [ ] Burst 5: `parseToolInvoked` — `tool_use` line → `ToolInvoked` event [depends: none]
+- [ ] Burst 6: `parseToolInvocationSucceeded` — successful `tool_result` line [depends: 5]
+- [ ] Burst 7: `parseToolInvocationFailed` — failed `tool_result` line [depends: 5]
+- [ ] Burst 8: `parseHookExecuted` — `hook_progress` line → `HookExecuted` event [depends: none]
+- [ ] Burst 9: `parseSubagentSpawned` / `parseSubagentCompleted` — `agent_progress` lines [depends: none]
+- [ ] Burst 10: `parseFileModified` — `update` / `create` lines → `FileModified` event [depends: none]
+- [ ] Burst 11: `parseSessionEnded` — end-of-stream marker → `SessionEnded` event [depends: 1]
+- [ ] Burst 12: `translateSession(jsonlPath)` — line-by-line orchestration, returns event array [depends: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+- [ ] Burst 13: Emmett SQLite store init — opens `events.db`, creates schema [depends: none]
+- [ ] Burst 14: `ingestSession(jsonlPath, store)` — append events with high-water-mark dedupe [depends: 12, 13]
+- [ ] Burst 15: `ingestProject(projectDir, store)` — scan all sessions, ingest each [depends: 14]
+- [ ] Burst 16: CLI: `claude-auto events ingest [project-dir]` [depends: 15]
+- [ ] Burst 17: Stop hook wiring — auto-ingest current session on Stop [depends: 14]
+
 ## DONE
-
-- [x] Burst 6.1: `formatInitResult` uses emojis and does not instruct Claude to ask the user
-- [x] Burst 6.2: `INIT_HINT_MESSAGE` uses emojis for visibility
-
-- [x] Burst 1.1: `createHookState` does not create autoDir (6fe15c2)
-- [x] Burst 1.2: `read()` returns defaults when autoDir missing (7ee52cd)
-- [x] Burst 1.3: `write()` is no-op when autoDir missing (c70de21)
-- [x] Burst 1.4: `update()` returns defaults when autoDir missing (c70de21)
-- [x] Burst 1.5: Remove `firstSetupRequired` from initial state creation (7ee52cd)
-- [x] Burst 2.1: `activityLog` no-op when autoDir missing (e33d77f)
-- [x] Burst 2.2: `debugLog` no-op when autoDir missing (e33d77f)
-- [x] Burst 2.3: `writeHookLog` no-op when autoDir missing (e33d77f)
-- [x] Burst 2.4: `logPluginDiagnostics` no file write when autoDir missing (e33d77f)
-- [x] Burst 3.1: `INIT_HINT_MESSAGE` constant (86fac7f)
-- [x] Burst 3.2: `handleSessionStart` returns only hint when autoDir missing (86fac7f)
-- [x] Burst 3.3: `handlePreToolUse` allows everything when autoDir missing (62efee8)
-- [x] Burst 3.4: `handleUserPromptSubmit` returns empty when autoDir missing (86fac7f)
-- [x] Burst 3.5: `handleStop` returns stop when autoDir missing (62efee8)
-- [x] Burst 4.1: Remove `firstSetupRequired` block from user-prompt-submit (86fac7f)
-- [x] Burst 4.2: Remove `FIRST_SETUP_MESSAGE` (86fac7f)
-- [x] Burst 5.1: `initClaudeAuto` creates `.claude-auto/` with default state (43244eb)
-- [x] Burst 5.2: Returns `created: false` when already initialized (43244eb)
-- [x] Burst 5.3: Detects `.gitignore` status for `.claude-auto` (43244eb)
-- [x] Burst 5.4: Script entry point + SKILL.md (7526a57)
