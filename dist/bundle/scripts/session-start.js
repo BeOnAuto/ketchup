@@ -3801,7 +3801,7 @@ function loadReminders(dirs, context, overrides) {
 }
 
 // src/welcome-message.ts
-var INIT_HINT_MESSAGE = "Reminder: Use /claude-auto-init to enable https://claude.on.auto in this folder";
+var INIT_HINT_MESSAGE = `On your first reply, mention once (then proceed with the user's request): "Reminder: Use /claude-auto-init to enable https://claude.on.auto in this folder"`;
 
 // src/hooks/session-start.ts
 async function handleSessionStart(paths, sessionId = "", agentType) {
