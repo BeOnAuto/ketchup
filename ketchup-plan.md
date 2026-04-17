@@ -20,11 +20,7 @@ interleave by order; raw jsonl line is stashed on each event under `source`.
 
 ## TODO
 
-- [ ] Burst 6: `parseToolInvocationSucceeded` — successful `tool_result` line [depends: 5]
-- [ ] Burst 7: `parseToolInvocationFailed` — failed `tool_result` line [depends: 5]
-- [ ] Burst 11: `parseSessionEnded` — end-of-stream marker → `SessionEnded` event [depends: 1]
 - [ ] Burst 12: `translateSession(jsonlPath)` — line-by-line orchestration, returns event array [depends: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-- [ ] Burst 13: Emmett SQLite store init — opens `events.db`, creates schema [depends: none]
 - [ ] Burst 14: `ingestSession(jsonlPath, store)` — append events with high-water-mark dedupe [depends: 12, 13]
 - [ ] Burst 15: `ingestProject(projectDir, store)` — scan all sessions, ingest each [depends: 14]
 - [ ] Burst 16: CLI: `claude-auto events ingest [project-dir]` [depends: 15]
@@ -40,3 +36,7 @@ interleave by order; raw jsonl line is stashed on each event under `source`.
 - [x] Burst 8: `parseHookExecuted` — `hook_progress` line → `HookExecuted` event (1380fa5)
 - [x] Burst 9: `parseSubagentProgressed` — `agent_progress` line → `SubagentProgressed` event (19ca15c)
 - [x] Burst 10: `parseFileModified` — `tool_result` line with `create`/`update` → `FileModified` event (98e01a6)
+- [x] Burst 6: `parseToolInvocationSucceeded` — successful `tool_result` → event (d0d02d3)
+- [x] Burst 7: `parseToolInvocationFailed` — failed `tool_result` → event (1bde829)
+- [x] Burst 11: `parseSessionEnded` — Stop hook line → `SessionEnded` event (39b6598)
+- [x] Burst 13: `createEventStore` — Emmett SQLite store factory (183e82b)
