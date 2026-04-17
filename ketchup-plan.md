@@ -2,6 +2,8 @@
 
 ## TODO
 
+- [ ] Burst 7.1: Simplify `INIT_HINT_MESSAGE` to plain one-line reminder [depends: none]
+
 ## DONE
 
 - [x] Burst 6.1: `formatInitResult` uses emojis and does not instruct Claude to ask the user
