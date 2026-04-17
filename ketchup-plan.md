@@ -2,10 +2,9 @@
 
 ## TODO
 
-- [ ] Burst 7.4: Wrap init config tip in directive so Claude surfaces it [depends: 7.3]
-
 ## DONE
 
+- [x] Burst 7.4: Wrap init config tip in directive so Claude surfaces it (45f3a8a)
 - [x] Burst 7.3: Wrap `INIT_HINT_MESSAGE` in a directive so Claude surfaces it on first reply (f388145)
 - [x] Burst 7.2: Fix skill name in `INIT_HINT_MESSAGE` to `/claude-auto-init` (0832f02)
 - [x] Burst 7.1: Simplify `INIT_HINT_MESSAGE` to plain one-line reminder (8783851)
