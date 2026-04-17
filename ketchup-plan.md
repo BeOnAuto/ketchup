@@ -2,6 +2,8 @@
 
 ## TODO
 
+- [ ] Burst 7.4: Wrap init config tip in directive so Claude surfaces it [depends: 7.3]
+
 ## DONE
 
 - [x] Burst 7.3: Wrap `INIT_HINT_MESSAGE` in a directive so Claude surfaces it on first reply (f388145)
