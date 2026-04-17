@@ -2,6 +2,8 @@
 
 ## TODO
 
+- [ ] Burst 7.3: Wrap `INIT_HINT_MESSAGE` in a directive so Claude surfaces it on first reply [depends: 7.2]
+
 ## DONE
 
 - [x] Burst 7.2: Fix skill name in `INIT_HINT_MESSAGE` to `/claude-auto-init` (0832f02)
