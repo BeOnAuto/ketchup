@@ -20,15 +20,8 @@ interleave by order; raw jsonl line is stashed on each event under `source`.
 
 ## TODO
 
-- [ ] Burst 2: `parsePromptSubmitted` — `user` message line → `PromptSubmitted` event [depends: none]
-- [ ] Burst 3: `parseAssistantResponded` — `assistant` text segment → `AssistantResponded` event [depends: none]
-- [ ] Burst 4: `parseThoughtRecorded` — `thinking` line → `ThoughtRecorded` event [depends: none]
-- [ ] Burst 5: `parseToolInvoked` — `tool_use` line → `ToolInvoked` event [depends: none]
 - [ ] Burst 6: `parseToolInvocationSucceeded` — successful `tool_result` line [depends: 5]
 - [ ] Burst 7: `parseToolInvocationFailed` — failed `tool_result` line [depends: 5]
-- [ ] Burst 8: `parseHookExecuted` — `hook_progress` line → `HookExecuted` event [depends: none]
-- [ ] Burst 9: `parseSubagentSpawned` / `parseSubagentCompleted` — `agent_progress` lines [depends: none]
-- [ ] Burst 10: `parseFileModified` — `update` / `create` lines → `FileModified` event [depends: none]
 - [ ] Burst 11: `parseSessionEnded` — end-of-stream marker → `SessionEnded` event [depends: 1]
 - [ ] Burst 12: `translateSession(jsonlPath)` — line-by-line orchestration, returns event array [depends: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
 - [ ] Burst 13: Emmett SQLite store init — opens `events.db`, creates schema [depends: none]
@@ -40,3 +33,10 @@ interleave by order; raw jsonl line is stashed on each event under `source`.
 ## DONE
 
 - [x] Burst 1: `parseSessionStarted` — jsonl `SessionStart` progress line → `SessionStarted` event (a31a987)
+- [x] Burst 2: `parsePromptSubmitted` — `user` message line → `PromptSubmitted` event (a4b48d5)
+- [x] Burst 3: `parseAssistantResponded` — `assistant` text segment → `AssistantResponded` event (651a361)
+- [x] Burst 4: `parseThoughtRecorded` — `thinking` item → `ThoughtRecorded` event (b443876)
+- [x] Burst 5: `parseToolInvoked` — `tool_use` item → `ToolInvoked` event (4f53bae)
+- [x] Burst 8: `parseHookExecuted` — `hook_progress` line → `HookExecuted` event (1380fa5)
+- [x] Burst 9: `parseSubagentProgressed` — `agent_progress` line → `SubagentProgressed` event (19ca15c)
+- [x] Burst 10: `parseFileModified` — `tool_result` line with `create`/`update` → `FileModified` event (98e01a6)
