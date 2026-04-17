@@ -50,6 +50,8 @@
   "author": "Sam Hatoum",
   "license": "MIT",
   "dependencies": {
+    "@event-driven-io/emmett": "^0.42.0",
+    "@event-driven-io/emmett-sqlite": "^0.42.0",
     "gray-matter": "^4.0.3",
     "micromatch": "^4.0.8"
   },
@@ -84,5 +86,10 @@
   "engines": {
     "node": ">=18.0.0"
   },
-  "packageManager": "pnpm@10.28.0"
+  "packageManager": "pnpm@10.28.0",
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "sqlite3"
+    ]
+  }
 }
