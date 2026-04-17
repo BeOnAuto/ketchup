@@ -20,11 +20,6 @@ interleave by order; raw jsonl line is stashed on each event under `source`.
 
 ## TODO
 
-- [ ] Burst 12: `translateSession(jsonlPath)` — line-by-line orchestration, returns event array [depends: 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
-- [ ] Burst 14: `ingestSession(jsonlPath, store)` — append events with high-water-mark dedupe [depends: 12, 13]
-- [ ] Burst 15: `ingestProject(projectDir, store)` — scan all sessions, ingest each [depends: 14]
-- [ ] Burst 16: CLI: `claude-auto events ingest [project-dir]` [depends: 15]
-- [ ] Burst 17: Stop hook wiring — auto-ingest current session on Stop [depends: 14]
 
 ## DONE
 
@@ -40,3 +35,9 @@ interleave by order; raw jsonl line is stashed on each event under `source`.
 - [x] Burst 7: `parseToolInvocationFailed` — failed `tool_result` → event (1bde829)
 - [x] Burst 11: `parseSessionEnded` — Stop hook line → `SessionEnded` event (39b6598)
 - [x] Burst 13: `createEventStore` — Emmett SQLite store factory (183e82b)
+- [x] Refactor: `parseSessionStarted` returns array with hook_progress filter (4080c31)
+- [x] Burst 12: `translateSession` orchestrates parsers over jsonl lines (8f9f2c5)
+- [x] Burst 14: `ingestSession` appends translated events to per-session stream (222ebba)
+- [x] Burst 15: `ingestProject` invokes session ingester for each jsonl file (145d11d)
+- [x] Burst 16: `ingestCliRun` + `scripts/events-ingest.ts` CLI entry (0e42410)
+- [x] Burst 17: `ingestOnStop` wires Stop hook input to session ingestion (45ffc39)
