@@ -20,7 +20,6 @@ interleave by order; raw jsonl line is stashed on each event under `source`.
 
 ## TODO
 
-- [ ] Burst 1: `parseSessionStarted` — jsonl `SessionStart` progress line → `SessionStarted` event [depends: none]
 - [ ] Burst 2: `parsePromptSubmitted` — `user` message line → `PromptSubmitted` event [depends: none]
 - [ ] Burst 3: `parseAssistantResponded` — `assistant` text segment → `AssistantResponded` event [depends: none]
 - [ ] Burst 4: `parseThoughtRecorded` — `thinking` line → `ThoughtRecorded` event [depends: none]
@@ -39,3 +38,5 @@ interleave by order; raw jsonl line is stashed on each event under `source`.
 - [ ] Burst 17: Stop hook wiring — auto-ingest current session on Stop [depends: 14]
 
 ## DONE
+
+- [x] Burst 1: `parseSessionStarted` — jsonl `SessionStart` progress line → `SessionStarted` event (a31a987)
