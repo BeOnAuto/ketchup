@@ -2,10 +2,9 @@
 
 ## TODO
 
-- [ ] Burst 7.3: Wrap `INIT_HINT_MESSAGE` in a directive so Claude surfaces it on first reply [depends: 7.2]
-
 ## DONE
 
+- [x] Burst 7.3: Wrap `INIT_HINT_MESSAGE` in a directive so Claude surfaces it on first reply (f388145)
 - [x] Burst 7.2: Fix skill name in `INIT_HINT_MESSAGE` to `/claude-auto-init` (0832f02)
 - [x] Burst 7.1: Simplify `INIT_HINT_MESSAGE` to plain one-line reminder (8783851)
 - [x] Burst 6.1: `formatInitResult` uses emojis and does not instruct Claude to ask the user
