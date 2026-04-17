@@ -80,7 +80,9 @@ function formatInitResult(result2) {
       lines.push('     echo ".claude-auto" >> .gitignore');
     }
     lines.push("");
-    lines.push("\u{1F4A1} Defaults are active \u2014 run /claude-auto-config show anytime to review or customize.");
+    lines.push(
+      `On your next reply, mention once (then proceed with the user's request): "Reminder: Defaults are active \u2014 run /claude-auto-config show anytime to review or customize."`
+    );
   } else {
     lines.push(`\u2705 claude-auto is already initialized at ${result2.autoDir}`);
   }

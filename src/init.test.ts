@@ -67,13 +67,13 @@ describe('initClaudeAuto', () => {
 });
 
 describe('formatInitResult', () => {
-  it('formats newly created result with emojis, gitignore advice, and non-interrupting config hint', () => {
+  it('formats newly created result with directive-wrapped config reminder', () => {
     const output = formatInitResult({ created: true, autoDir: '/project/.claude-auto', gitignoreAdvice: true });
 
     expect(output).toContain('Initialized claude-auto at /project/.claude-auto');
     expect(output).toContain('.gitignore');
-    expect(output).toContain('/claude-auto-config');
-    expect(output).toMatch(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u);
+    expect(output).toContain('On your next reply, mention once');
+    expect(output).toContain('Reminder: Defaults are active — run /claude-auto-config show');
     expect(output).not.toMatch(/ask the user/i);
   });
 

@@ -39,7 +39,9 @@ export function formatInitResult(result: InitResult): string {
     }
 
     lines.push('');
-    lines.push('💡 Defaults are active — run /claude-auto-config show anytime to review or customize.');
+    lines.push(
+      'On your next reply, mention once (then proceed with the user\'s request): "Reminder: Defaults are active — run /claude-auto-config show anytime to review or customize."',
+    );
   } else {
     lines.push(`✅ claude-auto is already initialized at ${result.autoDir}`);
   }
