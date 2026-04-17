@@ -2,6 +2,8 @@
 
 ## TODO
 
+- [ ] Burst 7.2: Fix skill name in `INIT_HINT_MESSAGE` to `/claude-auto-init` [depends: 7.1]
+
 ## DONE
 
 - [x] Burst 7.1: Simplify `INIT_HINT_MESSAGE` to plain one-line reminder (8783851)
