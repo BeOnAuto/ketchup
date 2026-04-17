@@ -3801,12 +3801,7 @@ function loadReminders(dirs, context, overrides) {
 }
 
 // src/welcome-message.ts
-var INIT_HINT_MESSAGE = `The claude-auto plugin is installed but not yet initialized in this project.
-
-When you first respond to the user, briefly mention:
-"\u{1F4A1} claude-auto is available but not active in this repo. \u2728 Run /claude-auto-init to enable \u2705 commit validation, \u{1F514} workflow reminders, and \u26A1 auto-continue."
-
-Keep it to one line, do not block the user's request, and do not repeat this in subsequent messages.`;
+var INIT_HINT_MESSAGE = "Reminder: Use /config-claude-init to enable https://claude.on.auto in this folder";
 
 // src/hooks/session-start.ts
 async function handleSessionStart(paths, sessionId = "", agentType) {
