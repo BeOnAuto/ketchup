@@ -2,6 +2,6 @@
 
 ## TODO
 
-- [ ] Burst 1: Remove `marketplace.json` from version-bump loop in ci.yml [depends: none]
-
 ## DONE
+
+- [x] Burst 1: Remove `marketplace.json` from version-bump loop in ci.yml (2e153e9)
