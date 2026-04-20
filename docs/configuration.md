@@ -139,13 +139,13 @@ Patterns use [micromatch](https://github.com/micromatch/micromatch) glob syntax.
 
 ## Managing Configuration
 
-Configuration is managed via the `/claude-auto:config` skill from within a Claude Code session:
+Configuration is managed via the `/claude-auto-config` skill from within a Claude Code session:
 
 ```
-/claude-auto:config show          # View current configuration
-/claude-auto:config set <key> <value>  # Update a setting
-/claude-auto:config validators    # List active validators
-/claude-auto:config reminders     # List active reminders
+/claude-auto-config show          # View current configuration
+/claude-auto-config set <key> <value>  # Update a setting
+/claude-auto-config validators    # List active validators
+/claude-auto-config reminders     # List active reminders
 ```
 
 ---

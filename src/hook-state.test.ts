@@ -2,7 +2,7 @@ import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
 
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { createHookState, DEFAULT_HOOK_STATE, type HookState } from './hook-state.js';
 
@@ -21,6 +21,21 @@ describe('hook-state', () => {
   });
 
   describe('createHookState', () => {
+    it('does not create autoDir when it does not exist', () => {
+      const nonExistentDir = path.join(tempDir, 'not-created');
+      createHookState(nonExistentDir);
+      expect(fs.existsSync(nonExistentDir)).toBe(false);
+    });
+
+    it('read returns DEFAULT_HOOK_STATE when autoDir does not exist', () => {
+      const nonExistentDir = path.join(tempDir, 'not-created');
+      const hookState = createHookState(nonExistentDir);
+      const state = hookState.read();
+
+      expect(state).toEqual(DEFAULT_HOOK_STATE);
+      expect(fs.existsSync(nonExistentDir)).toBe(false);
+    });
+
     it('exists returns false before read and true after read', () => {
       const hookState = createHookState(autoDir);
 
@@ -29,23 +44,6 @@ describe('hook-state', () => {
       hookState.read();
 
       expect(hookState.exists()).toBe(true);
-    });
-
-    it('sets firstSetupRequired when created in plugin mode', () => {
-      vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/claude-auto');
-      const hookState = createHookState(autoDir);
-      const state = hookState.read();
-
-      expect(state.firstSetupRequired).toBe(true);
-      vi.unstubAllEnvs();
-    });
-
-    it('does not set firstSetupRequired when created in legacy mode', () => {
-      delete process.env.CLAUDE_PLUGIN_ROOT;
-      const hookState = createHookState(autoDir);
-      const state = hookState.read();
-
-      expect(state.firstSetupRequired).toBeUndefined();
     });
 
     it('creates state file with defaults when not exists', () => {
@@ -119,6 +117,15 @@ describe('hook-state', () => {
   });
 
   describe('write', () => {
+    it('is a no-op when autoDir does not exist', () => {
+      const nonExistentDir = path.join(tempDir, 'not-created');
+      const hookState = createHookState(nonExistentDir);
+
+      hookState.write({ ...DEFAULT_HOOK_STATE, autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, mode: 'off' } });
+
+      expect(fs.existsSync(nonExistentDir)).toBe(false);
+    });
+
     it('writes state to .claude-auto/.claude.hooks.json', () => {
       const hookState = createHookState(autoDir);
       const newState: HookState = {
@@ -146,6 +153,16 @@ describe('hook-state', () => {
   });
 
   describe('update', () => {
+    it('returns defaults and does not create files when autoDir does not exist', () => {
+      const nonExistentDir = path.join(tempDir, 'not-created');
+      const hookState = createHookState(nonExistentDir);
+
+      const result = hookState.update({ autoContinue: { mode: 'off', skipModes: [], maxIterations: 0 } });
+
+      expect(result).toEqual(DEFAULT_HOOK_STATE);
+      expect(fs.existsSync(nonExistentDir)).toBe(false);
+    });
+
     it('updates specific fields and preserves others', () => {
       const hookState = createHookState(autoDir);
 

@@ -18,6 +18,21 @@ describe('logPluginDiagnostics', () => {
     fs.rmSync(tempDir, { recursive: true, force: true });
   });
 
+  it('does not write log file when autoDir does not exist', () => {
+    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/claude-auto');
+    const nonExistentDir = path.join(tempDir, 'not-created');
+
+    logPluginDiagnostics('SessionStart', {
+      projectRoot: '/project',
+      claudeDir: '/project/.claude',
+      autoDir: nonExistentDir,
+      validatorsDirs: ['/plugins/claude-auto/validators'],
+      remindersDirs: ['/plugins/claude-auto/reminders'],
+    });
+
+    expect(fs.existsSync(nonExistentDir)).toBe(false);
+  });
+
   it('writes to file in plugin mode', () => {
     vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/claude-auto');
     vi.stubEnv('CLAUDE_PLUGIN_DATA', '/data/claude-auto');

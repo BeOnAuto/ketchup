@@ -40,7 +40,7 @@ Inside any Claude Code session:
 claude --plugin-dir /path/to/claude-auto
 ```
 
-Claude Code sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` automatically. Validators and reminders load from the plugin package, with optional project-local overrides from `.claude-auto/`. State and logs go to the project's `.claude-auto/` directory.
+Claude Code sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` automatically. Run `/claude-auto-init` inside a session to activate per-project configuration, validators, and logging.
 
 ## Quick Start
 
@@ -53,11 +53,13 @@ Claude Code sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` automatically. Va
 claude --plugin-dir /path/to/claude-auto
 ```
 
-After installation, Claude Auto automatically:
+After installation, Claude will mention that claude-auto is available. To activate it in a project:
 
-- Injects hooks that validate every commit against your criteria
-- Creates reminders that inject your guidelines into prompts
-- Sets up file protection via deny-lists
+```
+/claude-auto-init
+```
+
+This creates `.claude-auto/` with default configuration. You can add it to `.gitignore` for personal use, or commit it for the whole team.
 
 **Next steps:**
 
@@ -121,10 +123,10 @@ Higher `priority` = appears first. Project-local files are loaded alongside plug
 Toggle validators and reminders without editing files:
 
 ```bash
-/claude-auto:config show
-/claude-auto:config validators disable no-comments
-/claude-auto:config reminders priority my-reminder 200
-/claude-auto:config reminders add my-rule --hook UserPromptSubmit --priority 50 --content "Always use early returns"
+/claude-auto-config show
+/claude-auto-config validators disable no-comments
+/claude-auto-config reminders priority my-reminder 200
+/claude-auto-config reminders add my-rule --hook UserPromptSubmit --priority 50 --content "Always use early returns"
 ```
 
 ---

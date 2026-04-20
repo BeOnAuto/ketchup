@@ -6,6 +6,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { DEFAULT_HOOK_STATE } from '../hook-state.js';
 import type { ResolvedPaths } from '../path-resolver.js';
+import { INIT_HINT_MESSAGE } from '../welcome-message.js';
 
 const DEFAULT_AUTO_DIR = '.claude-auto';
 
@@ -42,6 +43,15 @@ describe('session-start hook', () => {
     } else {
       process.env.DEBUG = originalEnv;
     }
+  });
+
+  it('returns init hint when autoDir does not exist', async () => {
+    const nonExistentPaths = { ...resolvedPaths, autoDir: path.join(tempDir, 'not-created') };
+
+    const result = await handleSessionStart(nonExistentPaths, 'session-1');
+
+    expect(result.hookSpecificOutput.additionalContext).toBe(INIT_HINT_MESSAGE);
+    expect(result.diagnostics.matchedReminders).toEqual([]);
   });
 
   it('outputs filtered reminders content for SessionStart hook', async () => {

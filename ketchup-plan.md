@@ -1,23 +1,33 @@
-# Ketchup Plan: Remove Legacy NPX Installation
+# Ketchup Plan: Make claude-auto opt-in per repository
 
 ## TODO
 
 ## DONE
 
-- [x] Burst 1: Delete src/cli/ directory (all 26 files)
-- [x] Burst 2: Delete bin/cli.ts
-- [x] Burst 3: Delete templates/ directory (settings.json, settings.local.json)
-- [x] Burst 4: Delete src/settings-merger.ts and src/settings-merger.test.ts
-- [x] Burst 5: Delete src/settings-template.test.ts
-- [x] Burst 6: Delete src/e2e.test.ts
-- [x] Burst 7: Delete src/linker.ts and src/linker.test.ts
-- [x] Burst 8: Delete src/gitignore-manager.ts and src/gitignore-manager.test.ts
-- [x] Burst 9: Delete src/state-manager.ts and src/state-manager.test.ts
-- [x] Burst 10: Delete src/root-finder.ts and src/root-finder.test.ts
-- [x] Burst 11: Remove legacy fallback from path-resolver.ts, remove config-loader.ts, update tests
-- [x] Burst 12: Clean up index.ts barrel exports
-- [x] Burst 13: Remove commander/cosmiconfig/yaml deps, bin entry, legacy scripts from package.json
-- [x] Burst 14: Update README.md and CLAUDE.md
-- [x] Burst 15: Fix resolvePathsFromEnv for skills context (CLAUDE_PLUGIN_ROOT only)
-- [x] Burst 16: Add explicit pluginRoot parameter to resolvePathsFromEnv, use in config.ts
-- [x] Burst 17: Update all docs, delete npm-package-test.yml, delete install-local-spec.md, clean stale dist
+- [x] Burst 7.4: Wrap init config tip in directive so Claude surfaces it (45f3a8a)
+- [x] Burst 7.3: Wrap `INIT_HINT_MESSAGE` in a directive so Claude surfaces it on first reply (f388145)
+- [x] Burst 7.2: Fix skill name in `INIT_HINT_MESSAGE` to `/claude-auto-init` (0832f02)
+- [x] Burst 7.1: Simplify `INIT_HINT_MESSAGE` to plain one-line reminder (8783851)
+- [x] Burst 6.1: `formatInitResult` uses emojis and does not instruct Claude to ask the user
+- [x] Burst 6.2: `INIT_HINT_MESSAGE` uses emojis for visibility
+
+- [x] Burst 1.1: `createHookState` does not create autoDir (6fe15c2)
+- [x] Burst 1.2: `read()` returns defaults when autoDir missing (7ee52cd)
+- [x] Burst 1.3: `write()` is no-op when autoDir missing (c70de21)
+- [x] Burst 1.4: `update()` returns defaults when autoDir missing (c70de21)
+- [x] Burst 1.5: Remove `firstSetupRequired` from initial state creation (7ee52cd)
+- [x] Burst 2.1: `activityLog` no-op when autoDir missing (e33d77f)
+- [x] Burst 2.2: `debugLog` no-op when autoDir missing (e33d77f)
+- [x] Burst 2.3: `writeHookLog` no-op when autoDir missing (e33d77f)
+- [x] Burst 2.4: `logPluginDiagnostics` no file write when autoDir missing (e33d77f)
+- [x] Burst 3.1: `INIT_HINT_MESSAGE` constant (86fac7f)
+- [x] Burst 3.2: `handleSessionStart` returns only hint when autoDir missing (86fac7f)
+- [x] Burst 3.3: `handlePreToolUse` allows everything when autoDir missing (62efee8)
+- [x] Burst 3.4: `handleUserPromptSubmit` returns empty when autoDir missing (86fac7f)
+- [x] Burst 3.5: `handleStop` returns stop when autoDir missing (62efee8)
+- [x] Burst 4.1: Remove `firstSetupRequired` block from user-prompt-submit (86fac7f)
+- [x] Burst 4.2: Remove `FIRST_SETUP_MESSAGE` (86fac7f)
+- [x] Burst 5.1: `initClaudeAuto` creates `.claude-auto/` with default state (43244eb)
+- [x] Burst 5.2: Returns `created: false` when already initialized (43244eb)
+- [x] Burst 5.3: Detects `.gitignore` status for `.claude-auto` (43244eb)
+- [x] Burst 5.4: Script entry point + SKILL.md (7526a57)

@@ -2,6 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 export function debugLog(autoDir: string, hookName: string, message: string): void {
+  if (!fs.existsSync(autoDir)) {
+    return;
+  }
+
   const debug = process.env.DEBUG;
   if (!debug || !debug.includes('claude-auto')) {
     return;

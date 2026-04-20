@@ -48,6 +48,9 @@ function matchesFilter(hookName, message) {
   return includes.some((pattern) => searchText.includes(pattern));
 }
 function activityLog(autoDir, sessionId, hookName, message) {
+  if (!import_node_fs.default.existsSync(autoDir)) {
+    return;
+  }
   if (!matchesFilter(hookName, message)) {
     return;
   }
@@ -76,6 +79,9 @@ function sanitizeForFilename(hookName) {
   return hookName.replace(/[^a-zA-Z0-9-]/g, "-").toLowerCase();
 }
 function writeHookLog(autoDir, entry) {
+  if (!fs2.existsSync(autoDir)) {
+    return;
+  }
   const logsDir = path2.join(autoDir, "logs", "hooks");
   if (!fs2.existsSync(logsDir)) {
     fs2.mkdirSync(logsDir, { recursive: true });
@@ -125,6 +131,9 @@ function writeHookLog(autoDir, entry) {
 `);
 }
 
+// src/hooks/auto-continue.ts
+var import_node_fs2 = require("node:fs");
+
 // src/hook-state.ts
 var fs3 = __toESM(require("node:fs"));
 var path3 = __toESM(require("node:path"));
@@ -156,14 +165,13 @@ var DEFAULT_HOOK_STATE = {
   }
 };
 function createHookState(autoDir) {
-  if (!fs3.existsSync(autoDir)) {
-    fs3.mkdirSync(autoDir, { recursive: true });
-  }
   const stateFile = path3.join(autoDir, ".claude.hooks.json");
   function read() {
+    if (!fs3.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
     if (!fs3.existsSync(stateFile)) {
-      const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
-      const initialState = isPluginMode ? { ...DEFAULT_HOOK_STATE, firstSetupRequired: true } : { ...DEFAULT_HOOK_STATE };
+      const initialState = { ...DEFAULT_HOOK_STATE };
       fs3.writeFileSync(stateFile, `${JSON.stringify(initialState, null, 2)}
 `);
       return JSON.parse(JSON.stringify(initialState));
@@ -171,7 +179,6 @@ function createHookState(autoDir) {
     const content = fs3.readFileSync(stateFile, "utf-8");
     const partial = JSON.parse(content);
     return {
-      ...partial.firstSetupRequired !== void 0 ? { firstSetupRequired: partial.firstSetupRequired } : {},
       autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, ...partial.autoContinue },
       validateCommit: { ...DEFAULT_HOOK_STATE.validateCommit, ...partial.validateCommit },
       denyList: { ...DEFAULT_HOOK_STATE.denyList, ...partial.denyList },
@@ -184,10 +191,16 @@ function createHookState(autoDir) {
     };
   }
   function write(state) {
+    if (!fs3.existsSync(autoDir)) {
+      return;
+    }
     fs3.writeFileSync(stateFile, `${JSON.stringify(state, null, 2)}
 `);
   }
   function update(updates) {
+    if (!fs3.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
     const current = read();
     const newState = {
       ...current,
@@ -218,6 +231,9 @@ function createHookState(autoDir) {
 
 // src/hooks/auto-continue.ts
 function handleStop(autoDir, input2) {
+  if (!(0, import_node_fs2.existsSync)(autoDir)) {
+    return { decision: "allow", reason: "auto-continue disabled" };
+  }
   const stateManager = createHookState(autoDir);
   const state = stateManager.read();
   const { mode, skipModes } = state.autoContinue;
@@ -279,9 +295,11 @@ function logPluginDiagnostics(hookName, paths) {
   if (isDebug) {
     console.error(message);
   }
-  const logsDir = path5.join(paths.autoDir, "logs");
-  fs4.mkdirSync(logsDir, { recursive: true });
-  fs4.appendFileSync(path5.join(logsDir, "plugin-debug.log"), message);
+  if (fs4.existsSync(paths.autoDir)) {
+    const logsDir = path5.join(paths.autoDir, "logs");
+    fs4.mkdirSync(logsDir, { recursive: true });
+    fs4.appendFileSync(path5.join(logsDir, "plugin-debug.log"), message);
+  }
 }
 
 // scripts/auto-continue.ts
