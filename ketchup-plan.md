@@ -31,12 +31,14 @@ can embed the same assets.
 
 ## TODO
 
-- [ ] Burst 23: `SessionPicker` component fetches and renders `/api/sessions` [depends: 22]
-- [ ] Burst 24: `Timeline` component renders flat events for selected session [depends: 23]
-- [ ] Burst 25: Tree nesting by subagent spawn/completion pairing [depends: 24]
-- [ ] Burst 26: Auto-collapse deep tree branches [depends: 25]
-- [ ] Burst 27: SSE variant `/api/sessions/:id/events/stream` that follows new events [depends: 21]
-- [ ] Burst 28: Client wires SSE to append live events into the tree [depends: 25, 27]
+- [ ] Burst 23: `startViewerServer(app, port)` binds server and returns close handle [depends: 21]
+- [ ] Burst 24: `scripts/events-viewer.ts` CLI entry wires real store and boots server [depends: 23]
+- [ ] Burst 25: `SessionPicker` component fetches and renders `/api/sessions` [depends: 22]
+- [ ] Burst 26: `Timeline` component renders flat events for selected session [depends: 25]
+- [ ] Burst 27: Tree nesting by subagent spawn/completion pairing [depends: 26]
+- [ ] Burst 28: Auto-collapse deep tree branches [depends: 27]
+- [ ] Burst 29: SSE variant `/api/sessions/:id/events/stream` that follows new events [depends: 23]
+- [ ] Burst 30: Client wires SSE to append live events into the tree [depends: 27, 29]
 
 
 ## DONE
