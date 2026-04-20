@@ -31,7 +31,6 @@ can embed the same assets.
 
 ## TODO
 
-- [ ] Burst 27: Timeline renders per-event-type details (prompt, tool, text, file path) [depends: 26]
 - [ ] Burst 28: Tree nesting by subagent spawn/completion pairing [depends: 27]
 - [ ] Burst 29: Auto-collapse deep tree branches [depends: 28]
 - [ ] Burst 30: SSE variant `/api/sessions/:id/events/stream` that follows new events [depends: 23]
@@ -67,3 +66,4 @@ can embed the same assets.
 - [x] Burst 24: `scripts/events-viewer.ts` boots viewer server with SQLite deps (31dff51)
 - [x] Burst 25: Session picker component fetches and lists sessions (a835e67)
 - [x] Burst 26: Timeline component fetches events for a session (620bcec)
+- [x] Burst 27: Timeline renders per-event-type summary with truncation (533d069)
