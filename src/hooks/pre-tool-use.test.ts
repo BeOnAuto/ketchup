@@ -5,7 +5,7 @@ import * as path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { ResolvedPaths } from '../path-resolver.js';
-import { handlePreToolUse } from './pre-tool-use.js';
+import { commandTargetsProtectedPath, handlePreToolUse, isProtectedPath } from './pre-tool-use.js';
 
 const DEFAULT_AUTO_DIR = '.claude-auto';
 
@@ -334,6 +334,80 @@ Validate this commit`,
     } finally {
       cwdSpy.mockRestore();
     }
+  });
+
+  it('denies Bash command targeting validator files', async () => {
+    const validatorPath = path.join(autoDir, 'validators', 'burst-atomicity.md');
+    const toolInput = { command: `rm ${validatorPath}` };
+
+    const result = await handlePreToolUse(resolvedPaths, 'session-bash-protect', toolInput);
+
+    expect(result).toEqual({
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'deny',
+        permissionDecisionReason: `Validator files are immutable: ${validatorPath}`,
+      },
+    });
+  });
+
+  it('denies Edit/Write to validator files', async () => {
+    const toolInput = { file_path: path.join(autoDir, 'validators', 'burst-atomicity.md') };
+
+    const result = await handlePreToolUse(resolvedPaths, 'session-protect', toolInput);
+
+    expect(result).toEqual({
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'deny',
+        permissionDecisionReason: `Validator files are immutable: ${toolInput.file_path}`,
+      },
+    });
+  });
+
+  describe('isProtectedPath', () => {
+    it('returns true for file inside a validatorsDirs path', () => {
+      const validatorsDirs = ['/plugin/validators', '/project/.claude-auto/validators'];
+
+      expect(isProtectedPath('/project/.claude-auto/validators/burst-atomicity.md', validatorsDirs)).toBe(true);
+      expect(isProtectedPath('/plugin/validators/coverage-rules.md', validatorsDirs)).toBe(true);
+    });
+
+    it('returns false for file outside validatorsDirs', () => {
+      const validatorsDirs = ['/plugin/validators', '/project/.claude-auto/validators'];
+
+      expect(isProtectedPath('/project/src/hooks/pre-tool-use.ts', validatorsDirs)).toBe(false);
+      expect(isProtectedPath('/project/.claude-auto/reminders/tcr.md', validatorsDirs)).toBe(false);
+    });
+  });
+
+  describe('commandTargetsProtectedPath', () => {
+    it('returns matched path when command contains a validator path', () => {
+      const dirs = ['/project/.claude-auto/validators'];
+
+      expect(commandTargetsProtectedPath('rm /project/.claude-auto/validators/test.md', dirs)).toBe(
+        '/project/.claude-auto/validators/test.md',
+      );
+    });
+
+    it('returns undefined when command does not contain a validator path', () => {
+      const dirs = ['/project/.claude-auto/validators'];
+
+      expect(commandTargetsProtectedPath('rm /project/src/file.ts', dirs)).toBe(undefined);
+    });
+  });
+
+  it('allows Bash commands not targeting validator files', async () => {
+    const toolInput = { command: 'rm /project/src/file.ts' };
+
+    const result = await handlePreToolUse(resolvedPaths, 'session-bash-ok', toolInput);
+
+    expect(result).toEqual({
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'allow',
+      },
+    });
   });
 
   it('injects reminders matching PreToolUse hook and toolName', async () => {
