@@ -31,7 +31,6 @@ can embed the same assets.
 
 ## TODO
 
-- [ ] Burst 21: `/api/sessions/:id/events` JSON endpoint (static backfill) [depends: 19, 20]
 - [ ] Burst 22: Vite + React scaffold with session picker calling `/api/sessions` [depends: 20]
 - [ ] Burst 23: Flat event timeline component for selected session [depends: 21, 22]
 - [ ] Burst 24: Tree nesting by subagent spawn/completion pairing [depends: 23]
@@ -63,3 +62,4 @@ can embed the same assets.
 - [x] Burst 18: `listSessions` returns per-session summaries from event store (f5c225c)
 - [x] Burst 19: `readSessionEvents` returns domain events for a session stream (fa2a662)
 - [x] Burst 20: `createViewerApp` serves `/api/sessions` from injected lister (7cfc9ad)
+- [x] Burst 21: Viewer serves `/api/sessions/:id/events` from injected reader (38f74fd)
