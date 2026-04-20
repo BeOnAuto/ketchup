@@ -52,6 +52,7 @@
   "dependencies": {
     "@event-driven-io/emmett": "^0.42.0",
     "@event-driven-io/emmett-sqlite": "^0.42.0",
+    "express": "^5.2.1",
     "gray-matter": "^4.0.3",
     "micromatch": "^4.0.8"
   },
@@ -61,12 +62,15 @@
     "@changesets/cli": "^2.29.8",
     "@commitlint/cli": "^20.3.1",
     "@commitlint/config-conventional": "^20.3.1",
+    "@types/express": "^5.0.6",
     "@types/micromatch": "^4.0.10",
     "@types/node": "^20.0.0",
+    "@types/supertest": "^7.2.0",
     "@vitest/coverage-v8": "^1.6.1",
     "esbuild": "^0.27.2",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
+    "supertest": "^7.2.2",
     "tsx": "^4.0.0",
     "turbo": "^2.7.5",
     "typescript": "^5.0.0",
