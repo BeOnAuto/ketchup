@@ -137,13 +137,10 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
           node -e "
             const fs = require('fs');
-            for (const f of ['plugin.json', 'marketplace.json']) {
-              const path = '.claude-plugin/' + f;
-              const data = JSON.parse(fs.readFileSync(path, 'utf8'));
-              if (data.version) data.version = '${VERSION}';
-              if (data.plugins) data.plugins.forEach(p => { if (p.name === 'claude-auto') p.version = '${VERSION}'; });
-              fs.writeFileSync(path, JSON.stringify(data, null, 2) + '\n');
-            }
+            const path = '.claude-plugin/plugin.json';
+            const data = JSON.parse(fs.readFileSync(path, 'utf8'));
+            data.version = '${VERSION}';
+            fs.writeFileSync(path, JSON.stringify(data, null, 2) + '\n');
           "
           git add .
           git commit -m "chore(release): version packages" || echo "No changes to commit"
