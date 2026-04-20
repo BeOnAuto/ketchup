@@ -8,11 +8,11 @@ afterEach(() => {
 });
 
 describe('Timeline', () => {
-  it('renders per-event-type summary alongside type and timestamp', async () => {
+  it('renders events as a nested tree with per-event-type summary', async () => {
     const events: SessionEvent[] = [
       {
         type: 'SessionStarted',
-        timestamp: 't1',
+        timestamp: 't0',
         sessionId: 'a',
         cwd: '/foo',
         gitBranch: 'main',
@@ -20,11 +20,11 @@ describe('Timeline', () => {
         entrypoint: 'cli',
         source: {},
       },
-      { type: 'PromptSubmitted', timestamp: 't2', sessionId: 'a', prompt: 'A'.repeat(100), source: {} },
-      { type: 'AssistantResponded', timestamp: 't3', sessionId: 'a', text: 'hi', source: {} },
+      { type: 'PromptSubmitted', timestamp: 't1', sessionId: 'a', prompt: 'A'.repeat(100), source: {} },
+      { type: 'AssistantResponded', timestamp: 't2', sessionId: 'a', text: 'hi', source: {} },
       {
         type: 'ThoughtRecorded',
-        timestamp: 't4',
+        timestamp: 't3',
         sessionId: 'a',
         thinking: 'reason',
         signature: 'sig',
@@ -32,39 +32,48 @@ describe('Timeline', () => {
       },
       {
         type: 'ToolInvoked',
-        timestamp: 't5',
+        timestamp: 't4',
         sessionId: 'a',
         toolName: 'Bash',
-        toolUseId: 'id1',
+        toolUseId: 'A',
         input: {},
         source: {},
       },
       {
         type: 'ToolInvocationSucceeded',
-        timestamp: 't6',
+        timestamp: 't5',
         sessionId: 'a',
-        toolUseId: 'id1',
+        toolUseId: 'A',
         content: 'ok',
         source: {},
       },
       {
-        type: 'ToolInvocationFailed',
-        timestamp: 't7',
+        type: 'ToolInvoked',
+        timestamp: 't6',
         sessionId: 'a',
-        toolUseId: 'id1',
+        toolName: 'Task',
+        toolUseId: 'B',
+        input: {},
+        source: {},
+      },
+      { type: 'SubagentProgressed', timestamp: 't7', sessionId: 'a', parentToolUseId: 'B', source: {} },
+      {
+        type: 'ToolInvocationFailed',
+        timestamp: 't8',
+        sessionId: 'a',
+        toolUseId: 'B',
         error: 'bad',
         source: {},
       },
       {
         type: 'HookExecuted',
-        timestamp: 't8',
+        timestamp: 't9',
         sessionId: 'a',
         hookEvent: 'Stop',
         hookName: 'tcr',
         command: 'sh',
         source: {},
       },
-      { type: 'SubagentProgressed', timestamp: 't9', sessionId: 'a', parentToolUseId: 'p1', source: {} },
       {
         type: 'FileModified',
         timestamp: 't10',
@@ -83,18 +92,24 @@ describe('Timeline', () => {
     render(<Timeline sessionId="abc" />);
     const items = await screen.findAllByRole('listitem');
 
-    expect(items.map((item) => item.textContent)).toEqual([
-      `SessionStarted — t1 — /foo @ main`,
-      `PromptSubmitted — t2 — ${'A'.repeat(80)}…`,
-      'AssistantResponded — t3 — hi',
-      'ThoughtRecorded — t4 — reason',
-      'ToolInvoked — t5 — Bash',
-      'ToolInvocationSucceeded — t6 — ✓ ok',
-      'ToolInvocationFailed — t7 — ✗ bad',
-      'HookExecuted — t8 — Stop:tcr',
-      'SubagentProgressed — t9 — parent=p1',
-      'FileModified — t10 — update /a',
-      'SessionEnded — t11 — ',
+    expect(
+      items.map((li) => ({
+        level: Number(li.getAttribute('data-level')),
+        label: li.querySelector('[data-testid="event-label"]')?.textContent,
+      })),
+    ).toEqual([
+      { level: 1, label: 'SessionStarted — t0 — /foo @ main' },
+      { level: 1, label: `PromptSubmitted — t1 — ${'A'.repeat(80)}…` },
+      { level: 1, label: 'AssistantResponded — t2 — hi' },
+      { level: 1, label: 'ThoughtRecorded — t3 — reason' },
+      { level: 1, label: 'ToolInvoked — t4 — Bash' },
+      { level: 2, label: 'ToolInvocationSucceeded — t5 — ✓ ok' },
+      { level: 1, label: 'ToolInvoked — t6 — Task' },
+      { level: 2, label: 'SubagentProgressed — t7 — parent=B' },
+      { level: 2, label: 'ToolInvocationFailed — t8 — ✗ bad' },
+      { level: 1, label: 'HookExecuted — t9 — Stop:tcr' },
+      { level: 1, label: 'FileModified — t10 — update /a' },
+      { level: 1, label: 'SessionEnded — t11 — ' },
     ]);
   });
 });

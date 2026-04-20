@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import { buildEventTree, type TreeNode } from './event-tree';
+
 type Base = { timestamp: string; sessionId: string; source: unknown };
 
 export type SessionEvent =
@@ -46,6 +48,23 @@ function summarize(event: SessionEvent): string {
   }
 }
 
+function EventNode({ node, depth }: { node: TreeNode; depth: number }) {
+  return (
+    <li data-level={depth}>
+      <span data-testid="event-label">
+        <strong>{node.event.type}</strong> — {node.event.timestamp} — {summarize(node.event)}
+      </span>
+      {node.children.length > 0 && (
+        <ul>
+          {node.children.map((child, index) => (
+            <EventNode key={`${child.event.type}-${index}-${child.event.timestamp}`} node={child} depth={depth + 1} />
+          ))}
+        </ul>
+      )}
+    </li>
+  );
+}
+
 export function Timeline({ sessionId }: { sessionId: string }) {
   const [events, setEvents] = useState<SessionEvent[]>([]);
 
@@ -55,12 +74,12 @@ export function Timeline({ sessionId }: { sessionId: string }) {
       .then((body: { events: SessionEvent[] }) => setEvents(body.events));
   }, [sessionId]);
 
+  const tree = buildEventTree(events);
+
   return (
     <ul>
-      {events.map((event, index) => (
-        <li key={`${event.type}-${index}-${event.timestamp}`}>
-          <strong>{event.type}</strong> — {event.timestamp} — {summarize(event)}
-        </li>
+      {tree.map((node, index) => (
+        <EventNode key={`${node.event.type}-${index}-${node.event.timestamp}`} node={node} depth={1} />
       ))}
     </ul>
   );
