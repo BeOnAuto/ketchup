@@ -3547,14 +3547,13 @@ var DEFAULT_HOOK_STATE = {
   }
 };
 function createHookState(autoDir) {
-  if (!fs.existsSync(autoDir)) {
-    fs.mkdirSync(autoDir, { recursive: true });
-  }
   const stateFile = path.join(autoDir, ".claude.hooks.json");
   function read() {
+    if (!fs.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
     if (!fs.existsSync(stateFile)) {
-      const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
-      const initialState = isPluginMode ? { ...DEFAULT_HOOK_STATE, firstSetupRequired: true } : { ...DEFAULT_HOOK_STATE };
+      const initialState = { ...DEFAULT_HOOK_STATE };
       fs.writeFileSync(stateFile, `${JSON.stringify(initialState, null, 2)}
 `);
       return JSON.parse(JSON.stringify(initialState));
@@ -3562,7 +3561,6 @@ function createHookState(autoDir) {
     const content = fs.readFileSync(stateFile, "utf-8");
     const partial = JSON.parse(content);
     return {
-      ...partial.firstSetupRequired !== void 0 ? { firstSetupRequired: partial.firstSetupRequired } : {},
       autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, ...partial.autoContinue },
       validateCommit: { ...DEFAULT_HOOK_STATE.validateCommit, ...partial.validateCommit },
       denyList: { ...DEFAULT_HOOK_STATE.denyList, ...partial.denyList },
@@ -3575,10 +3573,16 @@ function createHookState(autoDir) {
     };
   }
   function write(state) {
+    if (!fs.existsSync(autoDir)) {
+      return;
+    }
     fs.writeFileSync(stateFile, `${JSON.stringify(state, null, 2)}
 `);
   }
   function update(updates) {
+    if (!fs.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
     const current = read();
     const newState = {
       ...current,
@@ -3827,7 +3831,7 @@ function derivePluginRoot() {
 var args = process.argv.slice(2);
 var subcommand = args[0];
 function usage() {
-  return `Usage: /claude-auto:config <subcommand> [args]
+  return `Usage: /claude-auto-config <subcommand> [args]
 
 Subcommands:
   show                              Show all current configuration

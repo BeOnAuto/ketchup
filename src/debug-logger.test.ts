@@ -21,6 +21,15 @@ describe('debug-logger', () => {
     }
   });
 
+  it('does not write or create directories when autoDir does not exist', () => {
+    process.env.DEBUG = 'claude-auto';
+    const nonExistentDir = path.join(tempDir, 'not-created');
+
+    debugLog(nonExistentDir, 'test-hook', 'test message');
+
+    expect(fs.existsSync(nonExistentDir)).toBe(false);
+  });
+
   it('writes to .claude-auto/logs/claude-auto/debug.log when DEBUG=claude-auto', () => {
     process.env.DEBUG = 'claude-auto';
     const autoDir = path.join(tempDir, '.claude-auto');

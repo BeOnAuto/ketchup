@@ -41,6 +41,20 @@ describe('pre-tool-use hook', () => {
     }
   });
 
+  it('allows everything when autoDir does not exist', async () => {
+    const nonExistentPaths = { ...resolvedPaths, autoDir: path.join(tempDir, 'not-created') };
+    const toolInput = { command: 'git commit -m "test"' };
+
+    const result = await handlePreToolUse(nonExistentPaths, 'session-1', toolInput);
+
+    expect(result).toEqual({
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'allow',
+      },
+    });
+  });
+
   it('blocks tool use when path matches deny pattern', async () => {
     fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), '*.secret\n');
     const toolInput = { file_path: '/project/config.secret' };

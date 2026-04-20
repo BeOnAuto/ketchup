@@ -20,6 +20,19 @@ describe('hook-logger', () => {
     fs.rmSync(tempDir, { recursive: true, force: true });
   });
 
+  it('does not write or create directories when autoDir does not exist', () => {
+    const nonExistentDir = path.join(tempDir, 'not-created');
+
+    writeHookLog(nonExistentDir, {
+      hookName: 'session-start',
+      timestamp: '2026-01-28T12:00:00.000Z',
+      input: {},
+      output: {},
+    });
+
+    expect(fs.existsSync(nonExistentDir)).toBe(false);
+  });
+
   it('creates log file in .claude-auto/logs/hooks/ named after hook', () => {
     writeHookLog(autoDir, {
       hookName: 'session-start',

@@ -29,7 +29,9 @@ export function logPluginDiagnostics(hookName: string, paths: ResolvedPaths): vo
     console.error(message);
   }
 
-  const logsDir = path.join(paths.autoDir, 'logs');
-  fs.mkdirSync(logsDir, { recursive: true });
-  fs.appendFileSync(path.join(logsDir, 'plugin-debug.log'), message);
+  if (fs.existsSync(paths.autoDir)) {
+    const logsDir = path.join(paths.autoDir, 'logs');
+    fs.mkdirSync(logsDir, { recursive: true });
+    fs.appendFileSync(path.join(logsDir, 'plugin-debug.log'), message);
+  }
 }

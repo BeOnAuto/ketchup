@@ -22,6 +22,14 @@ describe('activity-logger', () => {
     }
   });
 
+  it('does not write or create directories when autoDir does not exist', () => {
+    const nonExistentDir = path.join(tempDir, 'not-created');
+
+    activityLog(nonExistentDir, 'session-123', 'test-hook', 'test message');
+
+    expect(fs.existsSync(nonExistentDir)).toBe(false);
+  });
+
   it('writes to .claude-auto/logs/activity.log', () => {
     const autoDir = path.join(tempDir, '.claude-auto');
     fs.mkdirSync(autoDir, { recursive: true });
