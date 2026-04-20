@@ -31,8 +31,6 @@ can embed the same assets.
 
 ## TODO
 
-- [ ] Burst 28: `buildEventTree` pairs tool invocations with results and nests subagent events [depends: 27]
-- [ ] Burst 29: Timeline renders the nested tree with indentation [depends: 28]
 - [ ] Burst 30: Auto-collapse deep tree branches [depends: 29]
 - [ ] Burst 31: SSE variant `/api/sessions/:id/events/stream` that follows new events [depends: 23]
 - [ ] Burst 32: Client wires SSE to append live events into the tree [depends: 29, 31]
@@ -68,3 +66,5 @@ can embed the same assets.
 - [x] Burst 25: Session picker component fetches and lists sessions (a835e67)
 - [x] Burst 26: Timeline component fetches events for a session (620bcec)
 - [x] Burst 27: Timeline renders per-event-type summary with truncation (533d069)
+- [x] Burst 28: `buildEventTree` pairs tool/result and subagent parents (0f5d303)
+- [x] Burst 29: Timeline renders nested tree with depth attribute (1fa5d29)
