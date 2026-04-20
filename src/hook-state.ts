@@ -46,7 +46,6 @@ export interface OverridesState {
 }
 
 export interface HookState {
-  firstSetupRequired?: boolean;
   autoContinue: AutoContinueState;
   validateCommit: ValidateCommitState;
   denyList: DenyListState;
@@ -91,17 +90,15 @@ export interface HookStateManager {
 }
 
 export function createHookState(autoDir: string): HookStateManager {
-  if (!fs.existsSync(autoDir)) {
-    fs.mkdirSync(autoDir, { recursive: true });
-  }
   const stateFile = path.join(autoDir, '.claude.hooks.json');
 
   function read(): HookState {
+    if (!fs.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
+
     if (!fs.existsSync(stateFile)) {
-      const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
-      const initialState = isPluginMode
-        ? { ...DEFAULT_HOOK_STATE, firstSetupRequired: true }
-        : { ...DEFAULT_HOOK_STATE };
+      const initialState = { ...DEFAULT_HOOK_STATE };
       fs.writeFileSync(stateFile, `${JSON.stringify(initialState, null, 2)}\n`);
       return JSON.parse(JSON.stringify(initialState)) as HookState;
     }
@@ -110,7 +107,6 @@ export function createHookState(autoDir: string): HookStateManager {
     const partial = JSON.parse(content) as Partial<HookState>;
 
     return {
-      ...(partial.firstSetupRequired !== undefined ? { firstSetupRequired: partial.firstSetupRequired } : {}),
       autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, ...partial.autoContinue },
       validateCommit: { ...DEFAULT_HOOK_STATE.validateCommit, ...partial.validateCommit },
       denyList: { ...DEFAULT_HOOK_STATE.denyList, ...partial.denyList },
@@ -124,10 +120,16 @@ export function createHookState(autoDir: string): HookStateManager {
   }
 
   function write(state: HookState): void {
+    if (!fs.existsSync(autoDir)) {
+      return;
+    }
     fs.writeFileSync(stateFile, `${JSON.stringify(state, null, 2)}\n`);
   }
 
   function update(updates: Partial<HookState>): HookState {
+    if (!fs.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
     const current = read();
     const newState: HookState = {
       ...current,

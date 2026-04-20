@@ -25,6 +25,10 @@ function matchesFilter(hookName: string, message: string): boolean {
 }
 
 export function activityLog(autoDir: string, sessionId: string, hookName: string, message: string): void {
+  if (!fs.existsSync(autoDir)) {
+    return;
+  }
+
   if (!matchesFilter(hookName, message)) {
     return;
   }

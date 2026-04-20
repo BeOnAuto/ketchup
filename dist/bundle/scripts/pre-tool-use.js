@@ -6150,7 +6150,7 @@ var require_parse3 = __commonJS({
 var require_gray_matter = __commonJS({
   "node_modules/.pnpm/gray-matter@4.0.3/node_modules/gray-matter/index.js"(exports2, module2) {
     "use strict";
-    var fs10 = require("fs");
+    var fs11 = require("fs");
     var sections = require_section_matter();
     var defaults = require_defaults();
     var stringify = require_stringify2();
@@ -6234,7 +6234,7 @@ var require_gray_matter = __commonJS({
       return stringify(file, data, options2);
     };
     matter3.read = function(filepath, options2) {
-      const str2 = fs10.readFileSync(filepath, "utf8");
+      const str2 = fs11.readFileSync(filepath, "utf8");
       const file = matter3(str2, options2);
       file.path = filepath;
       return file;
@@ -6263,7 +6263,7 @@ var require_gray_matter = __commonJS({
 });
 
 // scripts/pre-tool-use.ts
-var fs9 = __toESM(require("node:fs"));
+var fs10 = __toESM(require("node:fs"));
 
 // src/activity-logger.ts
 var import_node_fs = __toESM(require("node:fs"));
@@ -6287,6 +6287,9 @@ function matchesFilter(hookName, message) {
   return includes.some((pattern) => searchText.includes(pattern));
 }
 function activityLog(autoDir, sessionId, hookName, message) {
+  if (!import_node_fs.default.existsSync(autoDir)) {
+    return;
+  }
   if (!matchesFilter(hookName, message)) {
     return;
   }
@@ -6509,6 +6512,9 @@ function sanitizeForFilename(hookName) {
   return hookName.replace(/[^a-zA-Z0-9-]/g, "-").toLowerCase();
 }
 function writeHookLog(autoDir, entry) {
+  if (!fs2.existsSync(autoDir)) {
+    return;
+  }
   const logsDir = path2.join(autoDir, "logs", "hooks");
   if (!fs2.existsSync(logsDir)) {
     fs2.mkdirSync(logsDir, { recursive: true });
@@ -6558,10 +6564,16 @@ function writeHookLog(autoDir, entry) {
 `);
 }
 
+// src/hooks/pre-tool-use.ts
+var fs8 = __toESM(require("node:fs"));
+
 // src/debug-logger.ts
 var import_node_fs2 = __toESM(require("node:fs"));
 var import_node_path2 = __toESM(require("node:path"));
 function debugLog(autoDir, hookName, message) {
+  if (!import_node_fs2.default.existsSync(autoDir)) {
+    return;
+  }
   const debug = process.env.DEBUG;
   if (!debug || !debug.includes("claude-auto")) {
     return;
@@ -6628,14 +6640,13 @@ var DEFAULT_HOOK_STATE = {
   }
 };
 function createHookState(autoDir) {
-  if (!fs5.existsSync(autoDir)) {
-    fs5.mkdirSync(autoDir, { recursive: true });
-  }
   const stateFile = path5.join(autoDir, ".claude.hooks.json");
   function read() {
+    if (!fs5.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
     if (!fs5.existsSync(stateFile)) {
-      const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
-      const initialState = isPluginMode ? { ...DEFAULT_HOOK_STATE, firstSetupRequired: true } : { ...DEFAULT_HOOK_STATE };
+      const initialState = { ...DEFAULT_HOOK_STATE };
       fs5.writeFileSync(stateFile, `${JSON.stringify(initialState, null, 2)}
 `);
       return JSON.parse(JSON.stringify(initialState));
@@ -6643,7 +6654,6 @@ function createHookState(autoDir) {
     const content = fs5.readFileSync(stateFile, "utf-8");
     const partial = JSON.parse(content);
     return {
-      ...partial.firstSetupRequired !== void 0 ? { firstSetupRequired: partial.firstSetupRequired } : {},
       autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, ...partial.autoContinue },
       validateCommit: { ...DEFAULT_HOOK_STATE.validateCommit, ...partial.validateCommit },
       denyList: { ...DEFAULT_HOOK_STATE.denyList, ...partial.denyList },
@@ -6656,10 +6666,16 @@ function createHookState(autoDir) {
     };
   }
   function write(state) {
+    if (!fs5.existsSync(autoDir)) {
+      return;
+    }
     fs5.writeFileSync(stateFile, `${JSON.stringify(state, null, 2)}
 `);
   }
   function update(updates) {
+    if (!fs5.existsSync(autoDir)) {
+      return { ...DEFAULT_HOOK_STATE };
+    }
     const current = read();
     const newState = {
       ...current,
@@ -6798,6 +6814,14 @@ function commandTargetsProtectedPath(command, validatorsDirs) {
   return void 0;
 }
 async function handlePreToolUse(paths, sessionId, toolInput, options2 = {}) {
+  if (!fs8.existsSync(paths.autoDir)) {
+    return {
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "allow"
+      }
+    };
+  }
   const command = toolInput.command;
   if (command && isCommitCommand(command)) {
     const gitCwd = options2.cwd ?? process.cwd();
@@ -6938,7 +6962,7 @@ async function resolvePathsFromEnv(explicitPluginRoot) {
 }
 
 // src/plugin-debug.ts
-var fs8 = __toESM(require("node:fs"));
+var fs9 = __toESM(require("node:fs"));
 var path9 = __toESM(require("node:path"));
 function logPluginDiagnostics(hookName, paths) {
   const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
@@ -6962,13 +6986,15 @@ function logPluginDiagnostics(hookName, paths) {
   if (isDebug) {
     console.error(message);
   }
-  const logsDir = path9.join(paths.autoDir, "logs");
-  fs8.mkdirSync(logsDir, { recursive: true });
-  fs8.appendFileSync(path9.join(logsDir, "plugin-debug.log"), message);
+  if (fs9.existsSync(paths.autoDir)) {
+    const logsDir = path9.join(paths.autoDir, "logs");
+    fs9.mkdirSync(logsDir, { recursive: true });
+    fs9.appendFileSync(path9.join(logsDir, "plugin-debug.log"), message);
+  }
 }
 
 // scripts/pre-tool-use.ts
-var input = parseHookInput(fs9.readFileSync(0, "utf-8"));
+var input = parseHookInput(fs10.readFileSync(0, "utf-8"));
 var startTime = Date.now();
 (async () => {
   const paths = await resolvePathsFromEnv();

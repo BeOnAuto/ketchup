@@ -1,10 +1,11 @@
+import * as fs from 'node:fs';
+
 import { activityLog } from '../activity-logger.js';
 import { debugLog } from '../debug-logger.js';
 import { createHookState } from '../hook-state.js';
 import type { ResolvedPaths } from '../path-resolver.js';
 import { loadReminders, scanReminders } from '../reminder-loader.js';
 import { isValidatorSession } from '../validator-session.js';
-import { FIRST_SETUP_MESSAGE } from '../welcome-message.js';
 
 type HookResult = {
   hookSpecificOutput: {
@@ -24,6 +25,20 @@ export async function handleUserPromptSubmit(
   sessionId: string,
   prompt?: string,
 ): Promise<HookResult & { diagnostics: UserPromptSubmitDiagnostics }> {
+  if (!fs.existsSync(paths.autoDir)) {
+    return {
+      hookSpecificOutput: {
+        hookEventName: 'UserPromptSubmit',
+        additionalContext: '',
+      },
+      diagnostics: {
+        resolvedPaths: paths,
+        reminderFiles: [],
+        matchedReminders: [],
+      },
+    };
+  }
+
   const reminderFiles = paths.remindersDirs.flatMap((dir) => scanReminders(dir));
 
   if (isValidatorSession(prompt)) {
@@ -43,28 +58,7 @@ export async function handleUserPromptSubmit(
     };
   }
 
-  const stateManager = createHookState(paths.autoDir);
-  const state = stateManager.read();
-
-  if (state.firstSetupRequired) {
-    const updated = stateManager.read();
-    delete updated.firstSetupRequired;
-    stateManager.write(updated);
-    activityLog(paths.autoDir, sessionId, 'user-prompt-submit', 'first-setup directive injected');
-    debugLog(paths.autoDir, 'user-prompt-submit', 'first-setup directive injected');
-
-    return {
-      hookSpecificOutput: {
-        hookEventName: 'UserPromptSubmit',
-        additionalContext: FIRST_SETUP_MESSAGE,
-      },
-      diagnostics: {
-        resolvedPaths: paths,
-        reminderFiles,
-        matchedReminders: [],
-      },
-    };
-  }
+  const state = createHookState(paths.autoDir).read();
 
   const reminders = loadReminders(paths.remindersDirs, { hook: 'UserPromptSubmit' }, state.overrides.reminders);
 

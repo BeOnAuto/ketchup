@@ -34,21 +34,23 @@ Or for local development:
 claude --plugin-dir /path/to/claude-auto
 ```
 
-The plugin automatically:
-
-- Creates reminders that inject your guidelines
-- Sets up the supervisor that ACKs or NACKs changes
-- Initializes hook state with sensible defaults
+Claude will mention that claude-auto is available but not yet active.
 
 ---
 
-## Step 2: Verify Your Installation
+## Step 2: Activate in Your Project
 
 ```
-/claude-auto:config show
+/claude-auto-init
 ```
 
-Everything looks good? Claude Auto is active. The Quality Loop is running. You can now let it run and check back on outcomes.
+This creates `.claude-auto/` with default configuration. Then verify:
+
+```
+/claude-auto-config show
+```
+
+Claude Auto is now active with commit validation, reminders, deny-lists, and auto-continue.
 
 ---
 
@@ -171,5 +173,5 @@ See the [transformation story](/origin-story#the-transformation) for the complet
 Having issues? See the [Configuration Guide](/configuration#troubleshooting) for common problems and solutions, or run:
 
 ```
-/claude-auto:config show
+/claude-auto-config show
 ```

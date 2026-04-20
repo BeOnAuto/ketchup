@@ -1,3 +1,5 @@
+import * as fs from 'node:fs';
+
 import { activityLog } from '../activity-logger.js';
 import {
   type Executor,
@@ -52,6 +54,15 @@ export async function handlePreToolUse(
   toolInput: ToolInput,
   options: PreToolUseOptions = {},
 ): Promise<HookResult> {
+  if (!fs.existsSync(paths.autoDir)) {
+    return {
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'allow',
+      },
+    };
+  }
+
   const command = toolInput.command as string | undefined;
 
   if (command && isCommitCommand(command)) {

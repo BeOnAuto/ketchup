@@ -24,7 +24,7 @@ const args = process.argv.slice(2);
 const subcommand = args[0];
 
 function usage(): string {
-  return `Usage: /claude-auto:config <subcommand> [args]
+  return `Usage: /claude-auto-config <subcommand> [args]
 
 Subcommands:
   show                              Show all current configuration

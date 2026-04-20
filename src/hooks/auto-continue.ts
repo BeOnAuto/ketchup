@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 
 import type { ClueCollectorResult } from '../clue-collector.js';
 import { createHookState } from '../hook-state.js';
@@ -76,6 +76,10 @@ Respond JSON only: {"decision":"CONTINUE","reason":"..."} or {"decision":"STOP",
 }
 
 export function handleStop(autoDir: string, input: StopHookInput): StopHookResult {
+  if (!existsSync(autoDir)) {
+    return { decision: 'allow', reason: 'auto-continue disabled' };
+  }
+
   const stateManager = createHookState(autoDir);
   const state = stateManager.read();
   const { mode, skipModes } = state.autoContinue;
