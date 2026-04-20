@@ -31,12 +31,13 @@ can embed the same assets.
 
 ## TODO
 
-- [ ] Burst 22: Vite + React scaffold with session picker calling `/api/sessions` [depends: 20]
-- [ ] Burst 23: Flat event timeline component for selected session [depends: 21, 22]
-- [ ] Burst 24: Tree nesting by subagent spawn/completion pairing [depends: 23]
-- [ ] Burst 25: Auto-collapse deep tree branches [depends: 24]
-- [ ] Burst 26: SSE variant `/api/sessions/:id/events/stream` that follows new events [depends: 21]
-- [ ] Burst 27: Client wires SSE to append live events into the tree [depends: 24, 26]
+- [ ] Burst 22: `viewer/` workspace scaffold — vite, react, testing-library, tsconfig [depends: 20]
+- [ ] Burst 23: `SessionPicker` component fetches and renders `/api/sessions` [depends: 22]
+- [ ] Burst 24: `Timeline` component renders flat events for selected session [depends: 23]
+- [ ] Burst 25: Tree nesting by subagent spawn/completion pairing [depends: 24]
+- [ ] Burst 26: Auto-collapse deep tree branches [depends: 25]
+- [ ] Burst 27: SSE variant `/api/sessions/:id/events/stream` that follows new events [depends: 21]
+- [ ] Burst 28: Client wires SSE to append live events into the tree [depends: 25, 27]
 
 
 ## DONE
