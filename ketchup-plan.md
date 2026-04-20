@@ -1,8 +1,15 @@
-# Ketchup Plan: Event Store — Claude session transcripts as domain events
+# Ketchup Plan: Event Store — ingestion and tree viewer
 
 Translate `~/.claude/projects/**/*.jsonl` transcripts into a domain event stream
 stored in Emmett (SQLite backend). One stream per `sessionId`. Events preserve
 interleave by order; raw jsonl line is stashed on each event under `source`.
+
+**Phase 1 — Ingestion (done):** parsers, translator, ingester, CLI + Stop hook.
+
+**Phase 2 — Viewer (in progress):** Express server + Vite/React SPA rendering an
+auto-collapsed tree of events per session. Session picker in left pane, tree in
+right pane. Live updates via SSE. Self-contained bundle so a future IDE webview
+can embed the same assets.
 
 **Design decisions (locked):**
 
@@ -11,6 +18,10 @@ interleave by order; raw jsonl line is stashed on each event under `source`.
 - `ThoughtRecorded` events kept (privacy revisit later if needed)
 - `AssistantResponded` emitted per text segment (interleave preserved by order)
 - Ingestion: on-demand CLI + Stop hook piggyback (live tail deferred)
+- Viewer server: Express, bound to `127.0.0.1`, no auth (local only)
+- Viewer client: Vite + React SPA, self-contained for IDE webview embedding
+- Live: server polls SQLite every ~500ms and pushes new events over SSE
+- Tree: subagent spawn/completion pairs drive nesting; deep branches auto-collapsed
 
 **Event vocabulary:**
 `SessionStarted` · `PromptSubmitted` · `AssistantResponded` · `ThoughtRecorded` ·
@@ -19,6 +30,17 @@ interleave by order; raw jsonl line is stashed on each event under `source`.
 `SessionCompacted` · `SessionEnded`
 
 ## TODO
+
+- [ ] Burst 18: `listSessions(store)` returns session summaries (id, event count, first/last timestamps) [depends: 13]
+- [ ] Burst 19: `readSessionEvents(store, id)` returns all events for a session in order [depends: 13]
+- [ ] Burst 20: Express server scaffold with `/api/sessions` endpoint [depends: 18]
+- [ ] Burst 21: `/api/sessions/:id/events` JSON endpoint (static backfill) [depends: 19, 20]
+- [ ] Burst 22: Vite + React scaffold with session picker calling `/api/sessions` [depends: 20]
+- [ ] Burst 23: Flat event timeline component for selected session [depends: 21, 22]
+- [ ] Burst 24: Tree nesting by subagent spawn/completion pairing [depends: 23]
+- [ ] Burst 25: Auto-collapse deep tree branches [depends: 24]
+- [ ] Burst 26: SSE variant `/api/sessions/:id/events/stream` that follows new events [depends: 21]
+- [ ] Burst 27: Client wires SSE to append live events into the tree [depends: 24, 26]
 
 
 ## DONE
