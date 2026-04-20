@@ -31,7 +31,6 @@ can embed the same assets.
 
 ## TODO
 
-- [ ] Burst 22: `viewer/` workspace scaffold — vite, react, testing-library, tsconfig [depends: 20]
 - [ ] Burst 23: `SessionPicker` component fetches and renders `/api/sessions` [depends: 22]
 - [ ] Burst 24: `Timeline` component renders flat events for selected session [depends: 23]
 - [ ] Burst 25: Tree nesting by subagent spawn/completion pairing [depends: 24]
@@ -64,3 +63,4 @@ can embed the same assets.
 - [x] Burst 19: `readSessionEvents` returns domain events for a session stream (fa2a662)
 - [x] Burst 20: `createViewerApp` serves `/api/sessions` from injected lister (7cfc9ad)
 - [x] Burst 21: Viewer serves `/api/sessions/:id/events` from injected reader (38f74fd)
+- [x] Burst 22: Scaffold `viewer/` workspace with vite, react, and testing-library (15a1ad9)
