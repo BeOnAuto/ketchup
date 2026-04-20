@@ -31,7 +31,6 @@ can embed the same assets.
 
 ## TODO
 
-- [ ] Burst 19: `readSessionEvents(store, id)` returns all events for a session in order [depends: 13]
 - [ ] Burst 20: Express server scaffold with `/api/sessions` endpoint [depends: 18]
 - [ ] Burst 21: `/api/sessions/:id/events` JSON endpoint (static backfill) [depends: 19, 20]
 - [ ] Burst 22: Vite + React scaffold with session picker calling `/api/sessions` [depends: 20]
@@ -63,3 +62,4 @@ can embed the same assets.
 - [x] Burst 16: `ingestCliRun` + `scripts/events-ingest.ts` CLI entry (0e42410)
 - [x] Burst 17: `ingestOnStop` wires Stop hook input to session ingestion (45ffc39)
 - [x] Burst 18: `listSessions` returns per-session summaries from event store (f5c225c)
+- [x] Burst 19: `readSessionEvents` returns domain events for a session stream (fa2a662)
