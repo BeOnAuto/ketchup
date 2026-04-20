@@ -1,5 +1,25 @@
 # claude-ketchup
 
+## 0.20.0
+
+### Minor Changes
+
+- 742659a: - Migrated to plugin-only mode with native Claude Code plugin support via BeOnAuto/auto-plugins marketplace
+  - Removed legacy npx installation, CLI system, and associated commands (install, doctor, repair, status, reminders, tui)
+  - Added runtime config management with overrides and first-setup guidance via new /claude-auto:config skill
+  - Fixed commit validation to respect validateCommit.mode off setting
+  - Fixed plugin path resolution for skills context when only CLAUDE_PLUGIN_ROOT is set
+
+### Patch Changes
+
+- 742659a: - Planned removal of npm publishing from release workflow
+- 742659a: - Fixed release workflow to skip marketplace.json during version bumps
+- 742659a: - Updated internal planning documentation to reflect completed work
+- 742659a: - Removed legacy npm publish step from the release pipeline
+  - Rewired downstream release gates to trigger from the version step
+- 742659a: - Updated internal planning notes to reflect completed work
+- 742659a: - Fixed CI version-bump loop to skip marketplace.json, preventing unintended modifications during releases
+
 ## 0.19.0
 
 ### Minor Changes
