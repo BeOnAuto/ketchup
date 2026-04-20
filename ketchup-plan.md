@@ -31,14 +31,11 @@ can embed the same assets.
 
 ## TODO
 
-- [ ] Burst 23: `startViewerServer(app, port)` binds server and returns close handle [depends: 21]
-- [ ] Burst 24: `scripts/events-viewer.ts` CLI entry wires real store and boots server [depends: 23]
-- [ ] Burst 25: `SessionPicker` component fetches and renders `/api/sessions` [depends: 22]
-- [ ] Burst 26: `Timeline` component renders flat events for selected session [depends: 25]
-- [ ] Burst 27: Tree nesting by subagent spawn/completion pairing [depends: 26]
-- [ ] Burst 28: Auto-collapse deep tree branches [depends: 27]
-- [ ] Burst 29: SSE variant `/api/sessions/:id/events/stream` that follows new events [depends: 23]
-- [ ] Burst 30: Client wires SSE to append live events into the tree [depends: 27, 29]
+- [ ] Burst 27: Timeline renders per-event-type details (prompt, tool, text, file path) [depends: 26]
+- [ ] Burst 28: Tree nesting by subagent spawn/completion pairing [depends: 27]
+- [ ] Burst 29: Auto-collapse deep tree branches [depends: 28]
+- [ ] Burst 30: SSE variant `/api/sessions/:id/events/stream` that follows new events [depends: 23]
+- [ ] Burst 31: Client wires SSE to append live events into the tree [depends: 28, 30]
 
 
 ## DONE
@@ -66,3 +63,7 @@ can embed the same assets.
 - [x] Burst 20: `createViewerApp` serves `/api/sessions` from injected lister (7cfc9ad)
 - [x] Burst 21: Viewer serves `/api/sessions/:id/events` from injected reader (38f74fd)
 - [x] Burst 22: Scaffold `viewer/` workspace with vite, react, and testing-library (15a1ad9)
+- [x] Burst 23: `startViewerServer` binds Express app on 127.0.0.1 (f4ca05e)
+- [x] Burst 24: `scripts/events-viewer.ts` boots viewer server with SQLite deps (31dff51)
+- [x] Burst 25: Session picker component fetches and lists sessions (a835e67)
+- [x] Burst 26: Timeline component fetches events for a session (620bcec)
