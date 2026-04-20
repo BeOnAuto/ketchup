@@ -31,10 +31,11 @@ can embed the same assets.
 
 ## TODO
 
-- [ ] Burst 28: Tree nesting by subagent spawn/completion pairing [depends: 27]
-- [ ] Burst 29: Auto-collapse deep tree branches [depends: 28]
-- [ ] Burst 30: SSE variant `/api/sessions/:id/events/stream` that follows new events [depends: 23]
-- [ ] Burst 31: Client wires SSE to append live events into the tree [depends: 28, 30]
+- [ ] Burst 28: `buildEventTree` pairs tool invocations with results and nests subagent events [depends: 27]
+- [ ] Burst 29: Timeline renders the nested tree with indentation [depends: 28]
+- [ ] Burst 30: Auto-collapse deep tree branches [depends: 29]
+- [ ] Burst 31: SSE variant `/api/sessions/:id/events/stream` that follows new events [depends: 23]
+- [ ] Burst 32: Client wires SSE to append live events into the tree [depends: 29, 31]
 
 
 ## DONE
