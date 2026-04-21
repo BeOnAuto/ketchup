@@ -6828,7 +6828,7 @@ async function handlePreToolUse(paths, sessionId, toolInput, options2 = {}) {
     return handleCommitValidation(paths, sessionId, command, options2, gitCwd);
   }
   if (command) {
-    const targetedPath = commandTargetsProtectedPath(command, paths.validatorsDirs);
+    const targetedPath = commandTargetsProtectedPath(command, paths.protectedValidatorsDirs);
     if (targetedPath) {
       activityLog(paths.autoDir, sessionId, "pre-tool-use", `blocked protected: ${targetedPath}`);
       debugLog(paths.autoDir, "pre-tool-use", `${targetedPath} blocked (immutable validator)`);
@@ -6842,7 +6842,7 @@ async function handlePreToolUse(paths, sessionId, toolInput, options2 = {}) {
     }
   }
   const filePath = toolInput.file_path;
-  if (filePath && isProtectedPath(filePath, paths.validatorsDirs)) {
+  if (filePath && isProtectedPath(filePath, paths.protectedValidatorsDirs)) {
     activityLog(paths.autoDir, sessionId, "pre-tool-use", `blocked protected: ${filePath}`);
     debugLog(paths.autoDir, "pre-tool-use", `${filePath} blocked (immutable validator)`);
     return {
