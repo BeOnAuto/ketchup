@@ -28,3 +28,9 @@ docs/.vitepress/cache
 
 # Temp files
 .changeset-prompt-*.txt
+
+# Event store artifacts
+events.db
+events.db-journal
+events.db-wal
+events.db-shm
