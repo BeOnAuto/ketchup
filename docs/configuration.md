@@ -275,7 +275,7 @@ Reminders are Markdown files with YAML frontmatter that inject context into Clau
 
 ### Location
 
-- Default reminders: `.claude-auto/reminders/` (provided by plugin)
+- Default reminders: `$CLAUDE_PLUGIN_ROOT/reminders/` (bundled with the plugin, immutable)
 - Custom reminders: `.claude-auto/reminders/` (add your own `.md` files)
 
 ### Frontmatter Schema
@@ -303,7 +303,7 @@ Validators are Markdown files with YAML frontmatter.
 
 ### Location
 
-- Default validators: `.claude-auto/validators/` (provided by plugin)
+- Default validators: `$CLAUDE_PLUGIN_ROOT/validators/` (bundled with the plugin, immutable)
 - Custom validators: `.claude-auto/validators/` (add your own `.md` files)
 
 ### Frontmatter Schema
