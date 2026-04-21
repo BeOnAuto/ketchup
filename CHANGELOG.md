@@ -1,5 +1,25 @@
 # claude-ketchup
 
+## 0.21.0
+
+### Minor Changes
+
+- b2cf282: - Allowed users to author their own validators in project-local `.claude-auto/validators/` while keeping the plugin's bundled validators protected from modification
+- b2cf282: - Migrated to plugin-only mode with native Claude Code plugin support via the BeOnAuto/auto-plugins marketplace, removing the legacy npx CLI installation
+  - Added a new config skill with runtime overrides for validators and reminders, plus first-setup guidance on initial plugin use
+  - Added support for user-defined custom validators and reminders with documentation in the README
+  - Fixed commit validation to respect the validateCommit.mode off setting, and resolved plugin path handling when only CLAUDE_PLUGIN_ROOT is set
+  - Updated all documentation and install instructions for plugin-only mode
+
+### Patch Changes
+
+- b2cf282: - Clarified that plugin-bundled validators and reminders are loaded from the plugin root directory
+- b2cf282: - Users can now freely create, edit, and delete their own validators in .claude-auto/validators/
+  - Plugin's bundled validators remain protected from modification
+- b2cf282: - Planned documentation fix for plugin-bundled validator path
+- b2cf282: - Updated ketchup plan to reflect progress on completed bursts
+- b2cf282: - Updated internal ketchup plan to mark burst 3 as complete
+
 ## 0.20.0
 
 ### Minor Changes
