@@ -27,6 +27,7 @@ describe('user-prompt-submit hook', () => {
       autoDir,
       remindersDirs: [path.join(autoDir, 'reminders')],
       validatorsDirs: [path.join(autoDir, 'validators')],
+      protectedValidatorsDirs: [],
     };
     fs.mkdirSync(claudeDir, { recursive: true });
     fs.mkdirSync(autoDir, { recursive: true });

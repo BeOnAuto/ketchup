@@ -8,6 +8,7 @@ export interface ResolvedPaths {
   autoDir: string;
   remindersDirs: string[];
   validatorsDirs: string[];
+  protectedValidatorsDirs: string[];
 }
 
 export async function resolvePathsFromEnv(explicitPluginRoot?: string): Promise<ResolvedPaths> {
@@ -21,11 +22,14 @@ export async function resolvePathsFromEnv(explicitPluginRoot?: string): Promise<
   const claudeDir = path.join(projectRoot, '.claude');
   const autoDir = path.join(projectRoot, AUTO_DIR);
 
+  const pluginValidatorsDir = path.join(pluginRoot, 'validators');
+
   return {
     projectRoot,
     claudeDir,
     autoDir,
     remindersDirs: [path.join(pluginRoot, 'reminders'), path.join(autoDir, 'reminders')],
-    validatorsDirs: [path.join(pluginRoot, 'validators'), path.join(autoDir, 'validators')],
+    validatorsDirs: [pluginValidatorsDir, path.join(autoDir, 'validators')],
+    protectedValidatorsDirs: [pluginValidatorsDir],
   };
 }

@@ -28,6 +28,7 @@ describe('logPluginDiagnostics', () => {
       autoDir: nonExistentDir,
       validatorsDirs: ['/plugins/claude-auto/validators'],
       remindersDirs: ['/plugins/claude-auto/reminders'],
+      protectedValidatorsDirs: ['/plugins/claude-auto/validators'],
     });
 
     expect(fs.existsSync(nonExistentDir)).toBe(false);
@@ -44,6 +45,7 @@ describe('logPluginDiagnostics', () => {
       autoDir: tempDir,
       validatorsDirs: ['/plugins/claude-auto/validators'],
       remindersDirs: ['/plugins/claude-auto/reminders'],
+      protectedValidatorsDirs: ['/plugins/claude-auto/validators'],
     });
 
     const logFile = path.join(tempDir, 'logs', 'plugin-debug.log');
@@ -64,6 +66,7 @@ describe('logPluginDiagnostics', () => {
       autoDir: tempDir,
       validatorsDirs: ['/project/.claude-auto/validators'],
       remindersDirs: ['/project/.claude-auto/reminders'],
+      protectedValidatorsDirs: [],
     });
 
     const logFile = path.join(tempDir, 'logs', 'plugin-debug.log');
@@ -83,6 +86,7 @@ describe('logPluginDiagnostics', () => {
       autoDir: tempDir,
       validatorsDirs: ['/plugins/claude-auto/validators'],
       remindersDirs: ['/plugins/claude-auto/reminders'],
+      protectedValidatorsDirs: ['/plugins/claude-auto/validators'],
     });
 
     expect(spy).toHaveBeenCalledOnce();
@@ -101,6 +105,7 @@ describe('logPluginDiagnostics', () => {
       autoDir: tempDir,
       validatorsDirs: ['/plugins/claude-auto/validators'],
       remindersDirs: ['/plugins/claude-auto/reminders'],
+      protectedValidatorsDirs: ['/plugins/claude-auto/validators'],
     });
 
     expect(spy).not.toHaveBeenCalled();
@@ -119,6 +124,7 @@ describe('logPluginDiagnostics', () => {
       autoDir: tempDir,
       validatorsDirs: ['/project/.claude-auto/validators'],
       remindersDirs: ['/project/.claude-auto/reminders'],
+      protectedValidatorsDirs: [],
     });
 
     expect(spy).not.toHaveBeenCalled();

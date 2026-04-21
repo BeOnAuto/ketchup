@@ -3863,12 +3863,14 @@ async function resolvePathsFromEnv(explicitPluginRoot) {
   const projectRoot = process.cwd();
   const claudeDir = path6.join(projectRoot, ".claude");
   const autoDir = path6.join(projectRoot, AUTO_DIR);
+  const pluginValidatorsDir = path6.join(pluginRoot, "validators");
   return {
     projectRoot,
     claudeDir,
     autoDir,
     remindersDirs: [path6.join(pluginRoot, "reminders"), path6.join(autoDir, "reminders")],
-    validatorsDirs: [path6.join(pluginRoot, "validators"), path6.join(autoDir, "validators")]
+    validatorsDirs: [pluginValidatorsDir, path6.join(autoDir, "validators")],
+    protectedValidatorsDirs: [pluginValidatorsDir]
   };
 }
 
