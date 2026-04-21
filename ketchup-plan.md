@@ -2,7 +2,7 @@
 
 ## TODO
 
-- [ ] Burst 1: resolvePathsFromEnv returns protectedValidatorsDirs field [depends: none]
-- [ ] Burst 2: handlePreToolUse uses protectedValidatorsDirs for immutability checks [depends: 1]
-
 ## DONE
+
+- [x] Burst 1: resolvePathsFromEnv returns protectedValidatorsDirs field (5e9d98f)
+- [x] Burst 2: handlePreToolUse uses protectedValidatorsDirs for immutability checks (4ac31ff)
