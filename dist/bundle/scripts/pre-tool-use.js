@@ -6828,7 +6828,7 @@ async function handlePreToolUse(paths, sessionId, toolInput, options2 = {}) {
     return handleCommitValidation(paths, sessionId, command, options2, gitCwd);
   }
   if (command) {
-    const targetedPath = commandTargetsProtectedPath(command, paths.validatorsDirs);
+    const targetedPath = commandTargetsProtectedPath(command, paths.protectedValidatorsDirs);
     if (targetedPath) {
       activityLog(paths.autoDir, sessionId, "pre-tool-use", `blocked protected: ${targetedPath}`);
       debugLog(paths.autoDir, "pre-tool-use", `${targetedPath} blocked (immutable validator)`);
@@ -6842,7 +6842,7 @@ async function handlePreToolUse(paths, sessionId, toolInput, options2 = {}) {
     }
   }
   const filePath = toolInput.file_path;
-  if (filePath && isProtectedPath(filePath, paths.validatorsDirs)) {
+  if (filePath && isProtectedPath(filePath, paths.protectedValidatorsDirs)) {
     activityLog(paths.autoDir, sessionId, "pre-tool-use", `blocked protected: ${filePath}`);
     debugLog(paths.autoDir, "pre-tool-use", `${filePath} blocked (immutable validator)`);
     return {
@@ -6952,12 +6952,14 @@ async function resolvePathsFromEnv(explicitPluginRoot) {
   const projectRoot = process.cwd();
   const claudeDir = path8.join(projectRoot, ".claude");
   const autoDir = path8.join(projectRoot, AUTO_DIR);
+  const pluginValidatorsDir = path8.join(pluginRoot, "validators");
   return {
     projectRoot,
     claudeDir,
     autoDir,
     remindersDirs: [path8.join(pluginRoot, "reminders"), path8.join(autoDir, "reminders")],
-    validatorsDirs: [path8.join(pluginRoot, "validators"), path8.join(autoDir, "validators")]
+    validatorsDirs: [pluginValidatorsDir, path8.join(autoDir, "validators")],
+    protectedValidatorsDirs: [pluginValidatorsDir]
   };
 }
 

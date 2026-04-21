@@ -42,6 +42,7 @@ describe('config-manager', () => {
       autoDir,
       validatorsDirs: [validatorsDir],
       remindersDirs: [remindersDir, projectRemindersDir],
+      protectedValidatorsDirs: [],
     };
 
     fs.writeFileSync(

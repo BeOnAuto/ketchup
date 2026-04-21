@@ -71,7 +71,7 @@ export async function handlePreToolUse(
   }
 
   if (command) {
-    const targetedPath = commandTargetsProtectedPath(command, paths.validatorsDirs);
+    const targetedPath = commandTargetsProtectedPath(command, paths.protectedValidatorsDirs);
     if (targetedPath) {
       activityLog(paths.autoDir, sessionId, 'pre-tool-use', `blocked protected: ${targetedPath}`);
       debugLog(paths.autoDir, 'pre-tool-use', `${targetedPath} blocked (immutable validator)`);
@@ -87,7 +87,7 @@ export async function handlePreToolUse(
 
   const filePath = toolInput.file_path as string;
 
-  if (filePath && isProtectedPath(filePath, paths.validatorsDirs)) {
+  if (filePath && isProtectedPath(filePath, paths.protectedValidatorsDirs)) {
     activityLog(paths.autoDir, sessionId, 'pre-tool-use', `blocked protected: ${filePath}`);
     debugLog(paths.autoDir, 'pre-tool-use', `${filePath} blocked (immutable validator)`);
     return {

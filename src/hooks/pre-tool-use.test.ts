@@ -26,6 +26,7 @@ describe('pre-tool-use hook', () => {
       autoDir,
       remindersDirs: [path.join(autoDir, 'reminders')],
       validatorsDirs: [path.join(autoDir, 'validators')],
+      protectedValidatorsDirs: [],
     };
     fs.mkdirSync(claudeDir, { recursive: true });
     fs.mkdirSync(autoDir, { recursive: true });
@@ -336,11 +337,13 @@ Validate this commit`,
     }
   });
 
-  it('denies Bash command targeting validator files', async () => {
-    const validatorPath = path.join(autoDir, 'validators', 'burst-atomicity.md');
+  it('denies Bash command targeting protected (plugin) validator files', async () => {
+    const pluginValidatorsDir = '/plugins/claude-auto/validators';
+    const paths = { ...resolvedPaths, protectedValidatorsDirs: [pluginValidatorsDir] };
+    const validatorPath = path.join(pluginValidatorsDir, 'burst-atomicity.md');
     const toolInput = { command: `rm ${validatorPath}` };
 
-    const result = await handlePreToolUse(resolvedPaths, 'session-bash-protect', toolInput);
+    const result = await handlePreToolUse(paths, 'session-bash-protect', toolInput);
 
     expect(result).toEqual({
       hookSpecificOutput: {
@@ -351,16 +354,31 @@ Validate this commit`,
     });
   });
 
-  it('denies Edit/Write to validator files', async () => {
-    const toolInput = { file_path: path.join(autoDir, 'validators', 'burst-atomicity.md') };
+  it('denies Edit/Write to protected (plugin) validator files', async () => {
+    const pluginValidatorsDir = '/plugins/claude-auto/validators';
+    const paths = { ...resolvedPaths, protectedValidatorsDirs: [pluginValidatorsDir] };
+    const toolInput = { file_path: path.join(pluginValidatorsDir, 'burst-atomicity.md') };
 
-    const result = await handlePreToolUse(resolvedPaths, 'session-protect', toolInput);
+    const result = await handlePreToolUse(paths, 'session-protect', toolInput);
 
     expect(result).toEqual({
       hookSpecificOutput: {
         hookEventName: 'PreToolUse',
         permissionDecision: 'deny',
         permissionDecisionReason: `Validator files are immutable: ${toolInput.file_path}`,
+      },
+    });
+  });
+
+  it('allows Edit/Write to project-local validator files (not in protectedValidatorsDirs)', async () => {
+    const toolInput = { file_path: path.join(autoDir, 'validators', 'my-custom.md') };
+
+    const result = await handlePreToolUse(resolvedPaths, 'session-user-validator', toolInput);
+
+    expect(result).toEqual({
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'allow',
       },
     });
   });
