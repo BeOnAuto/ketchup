@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 49: Session header shows "session id" label and "copy resume command" button [depends: 47]
 
 
 
@@ -101,3 +100,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 46: List sessions include summary from first prompt (49c1d33)
 - [x] Burst 47: Session header shows id and summary above timeline (87edade)
 - [x] Burst 48: Session picker uses summary as primary label (8b986d0)
+- [x] Burst 49: Session header label and copy resume command button (018c4fd)
