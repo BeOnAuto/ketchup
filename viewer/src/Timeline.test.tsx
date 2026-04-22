@@ -22,14 +22,6 @@ describe('Timeline', () => {
         source: {},
       },
       {
-        type: 'ThoughtRecorded',
-        timestamp: 't3',
-        sessionId: 'a',
-        thinking: 'reason',
-        signature: 'sig',
-        source: {},
-      },
-      {
         type: 'ToolInvoked',
         timestamp: 't4',
         sessionId: 'a',
@@ -98,7 +90,6 @@ describe('Timeline', () => {
       })),
     ).toEqual([
       { level: 1, label: 'SessionStarted — t0 — /foo @ main' },
-      { level: 1, label: 'ThoughtRecorded — t3 — reason' },
       { level: 1, label: 'ToolInvoked — t4 — Bash' },
       { level: 2, label: 'ToolInvocationSucceeded — t5 — ✓ ok' },
       { level: 1, label: 'ToolInvoked — t6 — Task' },
@@ -108,6 +99,31 @@ describe('Timeline', () => {
       { level: 1, label: 'FileModified — t10 — update /a' },
       { level: 1, label: 'SessionEnded — t11 — ' },
     ]);
+  });
+
+  it('renders a thought as a collapsed disclosure with italic body when expanded', async () => {
+    const thinking = 'Let me reason through this carefully step by step';
+    const events: SessionEvent[] = [
+      { type: 'ThoughtRecorded', timestamp: 't1', sessionId: 'a', thinking, signature: 'sig', source: {} },
+    ];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ events }))),
+    );
+
+    render(<Timeline sessionId="abc" pollIntervalMs={60000} />);
+    const card = await screen.findByTestId('thought-card');
+    const body = card.querySelector('div');
+
+    expect({
+      initiallyOpen: card.hasAttribute('open'),
+      bodyText: body?.textContent,
+      bodyClasses: body?.className,
+    }).toEqual({
+      initiallyOpen: false,
+      bodyText: thinking,
+      bodyClasses: 'mt-2 whitespace-pre-wrap text-slate-600 italic',
+    });
   });
 
   it('renders an assistant response as a left-aligned chat bubble with the full text', async () => {

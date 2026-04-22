@@ -67,6 +67,14 @@ function EventBody({ event }: { event: SessionEvent }) {
       </div>
     );
   }
+  if (event.type === 'ThoughtRecorded') {
+    return (
+      <details data-testid="thought-card" className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm">
+        <summary className="cursor-pointer text-slate-500">💭 Thought</summary>
+        <div className="mt-2 whitespace-pre-wrap text-slate-600 italic">{event.thinking}</div>
+      </details>
+    );
+  }
   return (
     <span data-testid="event-label">
       <strong>{event.type}</strong> — {event.timestamp} — {summarize(event)}
