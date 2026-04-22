@@ -15,7 +15,11 @@ export function App() {
       <main className="min-w-0 flex-1">
         {selected ? (
           <>
-            <SessionHeader sessionId={selected.sessionId} summary={selected.summary} />
+            <SessionHeader
+              sessionId={selected.sessionId}
+              summary={selected.summary}
+              onCopy={(command) => navigator.clipboard.writeText(command)}
+            />
             <Timeline sessionId={selected.sessionId} />
           </>
         ) : (

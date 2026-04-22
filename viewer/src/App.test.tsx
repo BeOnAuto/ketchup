@@ -64,6 +64,6 @@ describe('App', () => {
     await user.click(pickerButton);
     const header = await screen.findByTestId('session-header');
 
-    expect(header.textContent).toEqual('abc-12345678my first prompt');
+    expect(header.textContent).toEqual('session idabc-12345678copy resume commandmy first prompt');
   });
 });
