@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 54: `/claude-auto-view` skill boots the viewer from the bundled script
 
 
 
@@ -106,3 +105,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 51: Events viewer re-ingests project dir on interval (c0bbf6b)
 - [x] Burst 52: `deriveProjectDir` maps cwd to `~/.claude/projects/<dashed>` default
 - [x] Burst 53: Viewer server serves built SPA assets from staticDir on same port
+- [x] Burst 54: `/claude-auto-view` skill boots the bundled events viewer

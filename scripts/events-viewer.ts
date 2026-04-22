@@ -8,6 +8,7 @@ import { deriveProjectDir } from '../src/event-store/derive-project-dir.js';
 import { ingestProject } from '../src/event-store/ingest-project.js';
 import { listSessions } from '../src/event-store/list-sessions.js';
 import { readSessionEvents } from '../src/event-store/read-session-events.js';
+import { resolveViewerStaticDir } from '../src/event-store/resolve-viewer-static-dir.js';
 import { startViewerServer } from '../src/event-store/start-viewer-server.js';
 import { createEventStore } from '../src/event-store/store.js';
 import { createViewerApp } from '../src/event-store/viewer-server.js';
@@ -22,12 +23,15 @@ async function main(): Promise<void> {
   const connection = sqliteConnection({ fileName: dbPath });
 
   console.log(`Re-ingesting ${projectDir} every ${reingestSeconds}s`);
-  await ingestProject(projectDir, store);
-  setInterval(() => {
-    ingestProject(projectDir, store).catch((error) => console.error('re-ingest failed:', error));
-  }, reingestSeconds * 1000);
+  const safeIngest = () =>
+    ingestProject(projectDir, store).catch((error) => console.error('ingest skipped:', error.message));
+  await safeIngest();
+  setInterval(safeIngest, reingestSeconds * 1000);
 
-  const staticDir = resolve(__dirname, '../viewer/dist');
+  const staticDir = resolveViewerStaticDir({
+    pluginRoot: process.env.CLAUDE_PLUGIN_ROOT,
+    scriptDir: __dirname,
+  });
   const app = createViewerApp({
     listSessions: () => listSessions(connection),
     readSessionEvents: (id) => readSessionEvents(store, id),
