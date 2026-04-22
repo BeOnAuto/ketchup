@@ -178,7 +178,7 @@ export function Timeline({ sessionId, pollIntervalMs = 2000 }: { sessionId: stri
     return () => clearInterval(interval);
   }, [sessionId, pollIntervalMs]);
 
-  const tree = buildEventTree(events);
+  const tree = buildEventTree(events.filter((event) => !(event.type === 'ThoughtRecorded' && event.thinking === '')));
 
   return (
     <ul className="space-y-3">

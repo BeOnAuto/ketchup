@@ -84,6 +84,30 @@ describe('Timeline', () => {
     expect(card.textContent).toEqual('Bashcommand="ls -la"');
   });
 
+  it('omits thought events with empty thinking text so only populated thoughts render', async () => {
+    const events: SessionEvent[] = [
+      { type: 'ThoughtRecorded', timestamp: 't1', sessionId: 'a', thinking: '', signature: 'sig', source: {} },
+      {
+        type: 'ThoughtRecorded',
+        timestamp: 't2',
+        sessionId: 'a',
+        thinking: 'real reasoning',
+        signature: 'sig',
+        source: {},
+      },
+    ];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ events }))),
+    );
+
+    render(<Timeline sessionId="abc" pollIntervalMs={60000} />);
+    await screen.findByTestId('thought-card');
+    const cards = screen.queryAllByTestId('thought-card');
+
+    expect(cards.map((card) => card.querySelector('div')?.textContent)).toEqual(['real reasoning']);
+  });
+
   it('renders a thought as a collapsed disclosure with italic body when expanded', async () => {
     const thinking = 'Let me reason through this carefully step by step';
     const events: SessionEvent[] = [
