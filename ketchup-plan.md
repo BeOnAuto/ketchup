@@ -32,8 +32,7 @@ can embed the same assets.
 ## TODO
 
 - [ ] Burst 30: Tree branches toggle collapsed/expanded on click [depends: 29]
-- [ ] Burst 31: SSE variant `/api/sessions/:id/events/stream` that follows new events [depends: 23]
-- [ ] Burst 32: Client wires SSE to append live events into the tree [depends: 29, 31]
+- [ ] Burst 31: Timeline polls `/api/sessions/:id/events` on an interval to show new events [depends: 29]
 
 
 ## DONE
