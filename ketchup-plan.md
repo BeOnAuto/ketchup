@@ -35,6 +35,8 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 59: Viewer Vite dev proxy forwards `/ws` to Express so dev mode receives live events
+
 
 
 
