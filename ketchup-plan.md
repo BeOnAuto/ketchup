@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 45: Session picker renders localized date/time for last timestamp [depends: 39]
 
 
 
@@ -93,3 +92,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 42: Constrain main and tool card input to prevent horizontal overflow (86d86f4)
 - [x] Burst 43: Omit thought events with empty thinking text (7c5921e)
 - [x] Burst 44: Render tool results with full content (bc6a37a)
+- [x] Burst 45: Session picker renders localized last-timestamp (c12f943)
