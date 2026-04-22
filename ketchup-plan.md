@@ -35,6 +35,9 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 42: Prevent horizontal overflow by constraining main flex column and tool card input [depends: 41]
+
+
 
 
 ## DONE
