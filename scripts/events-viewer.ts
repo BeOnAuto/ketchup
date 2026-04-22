@@ -5,7 +5,9 @@ import { resolve } from 'node:path';
 import { sqliteConnection } from '@event-driven-io/emmett-sqlite';
 
 import { deriveProjectDir } from '../src/event-store/derive-project-dir.js';
+import { createEventWebSocket } from '../src/event-store/event-websocket.js';
 import { ingestProject } from '../src/event-store/ingest-project.js';
+import { ingestSession } from '../src/event-store/ingest-session.js';
 import { listSessions } from '../src/event-store/list-sessions.js';
 import { readSessionEvents } from '../src/event-store/read-session-events.js';
 import { resolveViewerStaticDir } from '../src/event-store/resolve-viewer-static-dir.js';
@@ -22,12 +24,6 @@ async function main(): Promise<void> {
   const store = await createEventStore(dbPath);
   const connection = sqliteConnection({ fileName: dbPath });
 
-  console.log(`Re-ingesting ${projectDir} every ${reingestSeconds}s`);
-  const safeIngest = () =>
-    ingestProject(projectDir, store).catch((error) => console.error('ingest skipped:', error.message));
-  await safeIngest();
-  setInterval(safeIngest, reingestSeconds * 1000);
-
   const staticDir = resolveViewerStaticDir({
     pluginRoot: process.env.CLAUDE_PLUGIN_ROOT,
     scriptDir: __dirname,
@@ -38,6 +34,26 @@ async function main(): Promise<void> {
     staticDir,
   });
   const server = await startViewerServer(app, port);
+  const wsHandle = createEventWebSocket(server, {
+    readSessionEvents: (id) => readSessionEvents(store, id),
+  });
+
+  const publishingIngester = async (jsonlPath: string, s: typeof store) => {
+    const newEvents = await ingestSession(jsonlPath, s);
+    if (newEvents.length > 0) {
+      wsHandle.publish(newEvents[0].sessionId, newEvents);
+    }
+    return newEvents;
+  };
+
+  console.log(`Re-ingesting ${projectDir} every ${reingestSeconds}s`);
+  const safeIngest = () =>
+    ingestProject(projectDir, store, publishingIngester).catch((error) =>
+      console.error('ingest skipped:', error.message),
+    );
+  await safeIngest();
+  setInterval(safeIngest, reingestSeconds * 1000);
+
   const address = server.address();
   const actualPort = typeof address === 'object' && address !== null ? address.port : port;
   console.log(`Viewer at http://127.0.0.1:${actualPort}`);
