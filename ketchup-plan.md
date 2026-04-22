@@ -35,6 +35,10 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 50: `ingestSession` dedupes by `source.uuid` to allow safe re-ingestion [depends: 14]
+- [ ] Burst 51: `events-viewer` boots a background re-ingest loop for live updates [depends: 50]
+
+
 
 
 
