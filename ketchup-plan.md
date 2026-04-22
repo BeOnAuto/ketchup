@@ -35,6 +35,9 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 49: Session header shows "session id" label and "copy resume command" button [depends: 47]
+
+
 
 
 
