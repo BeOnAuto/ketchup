@@ -35,9 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 46: `listSessions` includes `summary` derived from first prompt [depends: 18]
-- [ ] Burst 47: `SessionHeader` top bar renders session id and summary above timeline [depends: 46]
-- [ ] Burst 48: Session picker uses summary as primary label [depends: 46]
 
 
 
@@ -98,3 +95,6 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 43: Omit thought events with empty thinking text (7c5921e)
 - [x] Burst 44: Render tool results with full content (bc6a37a)
 - [x] Burst 45: Session picker renders localized last-timestamp (c12f943)
+- [x] Burst 46: List sessions include summary from first prompt (49c1d33)
+- [x] Burst 47: Session header shows id and summary above timeline (87edade)
+- [x] Burst 48: Session picker uses summary as primary label (8b986d0)
