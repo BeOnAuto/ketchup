@@ -35,13 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 34: `PromptSubmitted` renders as right-aligned chat bubble with full prompt [depends: 33]
-- [ ] Burst 35: `AssistantResponded` renders as left-aligned chat bubble with full text [depends: 34]
-- [ ] Burst 36: `ThoughtRecorded` renders collapsed-by-default with italic body [depends: 34]
-- [ ] Burst 37: Tool invocation pairs render as a compact card with status [depends: 34]
-- [ ] Burst 38: Hook / file / session events render as compact metadata rows [depends: 34]
-- [ ] Burst 39: Session picker restyled as cards with timestamps [depends: 33]
-
 ## DONE
 
 - [x] Burst 1: `parseSessionStarted` — jsonl `SessionStart` progress line → `SessionStarted` event (a31a987)
@@ -78,3 +71,9 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 31: Timeline polls events on interval for live updates (71cdc47)
 - [x] Burst 32: Install tailwind css v4 in viewer and apply utility classes (a0ee174)
 - [x] Burst 33: Add cn helper with clsx and tailwind-merge (b1904c7)
+- [x] Burst 34: Render prompts as right-aligned chat bubbles (6ed0c71)
+- [x] Burst 35: Render assistant responses as left-aligned chat bubbles (0981585)
+- [x] Burst 36: Render thoughts as collapsed disclosure cards (003ff86)
+- [x] Burst 37: Render tool invocations as cards with name and JSON input (37951a4)
+- [x] Burst 38: Render hook/file/session events as compact metadata rows (8ab7795)
+- [x] Burst 39: Restyle session picker as cards (4864470)
