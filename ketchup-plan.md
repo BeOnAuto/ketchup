@@ -35,6 +35,11 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 46: `listSessions` includes `summary` derived from first prompt [depends: 18]
+- [ ] Burst 47: `SessionHeader` top bar renders session id and summary above timeline [depends: 46]
+- [ ] Burst 48: Session picker uses summary as primary label [depends: 46]
+
+
 
 
 
