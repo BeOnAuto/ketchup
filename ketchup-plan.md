@@ -35,6 +35,9 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 40: Tree branches start collapsed by default [depends: 30]
+
+
 ## DONE
 
 - [x] Burst 1: `parseSessionStarted` — jsonl `SessionStart` progress line → `SessionStarted` event (a31a987)
