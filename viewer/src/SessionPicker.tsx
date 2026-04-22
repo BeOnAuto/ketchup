@@ -32,7 +32,7 @@ export function SessionPicker({ onSelect }: { onSelect: (sessionId: string) => v
               {session.eventCount} events
             </div>
             <div data-testid="session-time" className="text-xs text-slate-400">
-              {session.lastTimestamp}
+              {new Date(session.lastTimestamp).toLocaleString()}
             </div>
           </button>
         </li>
