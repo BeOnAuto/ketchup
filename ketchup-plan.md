@@ -35,8 +35,9 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-
-
+- [ ] Burst 52: Events viewer auto-derives project dir from cwd when not supplied
+- [ ] Burst 53: Viewer server serves built SPA assets from a single Express port
+- [ ] Burst 54: `/claude-auto-view` skill boots the viewer from the bundled script
 
 
 
