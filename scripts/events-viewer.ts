@@ -27,16 +27,17 @@ async function main(): Promise<void> {
     ingestProject(projectDir, store).catch((error) => console.error('re-ingest failed:', error));
   }, reingestSeconds * 1000);
 
+  const staticDir = resolve(__dirname, '../viewer/dist');
   const app = createViewerApp({
     listSessions: () => listSessions(connection),
     readSessionEvents: (id) => readSessionEvents(store, id),
+    staticDir,
   });
   const server = await startViewerServer(app, port);
   const address = server.address();
   const actualPort = typeof address === 'object' && address !== null ? address.port : port;
-  console.log(`Viewer API at http://127.0.0.1:${actualPort}`);
+  console.log(`Viewer at http://127.0.0.1:${actualPort}`);
   console.log(`DB: ${dbPath}`);
-  console.log(`Run \`cd viewer && pnpm dev\` to open the UI.`);
 }
 
 main();

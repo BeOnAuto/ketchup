@@ -1,3 +1,7 @@
+import { mkdtempSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+
 import request from 'supertest';
 import { describe, expect, it } from 'vitest';
 
@@ -66,6 +70,23 @@ describe('viewer server', () => {
       requestedId: 'abc',
       status: 200,
       body: { events },
+    });
+  });
+
+  it('serves the SPA index.html from staticDir for root requests', async () => {
+    const dir = mkdtempSync(join(tmpdir(), 'viewer-static-'));
+    writeFileSync(join(dir, 'index.html'), '<html>spa</html>');
+    const app = createViewerApp({
+      listSessions: noopListSessions,
+      readSessionEvents: noopReadSessionEvents,
+      staticDir: dir,
+    });
+
+    const response = await request(app).get('/');
+
+    expect({ status: response.status, text: response.text }).toEqual({
+      status: 200,
+      text: '<html>spa</html>',
     });
   });
 });

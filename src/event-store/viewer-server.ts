@@ -6,6 +6,7 @@ import type { SessionEvent } from './translate-session.js';
 export interface ViewerDeps {
   listSessions: () => Promise<SessionSummary[]>;
   readSessionEvents: (sessionId: string) => Promise<SessionEvent[]>;
+  staticDir?: string;
 }
 
 export function createViewerApp(deps: ViewerDeps): Express {
@@ -20,6 +21,10 @@ export function createViewerApp(deps: ViewerDeps): Express {
     const events = await deps.readSessionEvents(req.params.id);
     res.json({ events });
   });
+
+  if (deps.staticDir) {
+    app.use(express.static(deps.staticDir));
+  }
 
   return app;
 }
