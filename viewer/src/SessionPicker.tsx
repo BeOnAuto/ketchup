@@ -5,9 +5,10 @@ export interface SessionSummary {
   eventCount: number;
   firstTimestamp: string;
   lastTimestamp: string;
+  summary: string;
 }
 
-export function SessionPicker({ onSelect }: { onSelect: (sessionId: string) => void }) {
+export function SessionPicker({ onSelect }: { onSelect: (session: SessionSummary) => void }) {
   const [sessions, setSessions] = useState<SessionSummary[]>([]);
 
   useEffect(() => {
@@ -22,7 +23,7 @@ export function SessionPicker({ onSelect }: { onSelect: (sessionId: string) => v
         <li key={session.sessionId}>
           <button
             type="button"
-            onClick={() => onSelect(session.sessionId)}
+            onClick={() => onSelect(session)}
             className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-left text-sm shadow-sm transition hover:border-slate-300 hover:bg-slate-50"
           >
             <div data-testid="session-id" className="font-mono text-xs text-slate-500">

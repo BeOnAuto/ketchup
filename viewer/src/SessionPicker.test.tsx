@@ -15,12 +15,14 @@ describe('SessionPicker', () => {
         eventCount: 12,
         firstTimestamp: '2026-04-20T10:00:00Z',
         lastTimestamp: '2026-04-20T11:00:00Z',
+        summary: 'session one prompt',
       },
       {
         sessionId: 'xyz-4567890abc',
         eventCount: 3,
         firstTimestamp: '2026-04-19T09:00:00Z',
         lastTimestamp: '2026-04-19T09:30:00Z',
+        summary: 'session two prompt',
       },
     ];
     vi.stubGlobal(
