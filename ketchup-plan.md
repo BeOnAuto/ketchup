@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 55: Viewer server exposes `/ws/sessions/:id/events` sending initial snapshot on connect
 - [ ] Burst 56: Appending events broadcasts them to WebSocket subscribers for that session
 - [ ] Burst 57: Client Timeline subscribes via WebSocket and drops the polling interval
 - [ ] Burst 58: Server watches jsonl files for changes instead of re-ingesting on an interval
@@ -108,3 +107,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 52: `deriveProjectDir` maps cwd to `~/.claude/projects/<dashed>` default
 - [x] Burst 53: Viewer server serves built SPA assets from staticDir on same port
 - [x] Burst 54: `/claude-auto-view` skill boots the bundled events viewer
+- [x] Burst 55: `createEventWebSocket` sends initial event snapshot on ws connect
