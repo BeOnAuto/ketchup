@@ -133,7 +133,7 @@ function EventBody({ event }: { event: SessionEvent }) {
 }
 
 function EventNode({ node, depth }: { node: TreeNode; depth: number }) {
-  const [expanded, setExpanded] = useState(true);
+  const [expanded, setExpanded] = useState(false);
   const hasChildren = node.children.length > 0;
   return (
     <li data-level={depth}>

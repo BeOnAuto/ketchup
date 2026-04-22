@@ -196,7 +196,7 @@ describe('Timeline', () => {
     expect(items.map((li) => li.textContent)).toEqual(['Session started — /w @ main', 'hookStop:tcr']);
   });
 
-  it('hides a parent node children when its collapse toggle is clicked', async () => {
+  it('hides a parent node children by default and reveals them when the expand toggle is clicked', async () => {
     const events: SessionEvent[] = [
       {
         type: 'ToolInvoked',
@@ -223,9 +223,14 @@ describe('Timeline', () => {
     const user = userEvent.setup();
 
     render(<Timeline sessionId="abc" />);
-    await screen.findByRole('button', { name: /collapse/i });
-    await user.click(screen.getByRole('button', { name: /collapse/i }));
+    await screen.findByRole('button', { name: /expand/i });
+    const beforeClick = screen.queryAllByTestId('event-label').map((el) => el.textContent);
+    await user.click(screen.getByRole('button', { name: /expand/i }));
+    const afterClick = screen.queryAllByTestId('event-label').map((el) => el.textContent);
 
-    expect(screen.queryAllByTestId('event-label').map((el) => el.textContent)).toEqual([]);
+    expect({ beforeClick, afterClick }).toEqual({
+      beforeClick: [],
+      afterClick: ['ToolInvocationSucceeded — t2 — ✓ ok'],
+    });
   });
 });
