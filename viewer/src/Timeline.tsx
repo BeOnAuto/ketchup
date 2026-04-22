@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useState } from 'react';
 
 import { buildEventTree, type TreeNode } from './event-tree';
 
@@ -54,7 +54,7 @@ function summarize(event: SessionEvent): string {
   }
 }
 
-function EventBody({ event }: { event: SessionEvent }) {
+function EventBody({ event, toggle }: { event: SessionEvent; toggle?: ReactNode }) {
   if (event.type === 'PromptSubmitted') {
     return (
       <div data-testid="prompt-bubble" className="flex justify-end">
@@ -85,6 +85,7 @@ function EventBody({ event }: { event: SessionEvent }) {
     return (
       <div data-testid="tool-card" className="rounded-md border border-slate-200 bg-white px-3 py-2 shadow-sm">
         <div className="flex items-center gap-2">
+          {toggle}
           <span className="rounded bg-slate-100 px-2 py-0.5 font-mono text-xs text-slate-700">{event.toolName}</span>
           <span className="truncate font-mono text-xs text-slate-500">{formatToolInput(event.input)}</span>
         </div>
@@ -135,20 +136,21 @@ function EventBody({ event }: { event: SessionEvent }) {
 function EventNode({ node, depth }: { node: TreeNode; depth: number }) {
   const [expanded, setExpanded] = useState(false);
   const hasChildren = node.children.length > 0;
+  const toggle = hasChildren ? (
+    <button
+      type="button"
+      onClick={() => setExpanded((value) => !value)}
+      aria-label={expanded ? 'collapse' : 'expand'}
+      className="text-slate-400 hover:text-slate-700"
+    >
+      {expanded ? '▾' : '▸'}
+    </button>
+  ) : null;
   return (
-    <li data-level={depth}>
-      {hasChildren && (
-        <button
-          type="button"
-          onClick={() => setExpanded((value) => !value)}
-          aria-label={expanded ? 'collapse' : 'expand'}
-        >
-          {expanded ? '▾' : '▸'}
-        </button>
-      )}
-      <EventBody event={node.event} />
+    <li data-level={depth} className="list-none">
+      <EventBody event={node.event} toggle={toggle} />
       {hasChildren && expanded && (
-        <ul>
+        <ul className="ml-4 mt-2 space-y-2 border-l border-slate-200 pl-4">
           {node.children.map((child, index) => (
             <EventNode key={`${child.event.type}-${index}-${child.event.timestamp}`} node={child} depth={depth + 1} />
           ))}
@@ -175,7 +177,7 @@ export function Timeline({ sessionId, pollIntervalMs = 2000 }: { sessionId: stri
   const tree = buildEventTree(events);
 
   return (
-    <ul>
+    <ul className="space-y-3">
       {tree.map((node, index) => (
         <EventNode key={`${node.event.type}-${index}-${node.event.timestamp}`} node={node} depth={1} />
       ))}
