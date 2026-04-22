@@ -96,6 +96,22 @@ function EventBody({ event, toggle }: { event: SessionEvent; toggle?: ReactNode 
       </div>
     );
   }
+  if (event.type === 'ToolInvocationSucceeded') {
+    return (
+      <div data-testid="tool-result" className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2">
+        <div className="mb-1 text-xs text-emerald-700">✓ succeeded</div>
+        <pre className="font-mono text-xs whitespace-pre-wrap break-words text-slate-700">{event.content}</pre>
+      </div>
+    );
+  }
+  if (event.type === 'ToolInvocationFailed') {
+    return (
+      <div data-testid="tool-result-failed" className="rounded-md border border-rose-200 bg-rose-50 px-3 py-2">
+        <div className="mb-1 text-xs text-rose-700">✗ failed</div>
+        <pre className="font-mono text-xs whitespace-pre-wrap break-words text-slate-700">{event.error}</pre>
+      </div>
+    );
+  }
   if (event.type === 'HookExecuted') {
     return (
       <div data-testid="hook-row" className="flex items-center gap-2 text-xs text-slate-500">

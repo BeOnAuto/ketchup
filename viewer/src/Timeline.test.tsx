@@ -220,7 +220,8 @@ describe('Timeline', () => {
     expect(items.map((li) => li.textContent)).toEqual(['Session started — /w @ main', 'hookStop:tcr']);
   });
 
-  it('hides a parent node children by default and reveals them when the expand toggle is clicked', async () => {
+  it('hides a parent node children by default and reveals the tool result when the expand toggle is clicked', async () => {
+    const fullOutput = 'line 1\nline 2\nlots of content that would otherwise be truncated at forty characters';
     const events: SessionEvent[] = [
       {
         type: 'ToolInvoked',
@@ -236,7 +237,7 @@ describe('Timeline', () => {
         timestamp: 't2',
         sessionId: 'a',
         toolUseId: 'A',
-        content: 'ok',
+        content: fullOutput,
         source: {},
       },
     ];
@@ -248,13 +249,47 @@ describe('Timeline', () => {
 
     render(<Timeline sessionId="abc" />);
     await screen.findByRole('button', { name: /expand/i });
-    const beforeClick = screen.queryAllByTestId('event-label').map((el) => el.textContent);
+    const before = screen.queryAllByTestId('tool-result').length;
     await user.click(screen.getByRole('button', { name: /expand/i }));
-    const afterClick = screen.queryAllByTestId('event-label').map((el) => el.textContent);
+    const after = screen.getByTestId('tool-result').textContent;
 
-    expect({ beforeClick, afterClick }).toEqual({
-      beforeClick: [],
-      afterClick: ['ToolInvocationSucceeded — t2 — ✓ ok'],
+    expect({ before, after }).toEqual({
+      before: 0,
+      after: `✓ succeeded${fullOutput}`,
     });
+  });
+
+  it('renders a failed tool invocation with the full error text', async () => {
+    const fullError = 'Error: file not found\n  at handler.ts:42\n  at processor.ts:118';
+    const events: SessionEvent[] = [
+      {
+        type: 'ToolInvoked',
+        timestamp: 't1',
+        sessionId: 'a',
+        toolName: 'Read',
+        toolUseId: 'B',
+        input: {},
+        source: {},
+      },
+      {
+        type: 'ToolInvocationFailed',
+        timestamp: 't2',
+        sessionId: 'a',
+        toolUseId: 'B',
+        error: fullError,
+        source: {},
+      },
+    ];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ events }))),
+    );
+    const user = userEvent.setup();
+
+    render(<Timeline sessionId="abc" />);
+    await screen.findByRole('button', { name: /expand/i });
+    await user.click(screen.getByRole('button', { name: /expand/i }));
+
+    expect(screen.getByTestId('tool-result-failed').textContent).toEqual(`✗ failed${fullError}`);
   });
 });
