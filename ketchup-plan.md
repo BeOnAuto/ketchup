@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 59: Viewer Vite dev proxy forwards `/ws` to Express so dev mode receives live events
 
 
 
@@ -112,3 +111,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 56c: Events viewer script publishes appended events to ws subscribers
 - [x] Burst 57: Timeline subscribes via WebSocket and drops the polling interval
 - [x] Burst 58: `watchProject` replaces the ingest setInterval with fs.watch-driven ingest
+- [x] Burst 59: Vite dev proxy forwards `/ws` to Express for live events in dev mode
