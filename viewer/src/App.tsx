@@ -6,12 +6,14 @@ import { Timeline } from './Timeline';
 export function App() {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   return (
-    <div style={{ fontFamily: 'system-ui', display: 'flex', gap: '1rem', padding: '1rem' }}>
-      <aside style={{ flex: '0 0 320px', borderRight: '1px solid #ccc', paddingRight: '1rem' }}>
-        <h1>Claude Auto Viewer</h1>
+    <div className="flex min-h-screen gap-4 p-4 font-sans">
+      <aside className="w-80 shrink-0 border-r border-slate-200 pr-4">
+        <h1 className="mb-4 text-xl font-semibold">Claude Auto Viewer</h1>
         <SessionPicker onSelect={setSelectedId} />
       </aside>
-      <main style={{ flex: 1 }}>{selectedId ? <Timeline sessionId={selectedId} /> : <p>Pick a session.</p>}</main>
+      <main className="flex-1">
+        {selectedId ? <Timeline sessionId={selectedId} /> : <p className="text-slate-500">Pick a session.</p>}
+      </main>
     </div>
   );
 }

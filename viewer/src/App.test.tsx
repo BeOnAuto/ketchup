@@ -8,7 +8,7 @@ afterEach(() => {
 });
 
 describe('App', () => {
-  it('renders the viewer heading and a placeholder until a session is picked', async () => {
+  it('renders the viewer shell with tailwind utility classes and a placeholder', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn(async () => new Response(JSON.stringify({ sessions: [] }))),
@@ -16,11 +16,13 @@ describe('App', () => {
 
     render(<App />);
 
+    const shell = screen.getByRole('heading', { name: /claude auto viewer/i }).closest('div');
+
     expect({
-      heading: screen.getByRole('heading', { name: /claude auto viewer/i }).textContent,
+      shellClasses: shell?.className,
       placeholder: screen.getByText(/pick a session/i).textContent,
     }).toEqual({
-      heading: 'Claude Auto Viewer',
+      shellClasses: 'flex min-h-screen gap-4 p-4 font-sans',
       placeholder: 'Pick a session.',
     });
   });
