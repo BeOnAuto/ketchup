@@ -14,12 +14,12 @@ import { resolveViewerStaticDir } from '../src/event-store/resolve-viewer-static
 import { startViewerServer } from '../src/event-store/start-viewer-server.js';
 import { createEventStore } from '../src/event-store/store.js';
 import { createViewerApp } from '../src/event-store/viewer-server.js';
+import { watchProject } from '../src/event-store/watch-project.js';
 
 async function main(): Promise<void> {
   const dbPath = resolve(process.argv[2] ?? './events.db');
   const port = Number(process.argv[3] ?? 4321);
   const projectDir = process.argv[4] ? resolve(process.argv[4]) : deriveProjectDir(process.cwd());
-  const reingestSeconds = Number(process.argv[5] ?? 5);
 
   const store = await createEventStore(dbPath);
   const connection = sqliteConnection({ fileName: dbPath });
@@ -38,21 +38,20 @@ async function main(): Promise<void> {
     readSessionEvents: (id) => readSessionEvents(store, id),
   });
 
-  const publishingIngester = async (jsonlPath: string, s: typeof store) => {
-    const newEvents = await ingestSession(jsonlPath, s);
+  const ingestOne = async (jsonlPath: string) => {
+    const newEvents = await ingestSession(jsonlPath, store);
     if (newEvents.length > 0) {
       wsHandle.publish(newEvents[0].sessionId, newEvents);
     }
-    return newEvents;
   };
 
-  console.log(`Re-ingesting ${projectDir} every ${reingestSeconds}s`);
-  const safeIngest = () =>
-    ingestProject(projectDir, store, publishingIngester).catch((error) =>
-      console.error('ingest skipped:', error.message),
-    );
-  await safeIngest();
-  setInterval(safeIngest, reingestSeconds * 1000);
+  console.log(`Watching ${projectDir} for jsonl changes`);
+  await ingestProject(projectDir, store, async (path) => {
+    await ingestOne(path);
+  }).catch((error) => console.error('initial ingest skipped:', error.message));
+  watchProject(projectDir, (path) => {
+    ingestOne(path).catch((error) => console.error('watch ingest failed:', error.message));
+  });
 
   const address = server.address();
   const actualPort = typeof address === 'object' && address !== null ? address.port : port;

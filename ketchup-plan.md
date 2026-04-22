@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 58: Server watches jsonl files for changes instead of re-ingesting on an interval
 
 
 
@@ -110,3 +109,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 56b: `ingestSession` returns the newly appended events for broadcasting
 - [x] Burst 56c: Events viewer script publishes appended events to ws subscribers
 - [x] Burst 57: Timeline subscribes via WebSocket and drops the polling interval
+- [x] Burst 58: `watchProject` replaces the ingest setInterval with fs.watch-driven ingest

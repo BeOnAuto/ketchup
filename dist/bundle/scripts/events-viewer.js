@@ -22668,7 +22668,7 @@ var require_view = __commonJS({
     var dirname = path.dirname;
     var basename = path.basename;
     var extname = path.extname;
-    var join2 = path.join;
+    var join3 = path.join;
     var resolve3 = path.resolve;
     module2.exports = View;
     function View(name, options) {
@@ -22730,12 +22730,12 @@ var require_view = __commonJS({
     };
     View.prototype.resolve = function resolve4(dir, file) {
       var ext = this.ext;
-      var path2 = join2(dir, file);
+      var path2 = join3(dir, file);
       var stat = tryStat(path2);
       if (stat && stat.isFile()) {
         return path2;
       }
-      path2 = join2(dir, basename(file, ext), "index" + ext);
+      path2 = join3(dir, basename(file, ext), "index" + ext);
       stat = tryStat(path2);
       if (stat && stat.isFile()) {
         return path2;
@@ -26440,7 +26440,7 @@ var require_send = __commonJS({
     var Stream = require("stream");
     var util = require("util");
     var extname = path.extname;
-    var join2 = path.join;
+    var join3 = path.join;
     var normalize = path.normalize;
     var resolve3 = path.resolve;
     var sep = path.sep;
@@ -26612,7 +26612,7 @@ var require_send = __commonJS({
           return res;
         }
         parts = path2.split(sep);
-        path2 = normalize(join2(root, path2));
+        path2 = normalize(join3(root, path2));
       } else {
         if (UP_PATH_REGEXP.test(path2)) {
           debug('malicious path "%s"', path2);
@@ -26745,7 +26745,7 @@ var require_send = __commonJS({
           if (err) return self.onStatError(err);
           return self.error(404);
         }
-        var p = join2(path2, self._index[i]);
+        var p = join3(path2, self._index[i]);
         debug('stat "%s"', p);
         fs.stat(p, function(err2, stat) {
           if (err2) return next(err2);
@@ -27599,7 +27599,7 @@ var require_express2 = __commonJS({
 });
 
 // scripts/events-viewer.ts
-var import_node_path3 = require("node:path");
+var import_node_path4 = require("node:path");
 
 // node_modules/.pnpm/@event-driven-io+emmett-sqlite@0.42.0_@event-driven-io+emmett@0.42.0_@types+async-retry_9332937baab60268b62a41b7d29110ba/node_modules/@event-driven-io/emmett-sqlite/dist/index.js
 var import_sqlite3 = __toESM(require("sqlite3"), 1);
@@ -29276,12 +29276,21 @@ function createViewerApp(deps) {
   return app;
 }
 
+// src/event-store/watch-project.ts
+var import_node_fs = require("node:fs");
+var import_node_path3 = require("node:path");
+function watchProject(projectDir, onJsonlChange, watchFn = import_node_fs.watch) {
+  return watchFn(projectDir, (_event, fileName) => {
+    if (!fileName?.endsWith(".jsonl")) return;
+    onJsonlChange((0, import_node_path3.join)(projectDir, fileName));
+  });
+}
+
 // scripts/events-viewer.ts
 async function main() {
-  const dbPath = (0, import_node_path3.resolve)(process.argv[2] ?? "./events.db");
+  const dbPath = (0, import_node_path4.resolve)(process.argv[2] ?? "./events.db");
   const port = Number(process.argv[3] ?? 4321);
-  const projectDir = process.argv[4] ? (0, import_node_path3.resolve)(process.argv[4]) : deriveProjectDir(process.cwd());
-  const reingestSeconds = Number(process.argv[5] ?? 5);
+  const projectDir = process.argv[4] ? (0, import_node_path4.resolve)(process.argv[4]) : deriveProjectDir(process.cwd());
   const store = await createEventStore(dbPath);
   const connection = sqliteConnection({ fileName: dbPath });
   const staticDir = resolveViewerStaticDir({
@@ -29297,19 +29306,19 @@ async function main() {
   const wsHandle = createEventWebSocket(server, {
     readSessionEvents: (id) => readSessionEvents(store, id)
   });
-  const publishingIngester = async (jsonlPath, s) => {
-    const newEvents = await ingestSession(jsonlPath, s);
+  const ingestOne = async (jsonlPath) => {
+    const newEvents = await ingestSession(jsonlPath, store);
     if (newEvents.length > 0) {
       wsHandle.publish(newEvents[0].sessionId, newEvents);
     }
-    return newEvents;
   };
-  console.log(`Re-ingesting ${projectDir} every ${reingestSeconds}s`);
-  const safeIngest = () => ingestProject(projectDir, store, publishingIngester).catch(
-    (error) => console.error("ingest skipped:", error.message)
-  );
-  await safeIngest();
-  setInterval(safeIngest, reingestSeconds * 1e3);
+  console.log(`Watching ${projectDir} for jsonl changes`);
+  await ingestProject(projectDir, store, async (path) => {
+    await ingestOne(path);
+  }).catch((error) => console.error("initial ingest skipped:", error.message));
+  watchProject(projectDir, (path) => {
+    ingestOne(path).catch((error) => console.error("watch ingest failed:", error.message));
+  });
   const address = server.address();
   const actualPort = typeof address === "object" && address !== null ? address.port : port;
   console.log(`Viewer at http://127.0.0.1:${actualPort}`);
