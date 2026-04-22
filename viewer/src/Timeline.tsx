@@ -76,14 +76,19 @@ function EventNode({ node, depth }: { node: TreeNode; depth: number }) {
   );
 }
 
-export function Timeline({ sessionId }: { sessionId: string }) {
+export function Timeline({ sessionId, pollIntervalMs = 2000 }: { sessionId: string; pollIntervalMs?: number }) {
   const [events, setEvents] = useState<SessionEvent[]>([]);
 
   useEffect(() => {
-    fetch(`/api/sessions/${sessionId}/events`)
-      .then((response) => response.json())
-      .then((body: { events: SessionEvent[] }) => setEvents(body.events));
-  }, [sessionId]);
+    const fetchEvents = () => {
+      fetch(`/api/sessions/${sessionId}/events`)
+        .then((response) => response.json())
+        .then((body: { events: SessionEvent[] }) => setEvents(body.events));
+    };
+    fetchEvents();
+    const interval = setInterval(fetchEvents, pollIntervalMs);
+    return () => clearInterval(interval);
+  }, [sessionId, pollIntervalMs]);
 
   const tree = buildEventTree(events);
 

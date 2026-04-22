@@ -114,6 +114,44 @@ describe('Timeline', () => {
     ]);
   });
 
+  it('polls for new events on the configured interval and renders newcomers', async () => {
+    let callCount = 0;
+    const firstEvents: SessionEvent[] = [
+      {
+        type: 'SessionStarted',
+        timestamp: 't0',
+        sessionId: 'a',
+        cwd: '/w',
+        gitBranch: 'main',
+        version: '1',
+        entrypoint: 'cli',
+        source: {},
+      },
+    ];
+    const secondEvents: SessionEvent[] = [
+      ...firstEvents,
+      { type: 'PromptSubmitted', timestamp: 't1', sessionId: 'a', prompt: 'hi', source: {} },
+    ];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => {
+        callCount += 1;
+        return new Response(JSON.stringify({ events: callCount === 1 ? firstEvents : secondEvents }));
+      }),
+    );
+    vi.useFakeTimers();
+
+    render(<Timeline sessionId="abc" pollIntervalMs={50} />);
+    await vi.advanceTimersByTimeAsync(100);
+    const items = screen.getAllByRole('listitem');
+    vi.useRealTimers();
+
+    expect(items.map((li) => li.querySelector('[data-testid="event-label"]')?.textContent)).toEqual([
+      'SessionStarted — t0 — /w @ main',
+      'PromptSubmitted — t1 — hi',
+    ]);
+  });
+
   it('hides a parent node children when its collapse toggle is clicked', async () => {
     const events: SessionEvent[] = [
       {
