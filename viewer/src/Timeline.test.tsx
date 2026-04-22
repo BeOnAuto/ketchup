@@ -1,8 +1,30 @@
-import { render, screen } from '@testing-library/react';
+import { act, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { type SessionEvent, Timeline } from './Timeline';
+
+class MockWebSocket {
+  static instances: MockWebSocket[] = [];
+  onmessage: ((event: { data: string }) => void) | null = null;
+  closed = false;
+  constructor(public url: string) {
+    MockWebSocket.instances.push(this);
+  }
+  close() {
+    this.closed = true;
+  }
+}
+
+function deliver(events: SessionEvent[]): void {
+  const ws = MockWebSocket.instances.at(-1);
+  ws?.onmessage?.({ data: JSON.stringify({ events }) });
+}
+
+beforeEach(() => {
+  MockWebSocket.instances = [];
+  vi.stubGlobal('WebSocket', MockWebSocket);
+});
 
 afterEach(() => {
   vi.unstubAllGlobals();
@@ -40,13 +62,9 @@ describe('Timeline', () => {
       },
       { type: 'SessionEnded', timestamp: 't3', sessionId: 'a', source: {} },
     ];
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async () => new Response(JSON.stringify({ events }))),
-    );
 
-    render(<Timeline sessionId="abc" pollIntervalMs={60000} />);
-    await screen.findByText(/Session started/);
+    render(<Timeline sessionId="abc" />);
+    act(() => deliver(events));
 
     expect({
       start: screen.getAllByTestId('session-divider')[0]?.textContent,
@@ -61,7 +79,7 @@ describe('Timeline', () => {
     });
   });
 
-  it('renders a tool invocation as a card with the tool name and JSON-formatted input', async () => {
+  it('renders a tool invocation as a card with the tool name and JSON-formatted input', () => {
     const events: SessionEvent[] = [
       {
         type: 'ToolInvoked',
@@ -73,18 +91,14 @@ describe('Timeline', () => {
         source: {},
       },
     ];
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async () => new Response(JSON.stringify({ events }))),
-    );
 
-    render(<Timeline sessionId="abc" pollIntervalMs={60000} />);
-    const card = await screen.findByTestId('tool-card');
+    render(<Timeline sessionId="abc" />);
+    act(() => deliver(events));
 
-    expect(card.textContent).toEqual('Bashcommand="ls -la"');
+    expect(screen.getByTestId('tool-card').textContent).toEqual('Bashcommand="ls -la"');
   });
 
-  it('omits thought events with empty thinking text so only populated thoughts render', async () => {
+  it('omits thought events with empty thinking text so only populated thoughts render', () => {
     const events: SessionEvent[] = [
       { type: 'ThoughtRecorded', timestamp: 't1', sessionId: 'a', thinking: '', signature: 'sig', source: {} },
       {
@@ -96,30 +110,23 @@ describe('Timeline', () => {
         source: {},
       },
     ];
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async () => new Response(JSON.stringify({ events }))),
-    );
 
-    render(<Timeline sessionId="abc" pollIntervalMs={60000} />);
-    await screen.findByTestId('thought-card');
+    render(<Timeline sessionId="abc" />);
+    act(() => deliver(events));
     const cards = screen.queryAllByTestId('thought-card');
 
     expect(cards.map((card) => card.querySelector('div')?.textContent)).toEqual(['real reasoning']);
   });
 
-  it('renders a thought as a collapsed disclosure with italic body when expanded', async () => {
+  it('renders a thought as a collapsed disclosure with italic body when expanded', () => {
     const thinking = 'Let me reason through this carefully step by step';
     const events: SessionEvent[] = [
       { type: 'ThoughtRecorded', timestamp: 't1', sessionId: 'a', thinking, signature: 'sig', source: {} },
     ];
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async () => new Response(JSON.stringify({ events }))),
-    );
 
-    render(<Timeline sessionId="abc" pollIntervalMs={60000} />);
-    const card = await screen.findByTestId('thought-card');
+    render(<Timeline sessionId="abc" />);
+    act(() => deliver(events));
+    const card = screen.getByTestId('thought-card');
     const body = card.querySelector('div');
 
     expect({
@@ -133,18 +140,15 @@ describe('Timeline', () => {
     });
   });
 
-  it('renders an assistant response as a left-aligned chat bubble with the full text', async () => {
+  it('renders an assistant response as a left-aligned chat bubble with the full text', () => {
     const fullText = 'Here is the full assistant response without truncation so the user can read everything';
     const events: SessionEvent[] = [
       { type: 'AssistantResponded', timestamp: 't1', sessionId: 'a', text: fullText, source: {} },
     ];
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async () => new Response(JSON.stringify({ events }))),
-    );
 
-    render(<Timeline sessionId="abc" pollIntervalMs={60000} />);
-    const bubble = await screen.findByTestId('response-bubble');
+    render(<Timeline sessionId="abc" />);
+    act(() => deliver(events));
+    const bubble = screen.getByTestId('response-bubble');
 
     expect({
       alignment: bubble.className,
@@ -155,18 +159,15 @@ describe('Timeline', () => {
     });
   });
 
-  it('renders a prompt event as a right-aligned chat bubble with the full prompt text', async () => {
+  it('renders a prompt event as a right-aligned chat bubble with the full prompt text', () => {
     const fullPrompt = 'Please summarize the session events for me in great detail with context';
     const events: SessionEvent[] = [
       { type: 'PromptSubmitted', timestamp: 't1', sessionId: 'a', prompt: fullPrompt, source: {} },
     ];
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async () => new Response(JSON.stringify({ events }))),
-    );
 
-    render(<Timeline sessionId="abc" pollIntervalMs={60000} />);
-    const bubble = await screen.findByTestId('prompt-bubble');
+    render(<Timeline sessionId="abc" />);
+    act(() => deliver(events));
+    const bubble = screen.getByTestId('prompt-bubble');
 
     expect({
       alignment: bubble.className,
@@ -177,8 +178,7 @@ describe('Timeline', () => {
     });
   });
 
-  it('polls for new events on the configured interval and renders newcomers', async () => {
-    let callCount = 0;
+  it('appends events from subsequent websocket pushes to the existing timeline', () => {
     const firstEvents: SessionEvent[] = [
       {
         type: 'SessionStarted',
@@ -192,7 +192,6 @@ describe('Timeline', () => {
       },
     ];
     const secondEvents: SessionEvent[] = [
-      ...firstEvents,
       {
         type: 'HookExecuted',
         timestamp: 't1',
@@ -203,19 +202,11 @@ describe('Timeline', () => {
         source: {},
       },
     ];
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async () => {
-        callCount += 1;
-        return new Response(JSON.stringify({ events: callCount === 1 ? firstEvents : secondEvents }));
-      }),
-    );
-    vi.useFakeTimers();
 
-    render(<Timeline sessionId="abc" pollIntervalMs={50} />);
-    await vi.advanceTimersByTimeAsync(100);
+    render(<Timeline sessionId="abc" />);
+    act(() => deliver(firstEvents));
+    act(() => deliver(secondEvents));
     const items = screen.getAllByRole('listitem');
-    vi.useRealTimers();
 
     expect(items.map((li) => li.textContent)).toEqual(['Session started — /w @ main', 'hookStop:tcr']);
   });
@@ -241,14 +232,10 @@ describe('Timeline', () => {
         source: {},
       },
     ];
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async () => new Response(JSON.stringify({ events }))),
-    );
     const user = userEvent.setup();
 
     render(<Timeline sessionId="abc" />);
-    await screen.findByRole('button', { name: /expand/i });
+    act(() => deliver(events));
     const before = screen.queryAllByTestId('tool-result').length;
     await user.click(screen.getByRole('button', { name: /expand/i }));
     const after = screen.getByTestId('tool-result').textContent;
@@ -280,14 +267,10 @@ describe('Timeline', () => {
         source: {},
       },
     ];
-    vi.stubGlobal(
-      'fetch',
-      vi.fn(async () => new Response(JSON.stringify({ events }))),
-    );
     const user = userEvent.setup();
 
     render(<Timeline sessionId="abc" />);
-    await screen.findByRole('button', { name: /expand/i });
+    act(() => deliver(events));
     await user.click(screen.getByRole('button', { name: /expand/i }));
 
     expect(screen.getByTestId('tool-result-failed').textContent).toEqual(`✗ failed${fullError}`);

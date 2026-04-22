@@ -180,19 +180,19 @@ function EventNode({ node, depth }: { node: TreeNode; depth: number }) {
   );
 }
 
-export function Timeline({ sessionId, pollIntervalMs = 2000 }: { sessionId: string; pollIntervalMs?: number }) {
+export function Timeline({ sessionId }: { sessionId: string }) {
   const [events, setEvents] = useState<SessionEvent[]>([]);
 
   useEffect(() => {
-    const fetchEvents = () => {
-      fetch(`/api/sessions/${sessionId}/events`)
-        .then((response) => response.json())
-        .then((body: { events: SessionEvent[] }) => setEvents(body.events));
+    setEvents([]);
+    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+    const ws = new WebSocket(`${protocol}//${window.location.host}/ws/sessions/${sessionId}/events`);
+    ws.onmessage = (message) => {
+      const payload = JSON.parse(message.data) as { events: SessionEvent[] };
+      setEvents((prev) => [...prev, ...payload.events]);
     };
-    fetchEvents();
-    const interval = setInterval(fetchEvents, pollIntervalMs);
-    return () => clearInterval(interval);
-  }, [sessionId, pollIntervalMs]);
+    return () => ws.close();
+  }, [sessionId]);
 
   const tree = buildEventTree(events.filter((event) => !(event.type === 'ThoughtRecorded' && event.thinking === '')));
 
