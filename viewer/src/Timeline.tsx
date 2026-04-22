@@ -49,12 +49,23 @@ function summarize(event: SessionEvent): string {
 }
 
 function EventNode({ node, depth }: { node: TreeNode; depth: number }) {
+  const [expanded, setExpanded] = useState(true);
+  const hasChildren = node.children.length > 0;
   return (
     <li data-level={depth}>
+      {hasChildren && (
+        <button
+          type="button"
+          onClick={() => setExpanded((value) => !value)}
+          aria-label={expanded ? 'collapse' : 'expand'}
+        >
+          {expanded ? '▾' : '▸'}
+        </button>
+      )}
       <span data-testid="event-label">
         <strong>{node.event.type}</strong> — {node.event.timestamp} — {summarize(node.event)}
       </span>
-      {node.children.length > 0 && (
+      {hasChildren && expanded && (
         <ul>
           {node.children.map((child, index) => (
             <EventNode key={`${child.event.type}-${index}-${child.event.timestamp}`} node={child} depth={depth + 1} />

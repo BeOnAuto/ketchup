@@ -1,4 +1,5 @@
 import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { type SessionEvent, Timeline } from './Timeline';
@@ -110,6 +111,42 @@ describe('Timeline', () => {
       { level: 1, label: 'HookExecuted — t9 — Stop:tcr' },
       { level: 1, label: 'FileModified — t10 — update /a' },
       { level: 1, label: 'SessionEnded — t11 — ' },
+    ]);
+  });
+
+  it('hides a parent node children when its collapse toggle is clicked', async () => {
+    const events: SessionEvent[] = [
+      {
+        type: 'ToolInvoked',
+        timestamp: 't1',
+        sessionId: 'a',
+        toolName: 'Bash',
+        toolUseId: 'A',
+        input: {},
+        source: {},
+      },
+      {
+        type: 'ToolInvocationSucceeded',
+        timestamp: 't2',
+        sessionId: 'a',
+        toolUseId: 'A',
+        content: 'ok',
+        source: {},
+      },
+    ];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ events }))),
+    );
+    const user = userEvent.setup();
+
+    render(<Timeline sessionId="abc" />);
+    await screen.findByRole('button', { name: /collapse/i });
+    await user.click(screen.getByRole('button', { name: /collapse/i }));
+    const items = screen.getAllByRole('listitem');
+
+    expect(items.map((li) => li.querySelector('[data-testid="event-label"]')?.textContent)).toEqual([
+      'ToolInvoked — t1 — Bash',
     ]);
   });
 });
