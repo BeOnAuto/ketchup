@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 43: Omit thought events with empty thinking text [depends: 36]
 
 
 
@@ -87,3 +86,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 40: Tree branches start collapsed by default (8d897b7)
 - [x] Burst 41: Move collapse toggle inside tool card header (eebd42a)
 - [x] Burst 42: Constrain main and tool card input to prevent horizontal overflow (86d86f4)
+- [x] Burst 43: Omit thought events with empty thinking text (7c5921e)
