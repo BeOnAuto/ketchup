@@ -6,10 +6,14 @@ interleave by order; raw jsonl line is stashed on each event under `source`.
 
 **Phase 1 — Ingestion (done):** parsers, translator, ingester, CLI + Stop hook.
 
-**Phase 2 — Viewer (in progress):** Express server + Vite/React SPA rendering an
-auto-collapsed tree of events per session. Session picker in left pane, tree in
-right pane. Live updates via SSE. Self-contained bundle so a future IDE webview
-can embed the same assets.
+**Phase 2 — Viewer (done):** Express server + Vite/React SPA rendering a
+tree of events per session. Session picker in left pane, tree in right pane.
+Live updates via polling. Self-contained bundle so a future IDE webview can
+embed the same assets.
+
+**Phase 3 — Viewer polish (in progress):** chat-bubble framing for
+prompt/response, compact tool cards with inline results, collapsed thoughts.
+Built on Tailwind + shadcn/ui primitives.
 
 **Design decisions (locked):**
 
@@ -31,7 +35,14 @@ can embed the same assets.
 
 ## TODO
 
-
+- [ ] Burst 32: Install and configure Tailwind CSS in the viewer workspace [depends: 31]
+- [ ] Burst 33: Init shadcn/ui (components.json) and add base primitives [depends: 32]
+- [ ] Burst 34: `EventCard` shell component used by all variants [depends: 33]
+- [ ] Burst 35: Prompt / assistant-response chat bubble variants [depends: 34]
+- [ ] Burst 36: Thought card — collapsed by default, expandable [depends: 34]
+- [ ] Burst 37: Tool invocation card pairs invoke + result with status [depends: 34]
+- [ ] Burst 38: Compact row variants for hook / file / session events [depends: 34]
+- [ ] Burst 39: Session picker restyle with shadcn Card and Badge [depends: 33]
 
 ## DONE
 
