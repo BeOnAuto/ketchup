@@ -46,4 +46,48 @@ describe('createEventWebSocket', () => {
       payload: { events },
     });
   });
+
+  it('broadcasts published events only to clients subscribed to the matching session', async () => {
+    const app = express();
+    const httpServer = createServer(app);
+    const handle = createEventWebSocket(httpServer, { readSessionEvents: async () => [] });
+    await new Promise<void>((resolve) => httpServer.listen(0, '127.0.0.1', resolve));
+    const { port } = httpServer.address() as AddressInfo;
+
+    const abcClient = new WebSocket(`ws://127.0.0.1:${port}/ws/sessions/abc/events`);
+    const xyzClient = new WebSocket(`ws://127.0.0.1:${port}/ws/sessions/xyz/events`);
+    const abcMessages: string[] = [];
+    const xyzMessages: string[] = [];
+    abcClient.on('message', (data) => abcMessages.push(data.toString()));
+    xyzClient.on('message', (data) => xyzMessages.push(data.toString()));
+    await Promise.all([
+      new Promise<void>((resolve) => abcClient.once('open', () => resolve())),
+      new Promise<void>((resolve) => xyzClient.once('open', () => resolve())),
+    ]);
+    await new Promise((resolve) => setTimeout(resolve, 20));
+
+    const appended: SessionEvent[] = [
+      {
+        type: 'PromptSubmitted',
+        sessionId: 'abc',
+        prompt: 'hi',
+        timestamp: '2026-04-20T10:00:01Z',
+        source: { line: '{}', uuid: 'u2' },
+      },
+    ];
+    handle.publish('abc', appended);
+    await new Promise((resolve) => setTimeout(resolve, 20));
+
+    abcClient.close();
+    xyzClient.close();
+    await new Promise<void>((resolve) => httpServer.close(() => resolve()));
+
+    expect({
+      abcPayloads: abcMessages.map((m) => JSON.parse(m)),
+      xyzPayloads: xyzMessages.map((m) => JSON.parse(m)),
+    }).toEqual({
+      abcPayloads: [{ events: [] }, { events: appended }],
+      xyzPayloads: [{ events: [] }],
+    });
+  });
 });

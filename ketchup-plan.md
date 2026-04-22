@@ -35,7 +35,8 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 56: Appending events broadcasts them to WebSocket subscribers for that session
+- [ ] Burst 56b: `ingestSession` returns the events it actually appended so callers can broadcast
+- [ ] Burst 56c: Events viewer script calls `wsHandle.publish` after each session ingest
 - [ ] Burst 57: Client Timeline subscribes via WebSocket and drops the polling interval
 - [ ] Burst 58: Server watches jsonl files for changes instead of re-ingesting on an interval
 
@@ -108,3 +109,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 53: Viewer server serves built SPA assets from staticDir on same port
 - [x] Burst 54: `/claude-auto-view` skill boots the bundled events viewer
 - [x] Burst 55: `createEventWebSocket` sends initial event snapshot on ws connect
+- [x] Burst 56: `wsHandle.publish` broadcasts events to the matching session's subscribers
