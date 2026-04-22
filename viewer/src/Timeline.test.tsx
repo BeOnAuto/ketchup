@@ -9,7 +9,7 @@ afterEach(() => {
 });
 
 describe('Timeline', () => {
-  it('renders non-variant events as a nested tree with per-event-type summary', async () => {
+  it('renders remaining non-variant events with generic label at depth 1', async () => {
     const events: SessionEvent[] = [
       {
         type: 'SessionStarted',
@@ -19,41 +19,6 @@ describe('Timeline', () => {
         gitBranch: 'main',
         version: '1',
         entrypoint: 'cli',
-        source: {},
-      },
-      {
-        type: 'ToolInvoked',
-        timestamp: 't4',
-        sessionId: 'a',
-        toolName: 'Bash',
-        toolUseId: 'A',
-        input: {},
-        source: {},
-      },
-      {
-        type: 'ToolInvocationSucceeded',
-        timestamp: 't5',
-        sessionId: 'a',
-        toolUseId: 'A',
-        content: 'ok',
-        source: {},
-      },
-      {
-        type: 'ToolInvoked',
-        timestamp: 't6',
-        sessionId: 'a',
-        toolName: 'Task',
-        toolUseId: 'B',
-        input: {},
-        source: {},
-      },
-      { type: 'SubagentProgressed', timestamp: 't7', sessionId: 'a', parentToolUseId: 'B', source: {} },
-      {
-        type: 'ToolInvocationFailed',
-        timestamp: 't8',
-        sessionId: 'a',
-        toolUseId: 'B',
-        error: 'bad',
         source: {},
       },
       {
@@ -90,15 +55,33 @@ describe('Timeline', () => {
       })),
     ).toEqual([
       { level: 1, label: 'SessionStarted — t0 — /foo @ main' },
-      { level: 1, label: 'ToolInvoked — t4 — Bash' },
-      { level: 2, label: 'ToolInvocationSucceeded — t5 — ✓ ok' },
-      { level: 1, label: 'ToolInvoked — t6 — Task' },
-      { level: 2, label: 'SubagentProgressed — t7 — parent=B' },
-      { level: 2, label: 'ToolInvocationFailed — t8 — ✗ bad' },
       { level: 1, label: 'HookExecuted — t9 — Stop:tcr' },
       { level: 1, label: 'FileModified — t10 — update /a' },
       { level: 1, label: 'SessionEnded — t11 — ' },
     ]);
+  });
+
+  it('renders a tool invocation as a card with the tool name and JSON-formatted input', async () => {
+    const events: SessionEvent[] = [
+      {
+        type: 'ToolInvoked',
+        timestamp: 't1',
+        sessionId: 'a',
+        toolName: 'Bash',
+        toolUseId: 'A',
+        input: { command: 'ls -la' },
+        source: {},
+      },
+    ];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ events }))),
+    );
+
+    render(<Timeline sessionId="abc" pollIntervalMs={60000} />);
+    const card = await screen.findByTestId('tool-card');
+
+    expect(card.textContent).toEqual('Bashcommand="ls -la"');
   });
 
   it('renders a thought as a collapsed disclosure with italic body when expanded', async () => {
@@ -245,10 +228,7 @@ describe('Timeline', () => {
     render(<Timeline sessionId="abc" />);
     await screen.findByRole('button', { name: /collapse/i });
     await user.click(screen.getByRole('button', { name: /collapse/i }));
-    const items = screen.getAllByRole('listitem');
 
-    expect(items.map((li) => li.querySelector('[data-testid="event-label"]')?.textContent)).toEqual([
-      'ToolInvoked — t1 — Bash',
-    ]);
+    expect(screen.queryAllByTestId('event-label').map((el) => el.textContent)).toEqual([]);
   });
 });

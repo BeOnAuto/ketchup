@@ -21,6 +21,12 @@ function truncate(text: string, max: number): string {
   return text.length > max ? `${text.slice(0, max)}…` : text;
 }
 
+function formatToolInput(input: Record<string, unknown>): string {
+  return Object.entries(input)
+    .map(([key, value]) => `${key}=${JSON.stringify(value)}`)
+    .join(' ');
+}
+
 function summarize(event: SessionEvent): string {
   switch (event.type) {
     case 'SessionStarted':
@@ -73,6 +79,16 @@ function EventBody({ event }: { event: SessionEvent }) {
         <summary className="cursor-pointer text-slate-500">💭 Thought</summary>
         <div className="mt-2 whitespace-pre-wrap text-slate-600 italic">{event.thinking}</div>
       </details>
+    );
+  }
+  if (event.type === 'ToolInvoked') {
+    return (
+      <div data-testid="tool-card" className="rounded-md border border-slate-200 bg-white px-3 py-2 shadow-sm">
+        <div className="flex items-center gap-2">
+          <span className="rounded bg-slate-100 px-2 py-0.5 font-mono text-xs text-slate-700">{event.toolName}</span>
+          <span className="truncate font-mono text-xs text-slate-500">{formatToolInput(event.input)}</span>
+        </div>
+      </div>
     );
   }
   return (
