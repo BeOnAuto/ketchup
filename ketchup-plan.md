@@ -35,6 +35,9 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 43: Omit thought events with empty thinking text [depends: 36]
+
+
 
 
 
