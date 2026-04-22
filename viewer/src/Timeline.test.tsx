@@ -21,7 +21,6 @@ describe('Timeline', () => {
         entrypoint: 'cli',
         source: {},
       },
-      { type: 'AssistantResponded', timestamp: 't2', sessionId: 'a', text: 'hi', source: {} },
       {
         type: 'ThoughtRecorded',
         timestamp: 't3',
@@ -99,7 +98,6 @@ describe('Timeline', () => {
       })),
     ).toEqual([
       { level: 1, label: 'SessionStarted — t0 — /foo @ main' },
-      { level: 1, label: 'AssistantResponded — t2 — hi' },
       { level: 1, label: 'ThoughtRecorded — t3 — reason' },
       { level: 1, label: 'ToolInvoked — t4 — Bash' },
       { level: 2, label: 'ToolInvocationSucceeded — t5 — ✓ ok' },
@@ -110,6 +108,28 @@ describe('Timeline', () => {
       { level: 1, label: 'FileModified — t10 — update /a' },
       { level: 1, label: 'SessionEnded — t11 — ' },
     ]);
+  });
+
+  it('renders an assistant response as a left-aligned chat bubble with the full text', async () => {
+    const fullText = 'Here is the full assistant response without truncation so the user can read everything';
+    const events: SessionEvent[] = [
+      { type: 'AssistantResponded', timestamp: 't1', sessionId: 'a', text: fullText, source: {} },
+    ];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ events }))),
+    );
+
+    render(<Timeline sessionId="abc" pollIntervalMs={60000} />);
+    const bubble = await screen.findByTestId('response-bubble');
+
+    expect({
+      alignment: bubble.className,
+      text: bubble.firstElementChild?.textContent,
+    }).toEqual({
+      alignment: 'flex justify-start',
+      text: fullText,
+    });
   });
 
   it('renders a prompt event as a right-aligned chat bubble with the full prompt text', async () => {

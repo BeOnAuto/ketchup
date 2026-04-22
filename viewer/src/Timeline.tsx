@@ -58,6 +58,15 @@ function EventBody({ event }: { event: SessionEvent }) {
       </div>
     );
   }
+  if (event.type === 'AssistantResponded') {
+    return (
+      <div data-testid="response-bubble" className="flex justify-start">
+        <div className="max-w-[85%] whitespace-pre-wrap rounded-lg bg-slate-100 px-4 py-2 text-slate-900">
+          {event.text}
+        </div>
+      </div>
+    );
+  }
   return (
     <span data-testid="event-label">
       <strong>{event.type}</strong> — {event.timestamp} — {summarize(event)}
