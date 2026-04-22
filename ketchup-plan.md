@@ -31,8 +31,6 @@ can embed the same assets.
 
 ## TODO
 
-- [ ] Burst 30: Tree branches toggle collapsed/expanded on click [depends: 29]
-- [ ] Burst 31: Timeline polls `/api/sessions/:id/events` on an interval to show new events [depends: 29]
 
 
 ## DONE
@@ -67,3 +65,5 @@ can embed the same assets.
 - [x] Burst 27: Timeline renders per-event-type summary with truncation (533d069)
 - [x] Burst 28: `buildEventTree` pairs tool/result and subagent parents (0f5d303)
 - [x] Burst 29: Timeline renders nested tree with depth attribute (1fa5d29)
+- [x] Burst 30: Tree branches toggle collapsed/expanded via button (a2c088b)
+- [x] Burst 31: Timeline polls events on interval for live updates (71cdc47)
