@@ -35,14 +35,12 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 32: Install and configure Tailwind CSS in the viewer workspace [depends: 31]
-- [ ] Burst 33: Init shadcn/ui (components.json) and add base primitives [depends: 32]
-- [ ] Burst 34: `EventCard` shell component used by all variants [depends: 33]
-- [ ] Burst 35: Prompt / assistant-response chat bubble variants [depends: 34]
-- [ ] Burst 36: Thought card — collapsed by default, expandable [depends: 34]
-- [ ] Burst 37: Tool invocation card pairs invoke + result with status [depends: 34]
-- [ ] Burst 38: Compact row variants for hook / file / session events [depends: 34]
-- [ ] Burst 39: Session picker restyle with shadcn Card and Badge [depends: 33]
+- [ ] Burst 34: `PromptSubmitted` renders as right-aligned chat bubble with full prompt [depends: 33]
+- [ ] Burst 35: `AssistantResponded` renders as left-aligned chat bubble with full text [depends: 34]
+- [ ] Burst 36: `ThoughtRecorded` renders collapsed-by-default with italic body [depends: 34]
+- [ ] Burst 37: Tool invocation pairs render as a compact card with status [depends: 34]
+- [ ] Burst 38: Hook / file / session events render as compact metadata rows [depends: 34]
+- [ ] Burst 39: Session picker restyled as cards with timestamps [depends: 33]
 
 ## DONE
 
@@ -78,3 +76,5 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 29: Timeline renders nested tree with depth attribute (1fa5d29)
 - [x] Burst 30: Tree branches toggle collapsed/expanded via button (a2c088b)
 - [x] Burst 31: Timeline polls events on interval for live updates (71cdc47)
+- [x] Burst 32: Install tailwind css v4 in viewer and apply utility classes (a0ee174)
+- [x] Burst 33: Add cn helper with clsx and tailwind-merge (b1904c7)
