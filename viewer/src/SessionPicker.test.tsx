@@ -8,21 +8,21 @@ afterEach(() => {
 });
 
 describe('SessionPicker', () => {
-  it('renders each session as a card with truncated id, event count, and last timestamp', async () => {
+  it('uses summary as the primary label and falls back to a truncated id when summary is empty', async () => {
     const summaries = [
       {
-        sessionId: 'd886289b-6710-482e-a5e5-ebbf146318ae',
+        sessionId: 'abc-123456789',
         eventCount: 12,
         firstTimestamp: '2026-04-20T10:00:00Z',
         lastTimestamp: '2026-04-20T11:00:00Z',
-        summary: 'session one prompt',
+        summary: 'my first prompt summary',
       },
       {
-        sessionId: 'xyz-4567890abc',
+        sessionId: 'empty-456789',
         eventCount: 3,
         firstTimestamp: '2026-04-19T09:00:00Z',
         lastTimestamp: '2026-04-19T09:30:00Z',
-        summary: 'session two prompt',
+        summary: '',
       },
     ];
     vi.stubGlobal(
@@ -35,13 +35,18 @@ describe('SessionPicker', () => {
 
     expect(
       buttons.map((button) => ({
-        id: button.querySelector('[data-testid="session-id"]')?.textContent,
-        count: button.querySelector('[data-testid="session-count"]')?.textContent,
-        time: button.querySelector('[data-testid="session-time"]')?.textContent,
+        label: button.querySelector('[data-testid="session-label"]')?.textContent,
+        meta: button.querySelector('[data-testid="session-meta"]')?.textContent,
       })),
     ).toEqual([
-      { id: 'd886289b…', count: '12 events', time: new Date('2026-04-20T11:00:00Z').toLocaleString() },
-      { id: 'xyz-4567…', count: '3 events', time: new Date('2026-04-19T09:30:00Z').toLocaleString() },
+      {
+        label: 'my first prompt summary',
+        meta: `12 events·${new Date('2026-04-20T11:00:00Z').toLocaleString()}`,
+      },
+      {
+        label: 'empty-45…',
+        meta: `3 events·${new Date('2026-04-19T09:30:00Z').toLocaleString()}`,
+      },
     ]);
   });
 });
