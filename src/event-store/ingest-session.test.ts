@@ -31,6 +31,7 @@ describe('ingestSession', () => {
     const store = await createEventStore(dbPath);
 
     await ingestSession(jsonlPath, store);
+    await ingestSession(jsonlPath, store);
 
     const result = await store.readStream('session-abc');
 

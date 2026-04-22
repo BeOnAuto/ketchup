@@ -1,12 +1,23 @@
+import type { Event } from '@event-driven-io/emmett';
 import type { SQLiteEventStore } from '@event-driven-io/emmett-sqlite';
 
-import { translateSession } from './translate-session.js';
+import { type SessionEvent, translateSession } from './translate-session.js';
+
+type StoredSessionEvent = SessionEvent extends { type: infer Type extends string }
+  ? Event<Type, SessionEvent & Record<string, unknown>>
+  : never;
 
 export async function ingestSession(jsonlPath: string, store: SQLiteEventStore): Promise<void> {
   const events = await translateSession(jsonlPath);
   if (events.length === 0) return;
   const streamName = `session-${events[0].sessionId}`;
-  const emmettEvents: Array<{ type: string; data: Record<string, unknown> }> = events.map((event) => ({
+
+  const existing = await store.readStream<StoredSessionEvent>(streamName);
+  const knownUuids = new Set(existing.events.map((event) => event.data.source.uuid));
+  const newEvents = events.filter((event) => !knownUuids.has(event.source.uuid));
+  if (newEvents.length === 0) return;
+
+  const emmettEvents: Array<{ type: string; data: Record<string, unknown> }> = newEvents.map((event) => ({
     type: event.type,
     data: JSON.parse(JSON.stringify(event)),
   }));
