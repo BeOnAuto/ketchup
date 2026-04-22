@@ -35,6 +35,9 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 45: Session picker renders localized date/time for last timestamp [depends: 39]
+
+
 
 
 
