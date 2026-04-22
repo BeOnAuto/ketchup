@@ -35,6 +35,9 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 44: Render tool success/failure results with full content instead of truncated label [depends: 37]
+
+
 
 
 
