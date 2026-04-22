@@ -9,7 +9,7 @@ afterEach(() => {
 });
 
 describe('Timeline', () => {
-  it('renders remaining non-variant events with generic label at depth 1', async () => {
+  it('renders hook, file, session-start, and session-end events as compact metadata rows', async () => {
     const events: SessionEvent[] = [
       {
         type: 'SessionStarted',
@@ -23,7 +23,7 @@ describe('Timeline', () => {
       },
       {
         type: 'HookExecuted',
-        timestamp: 't9',
+        timestamp: 't1',
         sessionId: 'a',
         hookEvent: 'Stop',
         hookName: 'tcr',
@@ -32,33 +32,33 @@ describe('Timeline', () => {
       },
       {
         type: 'FileModified',
-        timestamp: 't10',
+        timestamp: 't2',
         sessionId: 'a',
         filePath: '/a',
         operation: 'update',
         source: {},
       },
-      { type: 'SessionEnded', timestamp: 't11', sessionId: 'a', source: {} },
+      { type: 'SessionEnded', timestamp: 't3', sessionId: 'a', source: {} },
     ];
     vi.stubGlobal(
       'fetch',
       vi.fn(async () => new Response(JSON.stringify({ events }))),
     );
 
-    render(<Timeline sessionId="abc" />);
-    const items = await screen.findAllByRole('listitem');
+    render(<Timeline sessionId="abc" pollIntervalMs={60000} />);
+    await screen.findByText(/Session started/);
 
-    expect(
-      items.map((li) => ({
-        level: Number(li.getAttribute('data-level')),
-        label: li.querySelector('[data-testid="event-label"]')?.textContent,
-      })),
-    ).toEqual([
-      { level: 1, label: 'SessionStarted — t0 — /foo @ main' },
-      { level: 1, label: 'HookExecuted — t9 — Stop:tcr' },
-      { level: 1, label: 'FileModified — t10 — update /a' },
-      { level: 1, label: 'SessionEnded — t11 — ' },
-    ]);
+    expect({
+      start: screen.getAllByTestId('session-divider')[0]?.textContent,
+      hook: screen.getByTestId('hook-row').textContent,
+      file: screen.getByTestId('file-row').textContent,
+      end: screen.getAllByTestId('session-divider')[1]?.textContent,
+    }).toEqual({
+      start: 'Session started — /foo @ main',
+      hook: 'hookStop:tcr',
+      file: 'fileupdate /a',
+      end: 'Session ended',
+    });
   });
 
   it('renders a tool invocation as a card with the tool name and JSON-formatted input', async () => {
@@ -193,10 +193,7 @@ describe('Timeline', () => {
     const items = screen.getAllByRole('listitem');
     vi.useRealTimers();
 
-    expect(items.map((li) => li.querySelector('[data-testid="event-label"]')?.textContent)).toEqual([
-      'SessionStarted — t0 — /w @ main',
-      'HookExecuted — t1 — Stop:tcr',
-    ]);
+    expect(items.map((li) => li.textContent)).toEqual(['Session started — /w @ main', 'hookStop:tcr']);
   });
 
   it('hides a parent node children when its collapse toggle is clicked', async () => {

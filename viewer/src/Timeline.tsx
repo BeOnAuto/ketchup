@@ -91,6 +91,40 @@ function EventBody({ event }: { event: SessionEvent }) {
       </div>
     );
   }
+  if (event.type === 'HookExecuted') {
+    return (
+      <div data-testid="hook-row" className="flex items-center gap-2 text-xs text-slate-500">
+        <span className="rounded bg-amber-100 px-1.5 py-0.5 text-amber-700">hook</span>
+        <span>
+          {event.hookEvent}:{event.hookName}
+        </span>
+      </div>
+    );
+  }
+  if (event.type === 'FileModified') {
+    return (
+      <div data-testid="file-row" className="flex items-center gap-2 text-xs text-slate-500">
+        <span className="rounded bg-purple-100 px-1.5 py-0.5 text-purple-700">file</span>
+        <span>
+          {event.operation} {event.filePath}
+        </span>
+      </div>
+    );
+  }
+  if (event.type === 'SessionStarted') {
+    return (
+      <div data-testid="session-divider" className="my-2 border-t border-slate-200 pt-2 text-xs text-slate-500">
+        Session started — {event.cwd} @ {event.gitBranch}
+      </div>
+    );
+  }
+  if (event.type === 'SessionEnded') {
+    return (
+      <div data-testid="session-divider" className="my-2 border-t border-slate-200 pt-2 text-xs text-slate-500">
+        Session ended
+      </div>
+    );
+  }
   return (
     <span data-testid="event-label">
       <strong>{event.type}</strong> — {event.timestamp} — {summarize(event)}
