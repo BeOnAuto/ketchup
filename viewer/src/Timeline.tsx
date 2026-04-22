@@ -48,6 +48,23 @@ function summarize(event: SessionEvent): string {
   }
 }
 
+function EventBody({ event }: { event: SessionEvent }) {
+  if (event.type === 'PromptSubmitted') {
+    return (
+      <div data-testid="prompt-bubble" className="flex justify-end">
+        <div className="max-w-[85%] whitespace-pre-wrap rounded-lg bg-blue-500 px-4 py-2 text-white">
+          {event.prompt}
+        </div>
+      </div>
+    );
+  }
+  return (
+    <span data-testid="event-label">
+      <strong>{event.type}</strong> — {event.timestamp} — {summarize(event)}
+    </span>
+  );
+}
+
 function EventNode({ node, depth }: { node: TreeNode; depth: number }) {
   const [expanded, setExpanded] = useState(true);
   const hasChildren = node.children.length > 0;
@@ -62,9 +79,7 @@ function EventNode({ node, depth }: { node: TreeNode; depth: number }) {
           {expanded ? '▾' : '▸'}
         </button>
       )}
-      <span data-testid="event-label">
-        <strong>{node.event.type}</strong> — {node.event.timestamp} — {summarize(node.event)}
-      </span>
+      <EventBody event={node.event} />
       {hasChildren && expanded && (
         <ul>
           {node.children.map((child, index) => (

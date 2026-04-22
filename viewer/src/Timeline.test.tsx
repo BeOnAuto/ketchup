@@ -9,7 +9,7 @@ afterEach(() => {
 });
 
 describe('Timeline', () => {
-  it('renders events as a nested tree with per-event-type summary', async () => {
+  it('renders non-variant events as a nested tree with per-event-type summary', async () => {
     const events: SessionEvent[] = [
       {
         type: 'SessionStarted',
@@ -21,7 +21,6 @@ describe('Timeline', () => {
         entrypoint: 'cli',
         source: {},
       },
-      { type: 'PromptSubmitted', timestamp: 't1', sessionId: 'a', prompt: 'A'.repeat(100), source: {} },
       { type: 'AssistantResponded', timestamp: 't2', sessionId: 'a', text: 'hi', source: {} },
       {
         type: 'ThoughtRecorded',
@@ -100,7 +99,6 @@ describe('Timeline', () => {
       })),
     ).toEqual([
       { level: 1, label: 'SessionStarted — t0 — /foo @ main' },
-      { level: 1, label: `PromptSubmitted — t1 — ${'A'.repeat(80)}…` },
       { level: 1, label: 'AssistantResponded — t2 — hi' },
       { level: 1, label: 'ThoughtRecorded — t3 — reason' },
       { level: 1, label: 'ToolInvoked — t4 — Bash' },
@@ -112,6 +110,28 @@ describe('Timeline', () => {
       { level: 1, label: 'FileModified — t10 — update /a' },
       { level: 1, label: 'SessionEnded — t11 — ' },
     ]);
+  });
+
+  it('renders a prompt event as a right-aligned chat bubble with the full prompt text', async () => {
+    const fullPrompt = 'Please summarize the session events for me in great detail with context';
+    const events: SessionEvent[] = [
+      { type: 'PromptSubmitted', timestamp: 't1', sessionId: 'a', prompt: fullPrompt, source: {} },
+    ];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ events }))),
+    );
+
+    render(<Timeline sessionId="abc" pollIntervalMs={60000} />);
+    const bubble = await screen.findByTestId('prompt-bubble');
+
+    expect({
+      alignment: bubble.className,
+      text: bubble.firstElementChild?.textContent,
+    }).toEqual({
+      alignment: 'flex justify-end',
+      text: fullPrompt,
+    });
   });
 
   it('polls for new events on the configured interval and renders newcomers', async () => {
@@ -130,7 +150,15 @@ describe('Timeline', () => {
     ];
     const secondEvents: SessionEvent[] = [
       ...firstEvents,
-      { type: 'PromptSubmitted', timestamp: 't1', sessionId: 'a', prompt: 'hi', source: {} },
+      {
+        type: 'HookExecuted',
+        timestamp: 't1',
+        sessionId: 'a',
+        hookEvent: 'Stop',
+        hookName: 'tcr',
+        command: 'sh',
+        source: {},
+      },
     ];
     vi.stubGlobal(
       'fetch',
@@ -148,7 +176,7 @@ describe('Timeline', () => {
 
     expect(items.map((li) => li.querySelector('[data-testid="event-label"]')?.textContent)).toEqual([
       'SessionStarted — t0 — /w @ main',
-      'PromptSubmitted — t1 — hi',
+      'HookExecuted — t1 — Stop:tcr',
     ]);
   });
 
