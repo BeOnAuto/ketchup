@@ -4,8 +4,9 @@ import { join } from 'node:path';
 import type { SQLiteEventStore } from '@event-driven-io/emmett-sqlite';
 
 import { ingestSession } from './ingest-session.js';
+import type { SessionEvent } from './translate-session.js';
 
-type SessionIngester = (jsonlPath: string, store: SQLiteEventStore) => Promise<void>;
+type SessionIngester = (jsonlPath: string, store: SQLiteEventStore) => Promise<SessionEvent[] | void>;
 
 export async function ingestProject(
   projectDir: string,

@@ -25515,17 +25515,18 @@ async function translateSession(jsonlPath) {
 // src/event-store/ingest-session.ts
 async function ingestSession(jsonlPath, store) {
   const events = await translateSession(jsonlPath);
-  if (events.length === 0) return;
+  if (events.length === 0) return [];
   const streamName = `session-${events[0].sessionId}`;
   const existing = await store.readStream(streamName);
   const knownUuids = new Set(existing.events.map((event) => event.data.source.uuid));
   const newEvents = events.filter((event) => !knownUuids.has(event.source.uuid));
-  if (newEvents.length === 0) return;
+  if (newEvents.length === 0) return [];
   const emmettEvents = newEvents.map((event) => ({
     type: event.type,
     data: JSON.parse(JSON.stringify(event))
   }));
   await store.appendToStream(streamName, emmettEvents);
+  return newEvents;
 }
 
 // src/event-store/ingest-project.ts
