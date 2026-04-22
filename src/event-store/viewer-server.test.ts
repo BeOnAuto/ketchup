@@ -15,12 +15,14 @@ describe('viewer server', () => {
         eventCount: 3,
         firstTimestamp: '2026-04-20T11:00:00Z',
         lastTimestamp: '2026-04-20T11:05:00Z',
+        summary: 'newer prompt',
       },
       {
         sessionId: 'abc',
         eventCount: 2,
         firstTimestamp: '2026-04-20T10:00:00Z',
         lastTimestamp: '2026-04-20T10:01:00Z',
+        summary: 'older prompt',
       },
     ];
     const app = createViewerApp({

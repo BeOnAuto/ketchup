@@ -5,7 +5,7 @@ import { createViewerApp } from './viewer-server.js';
 
 describe('startViewerServer', () => {
   it('binds the Express app on 127.0.0.1 and serves the routes over HTTP', async () => {
-    const summaries = [{ sessionId: 'abc', eventCount: 1, firstTimestamp: 't', lastTimestamp: 't' }];
+    const summaries = [{ sessionId: 'abc', eventCount: 1, firstTimestamp: 't', lastTimestamp: 't', summary: 'hi' }];
     const app = createViewerApp({
       listSessions: async () => summaries,
       readSessionEvents: async () => [],

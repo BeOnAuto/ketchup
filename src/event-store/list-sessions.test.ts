@@ -18,7 +18,7 @@ function sessionStartLine(sessionId: string, timestamp: string): string {
       hookName: 'SessionStart:startup',
       command: 'node s.js',
     },
-    uuid: `u-${sessionId}`,
+    uuid: `u-${sessionId}-start`,
     timestamp,
     sessionId,
     cwd: 'c',
@@ -28,14 +28,27 @@ function sessionStartLine(sessionId: string, timestamp: string): string {
   });
 }
 
+function userPromptLine(sessionId: string, timestamp: string, prompt: string): string {
+  return JSON.stringify({
+    type: 'user',
+    uuid: `u-${sessionId}-prompt`,
+    timestamp,
+    sessionId,
+    message: { content: prompt },
+  });
+}
+
 describe('listSessions', () => {
-  it('returns a summary per session stream ordered by most recent timestamp', async () => {
+  it('returns summaries ordered by recency including the first prompt as summary', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'ls-'));
     const dbPath = join(dir, 'events.db');
     const store = await createEventStore(dbPath);
 
     const olderJsonl = join(dir, 'older.jsonl');
-    writeFileSync(olderJsonl, `${sessionStartLine('abc', '2026-04-20T10:00:00Z')}\n`);
+    writeFileSync(
+      olderJsonl,
+      `${sessionStartLine('abc', '2026-04-20T10:00:00Z')}\n${userPromptLine('abc', '2026-04-20T10:00:05Z', 'hello from abc')}\n`,
+    );
     await ingestSession(olderJsonl, store);
 
     const newerJsonl = join(dir, 'newer.jsonl');
@@ -52,12 +65,14 @@ describe('listSessions', () => {
         eventCount: 2,
         firstTimestamp: '2026-04-20T11:00:00Z',
         lastTimestamp: '2026-04-20T11:00:00Z',
+        summary: '',
       },
       {
         sessionId: 'abc',
-        eventCount: 2,
+        eventCount: 3,
         firstTimestamp: '2026-04-20T10:00:00Z',
-        lastTimestamp: '2026-04-20T10:00:00Z',
+        lastTimestamp: '2026-04-20T10:00:05Z',
+        summary: 'hello from abc',
       },
     ]);
   });
