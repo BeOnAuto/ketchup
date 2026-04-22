@@ -35,7 +35,7 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 40: Tree branches start collapsed by default [depends: 30]
+- [ ] Burst 41: Move collapse toggle inside the tool card header [depends: 40]
 
 
 ## DONE
@@ -80,3 +80,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 37: Render tool invocations as cards with name and JSON input (37951a4)
 - [x] Burst 38: Render hook/file/session events as compact metadata rows (8ab7795)
 - [x] Burst 39: Restyle session picker as cards (4864470)
+- [x] Burst 40: Tree branches start collapsed by default (8d897b7)
