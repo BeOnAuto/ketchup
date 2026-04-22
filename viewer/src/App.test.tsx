@@ -26,4 +26,15 @@ describe('App', () => {
       placeholder: 'Pick a session.',
     });
   });
+
+  it('constrains the main content area with min-w-0 so long content does not push the page wide', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ sessions: [] }))),
+    );
+
+    render(<App />);
+
+    expect(screen.getByRole('main').className).toEqual('min-w-0 flex-1');
+  });
 });

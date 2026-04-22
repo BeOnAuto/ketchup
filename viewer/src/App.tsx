@@ -11,7 +11,7 @@ export function App() {
         <h1 className="mb-4 text-xl font-semibold">Claude Auto Viewer</h1>
         <SessionPicker onSelect={setSelectedId} />
       </aside>
-      <main className="flex-1">
+      <main className="min-w-0 flex-1">
         {selectedId ? <Timeline sessionId={selectedId} /> : <p className="text-slate-500">Pick a session.</p>}
       </main>
     </div>

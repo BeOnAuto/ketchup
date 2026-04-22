@@ -84,10 +84,14 @@ function EventBody({ event, toggle }: { event: SessionEvent; toggle?: ReactNode 
   if (event.type === 'ToolInvoked') {
     return (
       <div data-testid="tool-card" className="rounded-md border border-slate-200 bg-white px-3 py-2 shadow-sm">
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 items-center gap-2">
           {toggle}
-          <span className="rounded bg-slate-100 px-2 py-0.5 font-mono text-xs text-slate-700">{event.toolName}</span>
-          <span className="truncate font-mono text-xs text-slate-500">{formatToolInput(event.input)}</span>
+          <span className="shrink-0 rounded bg-slate-100 px-2 py-0.5 font-mono text-xs text-slate-700">
+            {event.toolName}
+          </span>
+          <span className="min-w-0 flex-1 truncate font-mono text-xs text-slate-500">
+            {formatToolInput(event.input)}
+          </span>
         </div>
       </div>
     );
