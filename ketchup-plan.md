@@ -35,8 +35,10 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-
-
+- [ ] Burst 55: Viewer server exposes `/ws/sessions/:id/events` sending initial snapshot on connect
+- [ ] Burst 56: Appending events broadcasts them to WebSocket subscribers for that session
+- [ ] Burst 57: Client Timeline subscribes via WebSocket and drops the polling interval
+- [ ] Burst 58: Server watches jsonl files for changes instead of re-ingesting on an interval
 
 
 
