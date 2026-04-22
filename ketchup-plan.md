@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 42: Prevent horizontal overflow by constraining main flex column and tool card input [depends: 41]
 
 
 
@@ -84,3 +83,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 39: Restyle session picker as cards (4864470)
 - [x] Burst 40: Tree branches start collapsed by default (8d897b7)
 - [x] Burst 41: Move collapse toggle inside tool card header (eebd42a)
+- [x] Burst 42: Constrain main and tool card input to prevent horizontal overflow (86d86f4)
