@@ -35,8 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 50: `ingestSession` dedupes by `source.uuid` to allow safe re-ingestion [depends: 14]
-- [ ] Burst 51: `events-viewer` boots a background re-ingest loop for live updates [depends: 50]
 
 
 
@@ -105,3 +103,5 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 47: Session header shows id and summary above timeline (87edade)
 - [x] Burst 48: Session picker uses summary as primary label (8b986d0)
 - [x] Burst 49: Session header label and copy resume command button (018c4fd)
+- [x] Burst 50: Dedupe events by source uuid when re-ingesting a session (a917054)
+- [x] Burst 51: Events viewer re-ingests project dir on interval (c0bbf6b)
