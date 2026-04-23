@@ -84,6 +84,8 @@ Static tools catch syntax. Tests catch regressions. Neither catches *semantic* f
 
 Semantic failures need semantic understanding. Ketchup runs a separate Claude subagent against every commit. It has no investment in shipping, no attachment to the diff, no reason to rationalize. Just the rules, read from your validator files.
 
+Cost, latency, false-positive rate, and what happens when the subagent hallucinates: see [Operational Concerns](/operational-concerns).
+
 ---
 
 ## Three steps

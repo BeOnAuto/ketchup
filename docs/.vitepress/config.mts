@@ -70,6 +70,7 @@ export default defineConfig({
           { text: 'Configuration', link: '/configuration' },
           { text: 'API Reference', link: '/api-reference' },
           { text: 'Architecture', link: '/architecture' },
+          { text: 'Operational Concerns', link: '/operational-concerns' },
         ],
       },
     ],
