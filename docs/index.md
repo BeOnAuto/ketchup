@@ -4,7 +4,7 @@ layout: home
 hero:
   name: Ketchup
   text: Turn every AI mistake into a rule AI can't repeat.
-  tagline: Ketchup runs 15+ customizable LLM-powered guardrails on every AI commit, so bad commits don't land.
+  tagline: Ketchup runs 15+ LLM-powered guardrails on every AI commit, so bad commits don't land.
   image:
     light: /hero-light.png
     dark: /hero-dark.png
@@ -59,11 +59,13 @@ Ketchup is how you make that loop real. Validators on every commit. Reminders on
 
 Ketchup is an open-source guardrail engine for Claude Code, from the team at [Auto](https://on.auto).
 
+> Today: Claude Code only. If your agent exposes hooks or an equivalent integration surface, [open an issue](https://github.com/BeOnAuto/auto-ketchup/issues).
+
 ---
 
 ## What ships
 
-**17 validators** from 40 years of engineering practice: `burst-atomicity`, `new-code-requires-tests`, `testing-weak-assertions`, `no-dangerous-git`, `coverage-rules`, `dead-code`, `tcr-workflow`, and more. [Full list →](/validators-guide)
+**17 validators** ship by default: `burst-atomicity`, `new-code-requires-tests`, `testing-weak-assertions`, `no-dangerous-git`, `coverage-rules`, `dead-code`, `tcr-workflow`, and more. [Full list →](/validators-guide)
 
 **10 reminders** that keep the discipline loaded: core workflow, extreme ownership, IDE diagnostics, rethink-after-revert, test-title-matches-spec, and more. [Full list →](/reminders-guide)
 

@@ -8,7 +8,7 @@ export default defineConfig({
   lang: 'en-US',
   title: 'Ketchup',
   description:
-    'Turn every AI mistake into a rule AI can\'t repeat. Ketchup runs 15+ customizable LLM-powered guardrails on every AI commit, so bad commits don\'t land.',
+    'Turn every AI mistake into a rule AI can\'t repeat. Ketchup runs 15+ LLM-powered guardrails on every AI commit, so bad commits don\'t land.',
   appearance: 'dark',
 
   themeConfig: {
@@ -127,7 +127,7 @@ export default defineConfig({
       {
         property: 'og:description',
         content:
-          'Ketchup runs 15+ customizable LLM-powered guardrails on every AI commit, so bad commits don\'t land.',
+          'Ketchup runs 15+ LLM-powered guardrails on every AI commit, so bad commits don\'t land.',
       },
     ],
     [
@@ -167,7 +167,7 @@ export default defineConfig({
       {
         name: 'twitter:description',
         content:
-          'Ketchup runs 15+ customizable LLM-powered guardrails on every AI commit, so bad commits don\'t land.',
+          'Ketchup runs 15+ LLM-powered guardrails on every AI commit, so bad commits don\'t land.',
       },
     ],
     [

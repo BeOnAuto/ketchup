@@ -2,7 +2,7 @@
 
 **Turn every AI mistake into a rule AI can't repeat.**
 
-Ketchup runs 15+ customizable LLM-powered guardrails on every AI commit, so bad commits don't land.
+Ketchup runs 15+ LLM-powered guardrails on every AI commit, so bad commits don't land.
 
 [![Build](https://img.shields.io/github/actions/workflow/status/BeOnAuto/auto-ketchup/ci.yml?style=flat-square)](https://github.com/BeOnAuto/auto-ketchup/actions) [![npm](https://img.shields.io/npm/v/auto-ketchup?style=flat-square)](https://www.npmjs.com/package/auto-ketchup) [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE) [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square)]()
 
@@ -11,6 +11,8 @@ Ketchup runs 15+ customizable LLM-powered guardrails on every AI commit, so bad 
 ```
 
 *Ketchup is an open-source guardrail engine for Claude Code, from the team at [Auto](https://on.auto).*
+
+> Today: Claude Code only. If your agent exposes hooks or an equivalent integration surface, [open an issue](https://github.com/BeOnAuto/auto-ketchup/issues).
 
 ---
 
