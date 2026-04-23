@@ -31,7 +31,7 @@ For a complete reference of all configuration files and options, see the [Config
 - Sets up the working context for the entire session
 
 **Default behavior:**
-- Loads reminders from `.claude-auto/reminders/` with `when.hook: SessionStart`
+- Loads reminders from `.ketchup/reminders/` with `when.hook: SessionStart`
 - Prioritizes reminders based on their priority value (higher = earlier)
 - Filters reminders based on state conditions if specified
 
@@ -104,7 +104,7 @@ For a complete reference of all configuration files and options, see the [Config
 - Can trigger auto-continue behavior
 
 **Default behavior:**
-- Checks auto-continue configuration in `.claude-auto/.claude.hooks.json`
+- Checks auto-continue configuration in `.ketchup/.claude.hooks.json`
 - In "smart" mode: analyzes transcript for continuation signals
 - In "non-stop" mode: always continues until max iterations
 - In "off" mode: never auto-continues
@@ -181,12 +181,12 @@ Uses [micromatch](https://github.com/micromatch/micromatch) glob patterns:
 
 ## Configure Hook State
 
-Control runtime hook behavior via `.claude-auto/.claude.hooks.json`.
+Control runtime hook behavior via `.ketchup/.claude.hooks.json`.
 
 ### Create the state file
 
 ```bash
-cat > .claude-auto/.claude.hooks.json << 'EOF'
+cat > .ketchup/.claude.hooks.json << 'EOF'
 {
   "autoContinue": {
     "mode": "smart",
@@ -255,17 +255,17 @@ Control which subagent types trigger validation:
 ### Enable debug logging
 
 ```bash
-DEBUG=claude-auto* claude
+DEBUG=auto-ketchup* claude
 ```
 
-Logs are written to `.claude-auto/logs/debug.log`.
+Logs are written to `.ketchup/logs/debug.log`.
 
 ### View hook logs
 
-Session logs are in `.claude-auto/logs/`:
+Session logs are in `.ketchup/logs/`:
 
 ```bash
-tail -f .claude-auto/logs/*.log
+tail -f .ketchup/logs/*.log
 ```
 
 ### Check hook execution
@@ -274,16 +274,16 @@ Each hook outputs JSON. Test manually from your project root:
 
 ```bash
 # Test session-start
-node .claude-auto/scripts/session-start.js
+node .ketchup/scripts/session-start.js
 
 # Test pre-tool-use with sample input
-node .claude-auto/scripts/pre-tool-use.js '{"file_path":"/some/file.ts"}'
+node .ketchup/scripts/pre-tool-use.js '{"file_path":"/some/file.ts"}'
 
 # Test user-prompt-submit with sample input
-node .claude-auto/scripts/user-prompt-submit.js "Write a function"
+node .ketchup/scripts/user-prompt-submit.js "Write a function"
 
 # Test stop hook
-node .claude-auto/scripts/auto-continue.js
+node .ketchup/scripts/auto-continue.js
 ```
 
 ---
@@ -293,7 +293,7 @@ node .claude-auto/scripts/auto-continue.js
 ### Create the script
 
 ```bash
-cat > .claude-auto/scripts/my-custom-hook.js << 'EOF'
+cat > .ketchup/scripts/my-custom-hook.js << 'EOF'
 #!/usr/bin/env node
 
 const input = JSON.parse(process.argv[2] || '{}');
@@ -307,7 +307,7 @@ const result = {
 console.log(JSON.stringify(result));
 EOF
 
-chmod +x .claude-auto/scripts/my-custom-hook.js
+chmod +x .ketchup/scripts/my-custom-hook.js
 ```
 
 ### Register in settings
@@ -323,7 +323,7 @@ Add to `.claude/settings.project.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude-auto/scripts/my-custom-hook.js"
+            "command": "node .ketchup/scripts/my-custom-hook.js"
           }
         ]
       }

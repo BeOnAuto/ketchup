@@ -1,28 +1,28 @@
 # Configuration Reference
 
-Complete reference for all Claude Auto configuration options, files, and environment variables.
+Complete reference for all Ketchup configuration options, files, and environment variables.
 
 ---
 
 ## Configuration Files Overview
 
-Claude Auto uses a layered configuration system with multiple files:
+Ketchup uses a layered configuration system with multiple files:
 
 | File | Purpose | Committed? | Auto-Created? |
 |------|---------|------------|---------------|
-| `.claude-auto/.claude.hooks.json` | Primary runtime hook state | No | Yes |
+| `.ketchup/.claude.hooks.json` | Primary runtime hook state | No | Yes |
 | `.claude/deny-list.project.txt` | Project file protection | Yes | No |
 | `.claude/deny-list.local.txt` | Local file protection | No | No |
-| `.claude-auto/reminders/*.md` | Context injection reminders | Yes/No | Yes |
-| `.claude-auto/validators/*.md` | Commit validation rules | Yes/No | Yes |
+| `.ketchup/reminders/*.md` | Context injection reminders | Yes/No | Yes |
+| `.ketchup/validators/*.md` | Commit validation rules | Yes/No | Yes |
 
 ---
 
-## Hook State (`.claude-auto/.claude.hooks.json`)
+## Hook State (`.ketchup/.claude.hooks.json`)
 
 The primary runtime configuration file. Controls auto-continue, commit validation, and other behaviors.
 
-**Location:** `.claude-auto/.claude.hooks.json` (inside the claude-auto directory)
+**Location:** `.ketchup/.claude.hooks.json` (inside the auto-ketchup directory)
 
 ### Full Schema
 
@@ -139,13 +139,13 @@ Patterns use [micromatch](https://github.com/micromatch/micromatch) glob syntax.
 
 ## Managing Configuration
 
-Configuration is managed via the `/claude-auto-config` skill from within a Claude Code session:
+Configuration is managed via the `/auto-ketchup-config` skill from within a Claude Code session:
 
 ```
-/claude-auto-config show          # View current configuration
-/claude-auto-config set <key> <value>  # Update a setting
-/claude-auto-config validators    # List active validators
-/claude-auto-config reminders     # List active reminders
+/auto-ketchup-config show          # View current configuration
+/auto-ketchup-config set <key> <value>  # Update a setting
+/auto-ketchup-config validators    # List active validators
+/auto-ketchup-config reminders     # List active reminders
 ```
 
 ---
@@ -175,10 +175,10 @@ AUTO_ROOT=/path/to/project claude
 Enable debug logging:
 
 ```bash
-DEBUG=claude-auto* claude
+DEBUG=auto-ketchup* claude
 ```
 
-Logs written to `.claude-auto/logs/debug.log`.
+Logs written to `.ketchup/logs/debug.log`.
 
 ### `AUTO_LOG`
 
@@ -195,7 +195,7 @@ AUTO_LOG="*,-allowed" claude
 AUTO_LOG="session-start,block" claude
 ```
 
-Activity logs written to `.claude-auto/logs/activity.log`.
+Activity logs written to `.ketchup/logs/activity.log`.
 
 ### `AUTO_VALIDATOR_MODE`
 
@@ -212,7 +212,7 @@ AUTO_VALIDATOR_MODE=strict claude
 AUTO_VALIDATOR_MODE=warn claude
 ```
 
-Overrides the `validateCommit.mode` setting in `.claude-auto/.claude.hooks.json`.
+Overrides the `validateCommit.mode` setting in `.ketchup/.claude.hooks.json`.
 
 ### `AUTO_AUTO_CONTINUE`
 
@@ -229,7 +229,7 @@ AUTO_AUTO_CONTINUE=smart claude
 AUTO_AUTO_CONTINUE=off claude
 ```
 
-Overrides the `autoContinue.mode` setting in `.claude-auto/.claude.hooks.json`.
+Overrides the `autoContinue.mode` setting in `.ketchup/.claude.hooks.json`.
 
 ---
 
@@ -276,7 +276,7 @@ Reminders are Markdown files with YAML frontmatter that inject context into Clau
 ### Location
 
 - Default reminders: `$CLAUDE_PLUGIN_ROOT/reminders/` (bundled with the plugin, immutable)
-- Custom reminders: `.claude-auto/reminders/` (add your own `.md` files)
+- Custom reminders: `.ketchup/reminders/` (add your own `.md` files)
 
 ### Frontmatter Schema
 
@@ -304,7 +304,7 @@ Validators are Markdown files with YAML frontmatter.
 ### Location
 
 - Default validators: `$CLAUDE_PLUGIN_ROOT/validators/` (bundled with the plugin, immutable)
-- Custom validators: `.claude-auto/validators/` (add your own `.md` files)
+- Custom validators: `.ketchup/validators/` (add your own `.md` files)
 
 ### Frontmatter Schema
 
@@ -320,7 +320,7 @@ enabled: true              # Set to false to disable
 
 ## Project Root Detection
 
-Claude Auto finds the project root in this order:
+Ketchup finds the project root in this order:
 
 1. `AUTO_ROOT` environment variable (if set and path exists)
 2. Walk up from `INIT_CWD` or `process.cwd()` to find `package.json`
@@ -333,15 +333,15 @@ Claude Auto finds the project root in this order:
 
 ### Debug Logs
 
-**Location:** `.claude-auto/logs/debug.log`
+**Location:** `.ketchup/logs/debug.log`
 
-**Enable:** `DEBUG=claude-auto*`
+**Enable:** `DEBUG=auto-ketchup*`
 
 **Format:** Timestamp, hook name, debug message
 
 ### Activity Logs
 
-**Location:** `.claude-auto/logs/activity.log`
+**Location:** `.ketchup/logs/activity.log`
 
 **Filter:** `AUTO_LOG` environment variable
 
@@ -374,7 +374,7 @@ Hook scripts are bundled within the plugin and registered automatically. No manu
 ### Enable non-stop mode
 
 ```json
-// .claude-auto/.claude.hooks.json
+// .ketchup/.claude.hooks.json
 {
   "autoContinue": {
     "mode": "non-stop",
@@ -386,7 +386,7 @@ Hook scripts are bundled within the plugin and registered automatically. No manu
 ### Disable commit validation
 
 ```json
-// .claude-auto/.claude.hooks.json
+// .ketchup/.claude.hooks.json
 {
   "validateCommit": {
     "mode": "off"
@@ -397,7 +397,7 @@ Hook scripts are bundled within the plugin and registered automatically. No manu
 ### Add custom file protection
 
 ```json
-// .claude-auto/.claude.hooks.json
+// .ketchup/.claude.hooks.json
 {
   "denyList": {
     "enabled": true,
@@ -409,7 +409,7 @@ Hook scripts are bundled within the plugin and registered automatically. No manu
 ### Skip validation for explore agents
 
 ```json
-// .claude-auto/.claude.hooks.json
+// .ketchup/.claude.hooks.json
 {
   "subagentHooks": {
     "validateCommitOnExplore": false,

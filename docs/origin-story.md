@@ -56,11 +56,11 @@ I needed fresh vocabulary. Unpolluted terms that wouldn't trigger pattern-matchi
 
 That's how **The Ketchup Technique** was born — a play on "catch up." Like the Pomodoro Technique gave fresh vocabulary for time management (a tomato timer instead of "timeboxing"), the Ketchup Technique gives fresh vocabulary for AI-assisted planning. It is the *methodology*: Bottles, Bursts, dependencies, and `ketchup-plan.md`.
 
-But a methodology is just theory until it runs. Through refinement, the methodology crystallized into **the Quality Loop** — a four-component validation *system*: Auto-Planner, Supervisor AI, TCR Discipline, and Auto-Continue. The Quality Loop is what earns the trust that lets you parallelize.
+But a methodology is just theory until it runs. Through refinement, the methodology crystallized into **the Quality Loop** — a four-component validation *system*: Auto-Planner, Validators, TCR Discipline, and Auto-Continue. The Quality Loop is what earns the trust that lets you parallelize.
 
-Enter **Claude Auto** — the open-source *tool* that implements both. It's the hooks, the validators, the auto-continue system, the reminders. The machinery that turns methodology into execution.
+Enter **Ketchup** — the open-source *tool* that implements both. It's the hooks, the validators, the auto-continue system, the reminders. The machinery that turns methodology into execution.
 
-Claude Auto is the first step to putting your entire development workflow **on.Auto**.
+Ketchup is the first step to putting your entire development workflow **on.Auto**.
 
 ### Bottles and Bursts
 
@@ -119,9 +119,9 @@ Then I discovered the real leverage.
 
 Git worktrees let you have multiple working directories from the same repo. Each on a different branch. Each isolated.
 
-Set Claude Auto off on Feature A in worktree-1.
-Open worktree-2. Set Claude Auto off on Feature B.
-Open worktree-3. Set Claude Auto off on Feature C.
+Set Ketchup off on Feature A in worktree-1.
+Open worktree-2. Set Ketchup off on Feature B.
+Open worktree-3. Set Ketchup off on Feature C.
 
 Three features running simultaneously. All quality-validated.
 
@@ -138,7 +138,7 @@ Through refinement, four components emerged:
 | Component          | What It Does                               | Result                          |
 | ------------------ | ------------------------------------------ | ------------------------------- |
 | **Auto-Planner**   | Generates plan from your requirements      | No need to specify every detail |
-| **Supervisor AI**  | Validates every commit against your criteria | Automated review               |
+| **Validators**  | Validates every commit against your criteria | Automated review               |
 | **TCR Discipline** | Test && Commit \|\| Revert                 | Bad code auto-reverts           |
 | **Auto-Continue**  | Keeps going until the plan is done         | You check back, not babysit     |
 

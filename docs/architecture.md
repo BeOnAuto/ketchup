@@ -49,7 +49,7 @@ Understanding how the Quality Loop works under the hood.
 
 ## Design Philosophy
 
-claude-auto follows several key principles:
+auto-ketchup follows several key principles:
 
 1. **Convention over Configuration**: Sensible defaults that just work
 2. **Plugin Architecture**: Runs as a Claude Code plugin with bundled hook scripts
@@ -68,7 +68,7 @@ claude-auto follows several key principles:
 │  ├── deny-list.project.txt ────► File protection patterns   │
 │  └── deny-list.local.txt ──────► Local protection patterns  │
 │                                                              │
-│  .claude-auto/                                               │
+│  .ketchup/                                               │
 │  ├── reminders/ ───────────────► Context injection files    │
 │  ├── validators/ ──────────────► Commit validation rules    │
 │  ├── .claude.hooks.json ───────► Hook behavior state        │
@@ -80,7 +80,7 @@ claude-auto follows several key principles:
                    Plugin loaded by Claude Code
                               │
 ┌─────────────────────────────────────────────────────────────┐
-│           claude-auto plugin                                 │
+│           auto-ketchup plugin                                 │
 ├─────────────────────────────────────────────────────────────┤
 │  dist/bundle/scripts/       Bundled hook scripts             │
 │  reminders/                 Default reminders                │
@@ -246,7 +246,7 @@ Claude Attempts git commit
 ┌─────────────────────────────┐
 │  handleValidateCommit()     │
 │  ├─► loadValidators()       │
-│  │   └─► .claude-auto/validators│
+│  │   └─► .ketchup/validators│
 │  ├─► parseValidator() each  │
 │  ├─► filterEnabled()        │
 │  └─► sendToSupervisor()     │
@@ -254,7 +254,7 @@ Claude Attempts git commit
                │
                ▼
 ┌─────────────────────────────┐
-│  Supervisor AI evaluates    │
+│  Validators evaluates    │
 │  each validator rule        │
 └──────────────┬──────────────┘
                │
@@ -357,7 +357,7 @@ transcript.jsonl
 ### Plugin Structure
 
 ```
-claude-auto/
+auto-ketchup/
 ├── src/
 │   ├── index.ts            Barrel export (public API)
 │   ├── path-resolver.ts    Path resolution from environment
@@ -401,7 +401,7 @@ your-project/
 │   ├── deny-list.project.txt     Project deny patterns
 │   └── deny-list.local.txt       Local deny patterns
 │
-├── .claude-auto/
+├── .ketchup/
 │   ├── reminders/
 │   │   └── *.md                  Context injection reminders
 │   ├── validators/

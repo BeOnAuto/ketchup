@@ -1,8 +1,8 @@
 # API Reference
 
-Programmatic access to Claude Auto's exported utilities.
+Programmatic access to Ketchup's exported utilities.
 
-These are the functions and types exported from `claude-auto` via `src/index.ts`.
+These are the functions and types exported from `auto-ketchup` via `src/index.ts`.
 
 ---
 
@@ -10,10 +10,10 @@ These are the functions and types exported from `claude-auto` via `src/index.ts`
 
 ### `resolvePathsFromEnv(explicitPluginRoot?: string): ResolvedPaths`
 
-Resolves the key directory paths used by Claude Auto, based on environment variables and optional explicit plugin root.
+Resolves the key directory paths used by Ketchup, based on environment variables and optional explicit plugin root.
 
 ```typescript
-import { resolvePathsFromEnv } from 'claude-auto';
+import { resolvePathsFromEnv } from 'auto-ketchup';
 
 const paths = resolvePathsFromEnv();
 // → { pluginRoot: '...', projectRoot: '...', autoDir: '...', ... }
@@ -22,7 +22,7 @@ const paths = resolvePathsFromEnv();
 With an explicit plugin root:
 
 ```typescript
-const paths = resolvePathsFromEnv('/path/to/claude-auto');
+const paths = resolvePathsFromEnv('/path/to/auto-ketchup');
 ```
 
 ---
@@ -34,7 +34,7 @@ const paths = resolvePathsFromEnv('/path/to/claude-auto');
 The resolved directory paths used by the plugin.
 
 ```typescript
-import type { ResolvedPaths } from 'claude-auto';
+import type { ResolvedPaths } from 'auto-ketchup';
 ```
 
 ---
@@ -98,7 +98,7 @@ interface ReminderContext {
 State object for managing validator and reminder overrides.
 
 ```typescript
-import type { OverridesState } from 'claude-auto';
+import type { OverridesState } from 'auto-ketchup';
 ```
 
 ---
@@ -108,7 +108,7 @@ import type { OverridesState } from 'claude-auto';
 Override configuration for a specific reminder.
 
 ```typescript
-import type { ReminderOverride } from 'claude-auto';
+import type { ReminderOverride } from 'auto-ketchup';
 ```
 
 ---
@@ -118,7 +118,7 @@ import type { ReminderOverride } from 'claude-auto';
 Override configuration for a specific validator.
 
 ```typescript
-import type { ValidatorOverride } from 'claude-auto';
+import type { ValidatorOverride } from 'auto-ketchup';
 ```
 
 ---
@@ -130,9 +130,9 @@ import type { ValidatorOverride } from 'claude-auto';
 Scans a directory for `.md` files. Returns filenames (not full paths). Returns empty array when directory doesn't exist. Non-`.md` files are ignored.
 
 ```typescript
-import { scanReminders } from 'claude-auto';
+import { scanReminders } from 'auto-ketchup';
 
-const filenames = scanReminders('/project/.claude-auto/reminders');
+const filenames = scanReminders('/project/.ketchup/reminders');
 // → ['ketchup.md', 'plan-mode.md']
 ```
 
@@ -143,7 +143,7 @@ const filenames = scanReminders('/project/.claude-auto/reminders');
 Parses a reminder file's raw content, extracting YAML frontmatter and body.
 
 ```typescript
-import { parseReminder } from 'claude-auto';
+import { parseReminder } from 'auto-ketchup';
 
 const reminder = parseReminder(
   `---
@@ -181,8 +181,8 @@ Filters reminders by context. All `when` conditions use AND logic — every key/
 Reminders with empty `when` always match.
 
 ```typescript
-import { matchReminders } from 'claude-auto';
-import type { Reminder, ReminderContext } from 'claude-auto';
+import { matchReminders } from 'auto-ketchup';
+import type { Reminder, ReminderContext } from 'auto-ketchup';
 
 const reminders: Reminder[] = [
   { name: 'always', when: {}, priority: 0, content: 'Always shown' },
@@ -206,7 +206,7 @@ const result = matchReminders(reminders, context);
 Sorts reminders by priority (highest first). Returns a new array (does not mutate input). Default priority is `0`.
 
 ```typescript
-import { sortByPriority } from 'claude-auto';
+import { sortByPriority } from 'auto-ketchup';
 
 const sorted = sortByPriority(reminders);
 // Priority 100 → 50 → 10 → 0
@@ -221,11 +221,11 @@ High-level function that scans, parses, matches, and sorts reminders from a dire
 Equivalent to: `sortByPriority(matchReminders(reminders.map(parseReminder), context))`
 
 ```typescript
-import { loadReminders } from 'claude-auto';
-import type { ReminderContext } from 'claude-auto';
+import { loadReminders } from 'auto-ketchup';
+import type { ReminderContext } from 'auto-ketchup';
 
 const context: ReminderContext = { hook: 'SessionStart' };
-const reminders = loadReminders('/project/.claude-auto/reminders', context);
+const reminders = loadReminders('/project/.ketchup/reminders', context);
 // → Sorted, filtered reminders matching SessionStart hook
 ```
 
@@ -244,7 +244,7 @@ Loads deny patterns from project and local files. Returns empty array when no fi
 Empty lines and lines starting with `#` (comments) are ignored. Patterns from both files are merged.
 
 ```typescript
-import { loadDenyPatterns } from 'claude-auto';
+import { loadDenyPatterns } from 'auto-ketchup';
 
 const patterns = loadDenyPatterns('/project/.claude');
 // → ['*.secret', '/private/**', '/my-local/**']
@@ -259,7 +259,7 @@ Checks if a file path matches any deny pattern using [micromatch](https://github
 Returns `false` when patterns array is empty.
 
 ```typescript
-import { isDenied } from 'claude-auto';
+import { isDenied } from 'auto-ketchup';
 
 isDenied('/config/api.secret', ['*.secret', '/private/**']);
 // → true

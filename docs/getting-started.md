@@ -1,10 +1,10 @@
 # Getting Started
 
-Install Claude Auto in 5 minutes.
+Install Ketchup in 5 minutes.
 
 **What you'll accomplish:**
 
-- Install Claude Auto
+- Install Ketchup
 - See the supervisor system in action
 - Create your first skill (context injection)
 - Set up file protection
@@ -19,45 +19,45 @@ Install Claude Auto in 5 minutes.
 
 ---
 
-## Step 1: Install Claude Auto
+## Step 1: Install Ketchup
 
 From within a Claude Code session:
 
 ```
 /plugin marketplace add BeOnAuto/auto-plugins
-/plugin install claude-auto
+/plugin install auto-ketchup
 ```
 
 Or for local development:
 
 ```bash
-claude --plugin-dir /path/to/claude-auto
+claude --plugin-dir /path/to/auto-ketchup
 ```
 
-Claude will mention that claude-auto is available but not yet active.
+Claude will mention that Ketchup is available but not yet active.
 
 ---
 
 ## Step 2: Activate in Your Project
 
 ```
-/claude-auto-init
+/auto-ketchup-init
 ```
 
-This creates `.claude-auto/` with default configuration. Then verify:
+This creates `.ketchup/` with default configuration. Then verify:
 
 ```
-/claude-auto-config show
+/auto-ketchup-config show
 ```
 
-Claude Auto is now active with commit validation, reminders, deny-lists, and auto-continue.
+Ketchup is now active with commit validation, reminders, deny-lists, and auto-continue.
 
 ---
 
 ## Step 3: Explore What Was Created
 
 ```bash
-ls -la .claude/ .claude-auto/
+ls -la .claude/ .ketchup/
 ```
 
 See the [Architecture Guide](/architecture#directory-structure) for complete directory structure details.
@@ -69,7 +69,7 @@ See the [Architecture Guide](/architecture#directory-structure) for complete dir
 Create your first reminder to inject YOUR rules into every session:
 
 ```bash
-cat > .claude-auto/reminders/my-project.md << 'EOF'
+cat > .ketchup/reminders/my-project.md << 'EOF'
 ---
 when:
   hook: SessionStart
@@ -116,23 +116,23 @@ git worktree add ../feature-payments feature/payments
 git worktree add ../feature-dashboard feature/dashboard
 ```
 
-Run a Claude Auto instance in each worktree:
+Run a Ketchup instance in each worktree:
 
 ```bash
 # Terminal 1 (feature-auth)
 cd ../feature-auth
 # Feed requirements, approve plan, start execution
-# Claude Auto running...
+# Ketchup running...
 
 # Terminal 2 (feature-payments)
 cd ../feature-payments
 # Feed requirements, approve plan, start execution
-# Claude Auto running...
+# Ketchup running...
 
 # Terminal 3 (feature-dashboard)
 cd ../feature-dashboard
 # Feed requirements, approve plan, start execution
-# Claude Auto running...
+# Ketchup running...
 ```
 
 Three features running simultaneously. All quality-validated.
@@ -141,12 +141,12 @@ Three features running simultaneously. All quality-validated.
 
 ## What Just Happened?
 
-You installed Claude Auto:
+You installed Ketchup:
 
 | Component         | What It Does                  | You Just Enabled        |
 | ----------------- | ----------------------------- | ----------------------- |
 | Auto-Planner      | AI plans before coding        | ketchup-plan.md support |
-| Supervisor AI     | ACK/NACK every commit         | PreToolUse hooks        |
+| Validators     | ACK/NACK every commit         | PreToolUse hooks        |
 | Context Injection | Your rules, every session     | SessionStart reminders  |
 | File Protection   | Deny-list for sensitive files | PreToolUse deny-list    |
 | Auto-Continue     | AI works until plan complete  | Stop hooks              |
@@ -173,5 +173,5 @@ See the [transformation story](/origin-story#the-transformation) for the complet
 Having issues? See the [Configuration Guide](/configuration#troubleshooting) for common problems and solutions, or run:
 
 ```
-/claude-auto-config show
+/auto-ketchup-config show
 ```

@@ -1,12 +1,12 @@
 # The Ketchup Technique
 
-> The planning methodology behind Claude Auto
+> The planning methodology behind Ketchup
 
-The Ketchup Technique is the methodology. The Quality Loop is the system. Claude Auto is the tool.
+The Ketchup Technique is the methodology. The Quality Loop is the system. Ketchup is the tool.
 
 - **The Ketchup Technique** gives fresh vocabulary for AI-assisted planning: Bottles, Bursts, dependencies, and the `ketchup-plan.md` format. It is the contract between your requirements and what the AI builds—a detailed, disciplined breakdown of work that keeps agents focused on rigorous software development.
-- **The Quality Loop** is the four-component validation system that executes those plans: Auto-Planner, Supervisor AI, TCR Discipline, and Auto-Continue. It is the _what runs_.
-- **Claude Auto** is the open-source engine that implements both.
+- **The Quality Loop** is the four-component validation system that executes those plans: Auto-Planner, Validators, TCR Discipline, and Auto-Continue. It is the _what runs_.
+- **Ketchup** is the open-source engine that implements both.
 
 ---
 
@@ -48,7 +48,7 @@ Feed your requirements. Get a complete plan.
 
 Oversight over every detail, ahead of time. The ketchup plan surfaces decisions before they're made—no opaque reasoning from agents.
 
-### 2. Supervisor AI
+### 2. Validators
 
 An impartial AI validates every commit.
 
@@ -177,7 +177,7 @@ Uncovered code = code nobody asked for = deleted by next revert.
 
 Sub-agents follow identical rules to the parent. When spawning a Task agent:
 
-1. **Include Claude Auto context** - Sub-agents receive the same reminders and rules automatically
+1. **Include Ketchup context** - Sub-agents receive the same reminders and rules automatically
 2. **Include ketchup-plan.md** - Sub-agents work from the same plan
 3. **No orphan work** - Sub-agent output must be committed by parent or sub-agent
 
@@ -222,13 +222,13 @@ git worktree add ../feature-payments feature/payments
 git worktree add ../feature-dashboard feature/dashboard
 ```
 
-Three isolated workspaces. Each running a Claude Auto instance.
+Three isolated workspaces. Each running a Ketchup instance.
 
 | Worktree            | Feature               | Status                   |
 | ------------------- | --------------------- | ------------------------ |
-| `feature-auth`      | Authentication system | Claude Auto executing... |
-| `feature-payments`  | Payment integration   | Claude Auto executing... |
-| `feature-dashboard` | Admin dashboard       | Claude Auto executing... |
+| `feature-auth`      | Authentication system | Ketchup executing... |
+| `feature-payments`  | Payment integration   | Ketchup executing... |
+| `feature-dashboard` | Admin dashboard       | Ketchup executing... |
 
 The bottleneck becomes defining requirements, not executing them.
 
