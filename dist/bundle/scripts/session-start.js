@@ -3397,7 +3397,7 @@ var require_parse = __commonJS({
 var require_gray_matter = __commonJS({
   "node_modules/.pnpm/gray-matter@4.0.3/node_modules/gray-matter/index.js"(exports2, module2) {
     "use strict";
-    var fs9 = require("fs");
+    var fs10 = require("fs");
     var sections = require_section_matter();
     var defaults = require_defaults();
     var stringify = require_stringify();
@@ -3481,7 +3481,7 @@ var require_gray_matter = __commonJS({
       return stringify(file, data, options2);
     };
     matter2.read = function(filepath, options2) {
-      const str2 = fs9.readFileSync(filepath, "utf8");
+      const str2 = fs10.readFileSync(filepath, "utf8");
       const file = matter2(str2, options2);
       file.path = filepath;
       return file;
@@ -3510,7 +3510,7 @@ var require_gray_matter = __commonJS({
 });
 
 // scripts/session-start.ts
-var fs8 = __toESM(require("node:fs"));
+var fs9 = __toESM(require("node:fs"));
 
 // src/activity-logger.ts
 var import_node_fs = __toESM(require("node:fs"));
@@ -3867,30 +3867,49 @@ async function handleSessionStart(paths, sessionId = "", agentType) {
   };
 }
 
-// src/path-resolver.ts
+// src/migrate.ts
+var fs7 = __toESM(require("node:fs"));
 var path6 = __toESM(require("node:path"));
+var LEGACY_DATA_DIR = ".claude-auto";
+function migrateLegacyDataDir(projectRoot) {
+  const legacy = path6.join(projectRoot, LEGACY_DATA_DIR);
+  const current = path6.join(projectRoot, BRAND.dataDir);
+  const legacyExists = fs7.existsSync(legacy);
+  const currentExists = fs7.existsSync(current);
+  if (legacyExists && currentExists) {
+    return { migrated: false, conflict: true };
+  }
+  if (legacyExists) {
+    fs7.renameSync(legacy, current);
+    return { migrated: true };
+  }
+  return { migrated: false };
+}
+
+// src/path-resolver.ts
+var path7 = __toESM(require("node:path"));
 async function resolvePathsFromEnv(explicitPluginRoot) {
   const pluginRoot = explicitPluginRoot || process.env.CLAUDE_PLUGIN_ROOT;
   if (!pluginRoot) {
     throw new Error(`CLAUDE_PLUGIN_ROOT must be set. ${BRAND.displayName} requires plugin mode.`);
   }
   const projectRoot = process.cwd();
-  const claudeDir = path6.join(projectRoot, ".claude");
-  const autoDir = path6.join(projectRoot, BRAND.dataDir);
-  const pluginValidatorsDir = path6.join(pluginRoot, "validators");
+  const claudeDir = path7.join(projectRoot, ".claude");
+  const autoDir = path7.join(projectRoot, BRAND.dataDir);
+  const pluginValidatorsDir = path7.join(pluginRoot, "validators");
   return {
     projectRoot,
     claudeDir,
     autoDir,
-    remindersDirs: [path6.join(pluginRoot, "reminders"), path6.join(autoDir, "reminders")],
-    validatorsDirs: [pluginValidatorsDir, path6.join(autoDir, "validators")],
+    remindersDirs: [path7.join(pluginRoot, "reminders"), path7.join(autoDir, "reminders")],
+    validatorsDirs: [pluginValidatorsDir, path7.join(autoDir, "validators")],
     protectedValidatorsDirs: [pluginValidatorsDir]
   };
 }
 
 // src/plugin-debug.ts
-var fs7 = __toESM(require("node:fs"));
-var path7 = __toESM(require("node:path"));
+var fs8 = __toESM(require("node:fs"));
+var path8 = __toESM(require("node:path"));
 function logPluginDiagnostics(hookName, paths) {
   const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
   const isDebug = !!process.env.CLAUDE_AUTO_DEBUG;
@@ -3913,17 +3932,18 @@ function logPluginDiagnostics(hookName, paths) {
   if (isDebug) {
     console.error(message);
   }
-  if (fs7.existsSync(paths.autoDir)) {
-    const logsDir = path7.join(paths.autoDir, "logs");
-    fs7.mkdirSync(logsDir, { recursive: true });
-    fs7.appendFileSync(path7.join(logsDir, "plugin-debug.log"), message);
+  if (fs8.existsSync(paths.autoDir)) {
+    const logsDir = path8.join(paths.autoDir, "logs");
+    fs8.mkdirSync(logsDir, { recursive: true });
+    fs8.appendFileSync(path8.join(logsDir, "plugin-debug.log"), message);
   }
 }
 
 // scripts/session-start.ts
-var input = parseHookInput(fs8.readFileSync(0, "utf-8"));
+var input = parseHookInput(fs9.readFileSync(0, "utf-8"));
 var startTime = Date.now();
 (async () => {
+  migrateLegacyDataDir(process.cwd());
   const paths = await resolvePathsFromEnv();
   logPluginDiagnostics("SessionStart", paths);
   try {
