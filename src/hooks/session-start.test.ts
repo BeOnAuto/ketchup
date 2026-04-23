@@ -33,7 +33,7 @@ describe('session-start hook', () => {
     };
     fs.mkdirSync(claudeDir, { recursive: true });
     fs.mkdirSync(autoDir, { recursive: true });
-    fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify(DEFAULT_HOOK_STATE));
+    fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify(DEFAULT_HOOK_STATE));
     fs.writeFileSync(path.join(tempDir, 'package.json'), '{}');
   });
 

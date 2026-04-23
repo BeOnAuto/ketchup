@@ -149,7 +149,7 @@ enabled: true
 ---
 Validate this commit`,
     );
-    fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify({ validateCommit: { mode: 'off' } }));
+    fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify({ validateCommit: { mode: 'off' } }));
 
     const result = await handlePreToolUse(resolvedPaths, 'session-off', {
       command: 'git commit -m "test: skip validation"',

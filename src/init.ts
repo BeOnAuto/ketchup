@@ -19,7 +19,7 @@ export function initKetchup(projectRoot: string): InitResult {
 
   fs.mkdirSync(autoDir, { recursive: true });
 
-  const stateFile = path.join(autoDir, '.claude.hooks.json');
+  const stateFile = path.join(autoDir, BRAND.stateFile);
   fs.writeFileSync(stateFile, `${JSON.stringify(DEFAULT_HOOK_STATE, null, 2)}\n`);
 
   return { created: true, autoDir, gitignoreAdvice: checkGitignoreAdvice(projectRoot) };
@@ -30,7 +30,7 @@ export function formatInitResult(result: InitResult): string {
 
   if (result.created) {
     lines.push(`✅ Initialized ${BRAND.displayName} at ${result.autoDir}`);
-    lines.push(`🎯 Default configuration written to ${BRAND.dataDir}/.claude.hooks.json`);
+    lines.push(`🎯 Default configuration written to ${BRAND.dataDir}/${BRAND.stateFile}`);
 
     if (result.gitignoreAdvice) {
       lines.push('');

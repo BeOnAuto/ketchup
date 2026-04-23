@@ -38,7 +38,7 @@ This creates the following structure in your project:
 ```
 your-project/
 ├── .ketchup/
-│   ├── .claude.hooks.json  # Hook behavior state
+│   ├── state.json  # Hook behavior state
 │   ├── reminders/          # Custom context injection files (*.md)
 │   ├── validators/         # Custom commit validation rules (*.md)
 │   └── logs/
@@ -72,7 +72,7 @@ All configuration is managed via the `/ketchup:config` skill:
 /ketchup:config reminders     # List active reminders
 ```
 
-Configuration is stored in `.ketchup/.claude.hooks.json`.
+Configuration is stored in `.ketchup/state.json`.
 
 ---
 

@@ -33,6 +33,7 @@ var BRAND = {
   displayName: "Ketchup",
   attribution: "Ketchup, from Auto",
   dataDir: ".ketchup",
+  stateFile: "state.json",
   docsUrl: "https://ketchup.on.auto",
   repoUrl: "https://github.com/BeOnAuto/ketchup",
   leadTagline: "Turn every AI mistake into a rule AI can't repeat.",
@@ -76,7 +77,7 @@ function initKetchup(projectRoot) {
     return { created: false, autoDir, gitignoreAdvice: checkGitignoreAdvice(projectRoot) };
   }
   fs.mkdirSync(autoDir, { recursive: true });
-  const stateFile = path.join(autoDir, ".claude.hooks.json");
+  const stateFile = path.join(autoDir, BRAND.stateFile);
   fs.writeFileSync(stateFile, `${JSON.stringify(DEFAULT_HOOK_STATE, null, 2)}
 `);
   return { created: true, autoDir, gitignoreAdvice: checkGitignoreAdvice(projectRoot) };
@@ -85,7 +86,7 @@ function formatInitResult(result2) {
   const lines = [];
   if (result2.created) {
     lines.push(`\u2705 Initialized ${BRAND.displayName} at ${result2.autoDir}`);
-    lines.push(`\u{1F3AF} Default configuration written to ${BRAND.dataDir}/.claude.hooks.json`);
+    lines.push(`\u{1F3AF} Default configuration written to ${BRAND.dataDir}/${BRAND.stateFile}`);
     if (result2.gitignoreAdvice) {
       lines.push("");
       lines.push(`\u{1F4CC} Note: ${BRAND.dataDir} is not in your .gitignore.`);

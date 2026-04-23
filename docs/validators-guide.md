@@ -252,7 +252,7 @@ enabled: true
 
 ## Validation Modes
 
-Control validation strictness in `.ketchup/.claude.hooks.json`:
+Control validation strictness in `.ketchup/state.json`:
 
 ```json
 {
@@ -463,7 +463,7 @@ From within a Claude Code session:
 
 ### Temporarily Disable
 
-In `.ketchup/.claude.hooks.json`:
+In `.ketchup/state.json`:
 
 ```json
 {

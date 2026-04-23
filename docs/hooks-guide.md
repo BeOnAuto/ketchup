@@ -104,7 +104,7 @@ For a complete reference of all configuration files and options, see the [Config
 - Can trigger auto-continue behavior
 
 **Default behavior:**
-- Checks auto-continue configuration in `.ketchup/.claude.hooks.json`
+- Checks auto-continue configuration in `.ketchup/state.json`
 - In "smart" mode: analyzes transcript for continuation signals
 - In "non-stop" mode: always continues until max iterations
 - In "off" mode: never auto-continues
@@ -181,12 +181,12 @@ Uses [micromatch](https://github.com/micromatch/micromatch) glob patterns:
 
 ## Configure Hook State
 
-Control runtime hook behavior via `.ketchup/.claude.hooks.json`.
+Control runtime hook behavior via `.ketchup/state.json`.
 
 ### Create the state file
 
 ```bash
-cat > .ketchup/.claude.hooks.json << 'EOF'
+cat > .ketchup/state.json << 'EOF'
 {
   "autoContinue": {
     "mode": "smart",

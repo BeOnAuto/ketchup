@@ -3,6 +3,7 @@ export const BRAND = {
   displayName: 'Ketchup',
   attribution: 'Ketchup, from Auto',
   dataDir: '.ketchup',
+  stateFile: 'state.json',
   docsUrl: 'https://ketchup.on.auto',
   repoUrl: 'https://github.com/BeOnAuto/ketchup',
   leadTagline: "Turn every AI mistake into a rule AI can't repeat.",

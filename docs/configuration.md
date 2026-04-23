@@ -10,7 +10,7 @@ Ketchup uses a layered configuration system with multiple files:
 
 | File | Purpose | Committed? | Auto-Created? |
 |------|---------|------------|---------------|
-| `.ketchup/.claude.hooks.json` | Primary runtime hook state | No | Yes |
+| `.ketchup/state.json` | Primary runtime hook state | No | Yes |
 | `.claude/deny-list.project.txt` | Project file protection | Yes | No |
 | `.claude/deny-list.local.txt` | Local file protection | No | No |
 | `.ketchup/reminders/*.md` | Context injection reminders | Yes/No | Yes |
@@ -18,11 +18,11 @@ Ketchup uses a layered configuration system with multiple files:
 
 ---
 
-## Hook State (`.ketchup/.claude.hooks.json`)
+## Hook State (`.ketchup/state.json`)
 
 The primary runtime configuration file. Controls auto-continue, commit validation, and other behaviors.
 
-**Location:** `.ketchup/.claude.hooks.json` (inside the ketchup directory)
+**Location:** `.ketchup/state.json` (inside the ketchup directory)
 
 ### Full Schema
 
@@ -212,7 +212,7 @@ AUTO_VALIDATOR_MODE=strict claude
 AUTO_VALIDATOR_MODE=warn claude
 ```
 
-Overrides the `validateCommit.mode` setting in `.ketchup/.claude.hooks.json`.
+Overrides the `validateCommit.mode` setting in `.ketchup/state.json`.
 
 ### `AUTO_AUTO_CONTINUE`
 
@@ -229,7 +229,7 @@ AUTO_AUTO_CONTINUE=smart claude
 AUTO_AUTO_CONTINUE=off claude
 ```
 
-Overrides the `autoContinue.mode` setting in `.ketchup/.claude.hooks.json`.
+Overrides the `autoContinue.mode` setting in `.ketchup/state.json`.
 
 ---
 
@@ -374,7 +374,7 @@ Hook scripts are bundled within the plugin and registered automatically. No manu
 ### Enable non-stop mode
 
 ```json
-// .ketchup/.claude.hooks.json
+// .ketchup/state.json
 {
   "autoContinue": {
     "mode": "non-stop",
@@ -386,7 +386,7 @@ Hook scripts are bundled within the plugin and registered automatically. No manu
 ### Disable commit validation
 
 ```json
-// .ketchup/.claude.hooks.json
+// .ketchup/state.json
 {
   "validateCommit": {
     "mode": "off"
@@ -397,7 +397,7 @@ Hook scripts are bundled within the plugin and registered automatically. No manu
 ### Add custom file protection
 
 ```json
-// .ketchup/.claude.hooks.json
+// .ketchup/state.json
 {
   "denyList": {
     "enabled": true,
@@ -409,7 +409,7 @@ Hook scripts are bundled within the plugin and registered automatically. No manu
 ### Skip validation for explore agents
 
 ```json
-// .ketchup/.claude.hooks.json
+// .ketchup/state.json
 {
   "subagentHooks": {
     "validateCommitOnExplore": false,

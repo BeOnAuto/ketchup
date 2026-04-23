@@ -3635,6 +3635,7 @@ var BRAND = {
   displayName: "Ketchup",
   attribution: "Ketchup, from Auto",
   dataDir: ".ketchup",
+  stateFile: "state.json",
   docsUrl: "https://ketchup.on.auto",
   repoUrl: "https://github.com/BeOnAuto/ketchup",
   leadTagline: "Turn every AI mistake into a rule AI can't repeat.",
@@ -3693,7 +3694,7 @@ var DEFAULT_HOOK_STATE = {
   }
 };
 function createHookState(autoDir) {
-  const stateFile = path4.join(autoDir, ".claude.hooks.json");
+  const stateFile = path4.join(autoDir, BRAND.stateFile);
   function read() {
     if (!fs4.existsSync(autoDir)) {
       return { ...DEFAULT_HOOK_STATE };

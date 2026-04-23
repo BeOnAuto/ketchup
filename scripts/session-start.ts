@@ -5,7 +5,7 @@ import { activityLog } from '../src/activity-logger.js';
 import { parseHookInput } from '../src/hook-input.js';
 import { writeHookLog } from '../src/hook-logger.js';
 import { handleSessionStart } from '../src/hooks/session-start.js';
-import { migrateLegacyDataDir } from '../src/migrate.js';
+import { migrateLegacyDataDir, migrateLegacyStateFile } from '../src/migrate.js';
 import { resolvePathsFromEnv } from '../src/path-resolver.js';
 import { logPluginDiagnostics } from '../src/plugin-debug.js';
 
@@ -14,6 +14,7 @@ const startTime = Date.now();
 
 (async () => {
   migrateLegacyDataDir(process.cwd());
+  migrateLegacyStateFile(process.cwd());
   const paths = await resolvePathsFromEnv();
   logPluginDiagnostics('SessionStart', paths);
   try {

@@ -168,7 +168,7 @@ describe('auto-continue hook', () => {
     it('returns allow when mode is off', () => {
       const autoDir = path.join(tempDir, '.ketchup');
       fs.mkdirSync(autoDir, { recursive: true });
-      fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify({ autoContinue: { mode: 'off' } }));
+      fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify({ autoContinue: { mode: 'off' } }));
 
       const input: StopHookInput = { session_id: 'test-session' };
       const result = handleStop(autoDir, input);
@@ -179,7 +179,7 @@ describe('auto-continue hook', () => {
     it('returns allow when stop_hook_active is true', () => {
       const autoDir = path.join(tempDir, '.ketchup');
       fs.mkdirSync(autoDir, { recursive: true });
-      fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify({ autoContinue: { mode: 'smart' } }));
+      fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify({ autoContinue: { mode: 'smart' } }));
 
       const input: StopHookInput = { session_id: 'test-session', stop_hook_active: true };
       const result = handleStop(autoDir, input);
@@ -190,7 +190,7 @@ describe('auto-continue hook', () => {
     it('returns allow with no work remaining when smart mode has no signals', () => {
       const autoDir = path.join(tempDir, '.ketchup');
       fs.mkdirSync(autoDir, { recursive: true });
-      fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify({ autoContinue: { mode: 'smart' } }));
+      fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify({ autoContinue: { mode: 'smart' } }));
 
       const input: StopHookInput = { session_id: 'test-session' };
       const result = handleStop(autoDir, input);
@@ -201,7 +201,7 @@ describe('auto-continue hook', () => {
     it('defaults to skipping plan mode via DEFAULT_HOOK_STATE skipModes', () => {
       const autoDir = path.join(tempDir, '.ketchup');
       fs.mkdirSync(autoDir, { recursive: true });
-      fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify({ autoContinue: { mode: 'smart' } }));
+      fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify({ autoContinue: { mode: 'smart' } }));
 
       const input: StopHookInput = { session_id: 'test-session', permission_mode: 'plan' };
       const result = handleStop(autoDir, input);
@@ -213,7 +213,7 @@ describe('auto-continue hook', () => {
       const autoDir = path.join(tempDir, '.ketchup');
       fs.mkdirSync(autoDir, { recursive: true });
       fs.writeFileSync(
-        path.join(autoDir, '.claude.hooks.json'),
+        path.join(autoDir, 'state.json'),
         JSON.stringify({ autoContinue: { mode: 'smart', skipModes: ['plan'] } }),
       );
 

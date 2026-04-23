@@ -50,7 +50,7 @@ Scripts are bundled via esbuild to `dist/bundle/scripts/` and executed from `$CL
 - **`hooks/`**, Hook handlers: `session-start.ts`, `pre-tool-use.ts`, `user-prompt-submit.ts`, `auto-continue.ts`, `validate-commit.ts`
 - **`commit-validator.ts`**, Batched validator execution (default batch size: 3), appeals parsing, Claude CLI spawning
 - **`validator-loader.ts`** / **`reminder-loader.ts`**, Load markdown files with YAML frontmatter from `.ketchup/validators/` and `.ketchup/reminders/`
-- **`hook-state.ts`**, Manages `.claude.hooks.json` (autoContinue mode, validateCommit mode, deny-list config)
+- **`hook-state.ts`**, Manages `state.json` (autoContinue mode, validateCommit mode, deny-list config)
 - **`deny-list.ts`**, File path protection via micromatch glob patterns
 - **`path-resolver.ts`**, Resolves plugin and project paths from `CLAUDE_PLUGIN_ROOT` / `CLAUDE_PLUGIN_DATA` env vars
 - **`clue-collector.ts`**, Extracts signals from session transcripts for auto-continue decisions

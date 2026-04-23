@@ -31,7 +31,7 @@ Each call is bounded by Claude's response time on a short structured-output prom
 
 **If latency matters more than thoroughness:**
 
-- Reduce `validateCommit.batchCount` in `.ketchup/.claude.hooks.json` (raise from 3 to 5 or 7 to fewer total calls)
+- Reduce `validateCommit.batchCount` in `.ketchup/state.json` (raise from 3 to 5 or 7 to fewer total calls)
 - Disable validators you don't need: `/ketchup:config validators disable <name>`
 - Set `validateCommit.mode` to `warn` instead of `strict` (NACK becomes a warning, doesn't block)
 
@@ -94,7 +94,7 @@ Three ways:
 
 ```bash
 # Or edit the file directly:
-# .ketchup/.claude.hooks.json
+# .ketchup/state.json
 # Set "validators": { "disabled": ["testing-weak-assertions"] }
 ```
 
@@ -107,7 +107,7 @@ Three ways:
 # ---
 ```
 
-The first form is the easiest and is auditable in `git log` because the change lands in `.claude.hooks.json`.
+The first form is the easiest and is auditable in `git log` because the change lands in `state.json`.
 
 ---
 

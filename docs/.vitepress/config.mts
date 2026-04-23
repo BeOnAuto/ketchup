@@ -26,7 +26,6 @@ export default defineConfig({
           { text: 'Hooks Guide', link: '/hooks-guide' },
           { text: 'Reminders Guide', link: '/reminders-guide' },
           { text: 'Validators Guide', link: '/validators-guide' },
-          { text: 'API Reference', link: '/api-reference' },
           { text: 'Architecture', link: '/architecture' },
         ],
       },
@@ -68,7 +67,6 @@ export default defineConfig({
         text: 'Reference',
         items: [
           { text: 'Configuration', link: '/configuration' },
-          { text: 'API Reference', link: '/api-reference' },
           { text: 'Architecture', link: '/architecture' },
           { text: 'Operational Concerns', link: '/operational-concerns' },
         ],

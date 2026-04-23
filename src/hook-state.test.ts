@@ -65,7 +65,7 @@ describe('hook-state', () => {
         subagentHooks: { validateCommitOnExplore: false, validateCommitOnWork: true, validateCommitOnUnknown: true },
         overrides: { validators: {}, reminders: {} },
       };
-      fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify(existingState));
+      fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify(existingState));
 
       const hookState = createHookState(autoDir);
       const state = hookState.read();
@@ -76,7 +76,7 @@ describe('hook-state', () => {
 
     it('merges partial state with defaults', () => {
       const partialState = { autoContinue: { mode: 'off' } };
-      fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify(partialState));
+      fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify(partialState));
 
       const hookState = createHookState(autoDir);
       const state = hookState.read();
@@ -88,7 +88,7 @@ describe('hook-state', () => {
 
     it('merges batchCount from partial state file', () => {
       const partialState = { validateCommit: { mode: 'strict', batchCount: 5 } };
-      fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify(partialState));
+      fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify(partialState));
 
       const hookState = createHookState(autoDir);
       const state = hookState.read();
@@ -106,7 +106,7 @@ describe('hook-state', () => {
         updatedAt: '2026-01-01T00:00:00Z',
         updatedBy: 'legacy',
       };
-      fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify(legacyState));
+      fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify(legacyState));
 
       const hookState = createHookState(autoDir);
       const state = hookState.read();
@@ -126,7 +126,7 @@ describe('hook-state', () => {
       expect(fs.existsSync(nonExistentDir)).toBe(false);
     });
 
-    it('writes state to .ketchup/.claude.hooks.json', () => {
+    it('writes state to .ketchup/state.json', () => {
       const hookState = createHookState(autoDir);
       const newState: HookState = {
         ...DEFAULT_HOOK_STATE,
@@ -135,7 +135,7 @@ describe('hook-state', () => {
 
       hookState.write(newState);
 
-      const content = JSON.parse(fs.readFileSync(path.join(autoDir, '.claude.hooks.json'), 'utf-8'));
+      const content = JSON.parse(fs.readFileSync(path.join(autoDir, 'state.json'), 'utf-8'));
       expect(content.autoContinue.mode).toBe('non-stop');
     });
 
@@ -145,7 +145,7 @@ describe('hook-state', () => {
 
       hookState.write(state);
 
-      const content = JSON.parse(fs.readFileSync(path.join(autoDir, '.claude.hooks.json'), 'utf-8'));
+      const content = JSON.parse(fs.readFileSync(path.join(autoDir, 'state.json'), 'utf-8'));
       expect(content.updatedAt).toBeUndefined();
       expect(content.updatedBy).toBeUndefined();
       expect(content.autoContinue.iteration).toBeUndefined();
@@ -219,7 +219,7 @@ describe('hook-state', () => {
           validateCommitOnUnknown: false,
         },
       };
-      fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify(existingState));
+      fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify(existingState));
 
       const hookState = createHookState(autoDir);
       const state = hookState.read();

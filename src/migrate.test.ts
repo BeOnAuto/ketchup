@@ -4,7 +4,7 @@ import * as path from 'node:path';
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { migrateLegacyDataDir } from './migrate.js';
+import { migrateLegacyDataDir, migrateLegacyStateFile } from './migrate.js';
 
 describe('migrateLegacyDataDir', () => {
   let projectRoot: string;
@@ -62,5 +62,66 @@ describe('migrateLegacyDataDir', () => {
     expect(result).toEqual({ migrated: false, conflict: true });
     expect(fs.readFileSync(path.join(current, '.claude.hooks.json'), 'utf-8')).toBe('{"current": true}');
     expect(fs.readFileSync(path.join(legacy, '.claude.hooks.json'), 'utf-8')).toBe('{"legacy": true}');
+  });
+});
+
+describe('migrateLegacyStateFile', () => {
+  let projectRoot: string;
+  let dataDir: string;
+
+  beforeEach(() => {
+    projectRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'ketchup-state-migrate-'));
+    dataDir = path.join(projectRoot, '.ketchup');
+  });
+
+  afterEach(() => {
+    fs.rmSync(projectRoot, { recursive: true, force: true });
+  });
+
+  it('renames .claude.hooks.json to state.json when only legacy exists', () => {
+    fs.mkdirSync(dataDir, { recursive: true });
+    fs.writeFileSync(path.join(dataDir, '.claude.hooks.json'), '{"autoContinue":{"mode":"smart"}}');
+
+    const result = migrateLegacyStateFile(projectRoot);
+
+    expect(result).toEqual({ migrated: true });
+    expect(fs.existsSync(path.join(dataDir, '.claude.hooks.json'))).toBe(false);
+    expect(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf-8')).toBe('{"autoContinue":{"mode":"smart"}}');
+  });
+
+  it('is a no-op when only state.json exists', () => {
+    fs.mkdirSync(dataDir, { recursive: true });
+    fs.writeFileSync(path.join(dataDir, 'state.json'), '{}');
+
+    const result = migrateLegacyStateFile(projectRoot);
+
+    expect(result).toEqual({ migrated: false });
+    expect(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf-8')).toBe('{}');
+  });
+
+  it('is a no-op when the data dir does not exist', () => {
+    const result = migrateLegacyStateFile(projectRoot);
+
+    expect(result).toEqual({ migrated: false });
+  });
+
+  it('is a no-op when neither file exists', () => {
+    fs.mkdirSync(dataDir, { recursive: true });
+
+    const result = migrateLegacyStateFile(projectRoot);
+
+    expect(result).toEqual({ migrated: false });
+  });
+
+  it('does not overwrite state.json when both exist', () => {
+    fs.mkdirSync(dataDir, { recursive: true });
+    fs.writeFileSync(path.join(dataDir, '.claude.hooks.json'), '{"legacy": true}');
+    fs.writeFileSync(path.join(dataDir, 'state.json'), '{"current": true}');
+
+    const result = migrateLegacyStateFile(projectRoot);
+
+    expect(result).toEqual({ migrated: false, conflict: true });
+    expect(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf-8')).toBe('{"current": true}');
+    expect(fs.readFileSync(path.join(dataDir, '.claude.hooks.json'), 'utf-8')).toBe('{"legacy": true}');
   });
 });

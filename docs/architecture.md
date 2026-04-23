@@ -70,7 +70,7 @@ ketchup follows several key principles:
 │  .ketchup/                                               │
 │  ├── reminders/ ───────────────► Context injection files    │
 │  ├── validators/ ──────────────► Commit validation rules    │
-│  ├── .claude.hooks.json ───────► Hook behavior state        │
+│  ├── state.json ───────► Hook behavior state        │
 │  └── logs/                                                   │
 │      └── activity.log ─────────► Activity log               │
 │                                                              │
@@ -405,7 +405,7 @@ your-project/
 │   │   └── *.md                  Context injection reminders
 │   ├── validators/
 │   │   └── *.md                  Commit validation rules
-│   ├── .claude.hooks.json        Hook behavior state
+│   ├── state.json        Hook behavior state
 │   └── logs/
 │       └── activity.log          Activity log
 ```

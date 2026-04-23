@@ -75,7 +75,7 @@ Red → green → TCR → refactor → TCR → done. The rhythm holds. [Planning
 
 ### 5. Auto-Continue
 
-Ketchup reads the `.ketchup/.claude.hooks.json` state and decides whether the agent should keep going or stop. The Stop hook runs an LLM classifier that reads:
+Ketchup reads the `.ketchup/state.json` state and decides whether the agent should keep going or stop. The Stop hook runs an LLM classifier that reads:
 
 - Session log clues (by time, by type)
 - Last 5 chat exchanges

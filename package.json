@@ -1,6 +1,7 @@
 {
   "name": "ketchup",
   "version": "0.21.0",
+  "private": true,
   "authors": [
     {
       "name": "Sam Hatoum"
@@ -11,12 +12,6 @@
     "type": "git",
     "url": "https://github.com/BeOnAuto/ketchup.git"
   },
-  "publishConfig": {
-    "registry": "https://registry.npmjs.org",
-    "access": "public"
-  },
-  "main": "dist/src/index.js",
-  "types": "dist/src/index.d.ts",
   "scripts": {
     "build": "tsc && pnpm build:bundle",
     "build:bundle": "esbuild scripts/session-start.ts scripts/pre-tool-use.ts scripts/user-prompt-submit.ts scripts/auto-continue.ts scripts/config.ts scripts/init.ts --bundle --platform=node --target=node18 --format=cjs --outdir=dist/bundle/scripts --external:typescript",
@@ -29,7 +24,6 @@
     "check": "turbo run build type-check test && pnpm lint",
     "changeset": "changeset",
     "version": "changeset version",
-    "release": "pnpm publish",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs",
@@ -40,17 +34,6 @@
       "biome check --write --no-errors-on-unmatched"
     ]
   },
-  "keywords": [
-    "ketchup",
-    "claude",
-    "claude-code",
-    "hooks",
-    "skills",
-    "tcr",
-    "quality-loop",
-    "parallel-agents",
-    "automation"
-  ],
   "author": "Sam Hatoum",
   "license": "MIT",
   "dependencies": {
@@ -75,16 +58,6 @@
     "vitepress": "^1.6.4",
     "vitest": "^1.0.0"
   },
-  "files": [
-    "dist/",
-    "scripts/",
-    "skills/",
-    ".claude-plugin/",
-    "hooks/",
-    "validators/",
-    "reminders/",
-    "agents/"
-  ],
   "engines": {
     "node": ">=18.0.0"
   },

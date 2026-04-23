@@ -4,7 +4,7 @@
 
 Ketchup runs 15+ LLM-powered guardrails on every AI commit, so bad commits don't land.
 
-[![Build](https://img.shields.io/github/actions/workflow/status/BeOnAuto/ketchup/ci.yml?style=flat-square)](https://github.com/BeOnAuto/ketchup/actions) [![npm](https://img.shields.io/npm/v/ketchup?style=flat-square)](https://www.npmjs.com/package/ketchup) [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE) [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square)]()
+[![Build](https://img.shields.io/github/actions/workflow/status/BeOnAuto/ketchup/ci.yml?style=flat-square)](https://github.com/BeOnAuto/ketchup/actions) [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE) [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square)]()
 
 ```
 /plugin install ketchup
@@ -177,7 +177,7 @@ Each worktree runs its own Ketchup instance, all quality-validated.
 }
 ```
 
-Configuration lives in `.ketchup/.claude.hooks.json`. See the [Configuration guide](./docs/configuration.md) for all options.
+Configuration lives in `.ketchup/state.json`. See the [Configuration guide](./docs/configuration.md) for all options.
 
 ---
 
@@ -241,7 +241,6 @@ DEBUG=ketchup claude --plugin-dir /path/to/ketchup
 | [Hooks Guide](./docs/hooks-guide.md) | Hook system deep-dive |
 | [Reminders Guide](./docs/reminders-guide.md) | Context injection system |
 | [Validators Guide](./docs/validators-guide.md) | Commit validation rules |
-| [API Reference](./docs/api-reference.md) | Programmatic access |
 | [Architecture](./docs/architecture.md) | System design internals |
 | [Origin Story](./docs/origin-story.md) | How Ketchup came to be |
 
@@ -265,7 +264,7 @@ src/
 ├── commit-validator.ts   # Batched commit validation with appeal support
 ├── deny-list.ts          # File protection via micromatch patterns
 ├── reminder-loader.ts    # Multi-directory reminder system with deduplication
-├── hook-state.ts         # Hook state management (.claude.hooks.json)
+├── hook-state.ts         # Hook state management (state.json)
 ├── validator-loader.ts   # Multi-directory validator loader
 └── index.ts              # Public API barrel exports
 scripts/

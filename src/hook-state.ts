@@ -1,6 +1,8 @@
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
+import { BRAND } from './brand.js';
+
 export type ContinueMode = 'smart' | 'non-stop' | 'off';
 export type CommitMode = 'strict' | 'warn' | 'off';
 
@@ -90,7 +92,7 @@ export interface HookStateManager {
 }
 
 export function createHookState(autoDir: string): HookStateManager {
-  const stateFile = path.join(autoDir, '.claude.hooks.json');
+  const stateFile = path.join(autoDir, BRAND.stateFile);
 
   function read(): HookState {
     if (!fs.existsSync(autoDir)) {

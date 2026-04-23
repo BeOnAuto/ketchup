@@ -25,7 +25,7 @@ describe('initKetchup', () => {
 
     expect(result).toEqual({ created: true, autoDir, gitignoreAdvice: true });
 
-    const stateFile = path.join(autoDir, '.claude.hooks.json');
+    const stateFile = path.join(autoDir, 'state.json');
     expect(JSON.parse(fs.readFileSync(stateFile, 'utf-8'))).toEqual(DEFAULT_HOOK_STATE);
   });
 
@@ -33,12 +33,12 @@ describe('initKetchup', () => {
     const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
     const existingState = { autoContinue: { mode: 'off' } };
-    fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify(existingState));
+    fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify(existingState));
 
     const result = initKetchup(tempDir);
 
     expect(result).toEqual({ created: false, autoDir, gitignoreAdvice: true });
-    expect(JSON.parse(fs.readFileSync(path.join(autoDir, '.claude.hooks.json'), 'utf-8'))).toEqual(existingState);
+    expect(JSON.parse(fs.readFileSync(path.join(autoDir, 'state.json'), 'utf-8'))).toEqual(existingState);
   });
 
   it('returns gitignoreAdvice true when .ketchup not in .gitignore', () => {
@@ -101,6 +101,6 @@ describe('scripts/init.ts', () => {
     const output = execSync(`npx tsx ${scriptPath}`, { cwd: tempDir, encoding: 'utf-8' });
 
     expect(output).toContain('Initialized Ketchup');
-    expect(fs.existsSync(path.join(tempDir, '.ketchup', '.claude.hooks.json'))).toBe(true);
+    expect(fs.existsSync(path.join(tempDir, '.ketchup', 'state.json'))).toBe(true);
   });
 });
