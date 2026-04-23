@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-Ketchup (npm: `auto-ketchup`) — a quality loop for Claude Code that enforces the Ketchup Technique (TDD-driven TCR discipline). It validates commits, injects reminders, manages deny-lists, and enables trusted parallel feature development. Brand: Ketchup. Package: auto-ketchup.
+Ketchup (npm: `auto-ketchup`), a quality loop for Claude Code that enforces the Ketchup Technique (TDD-driven TCR discipline). It validates commits, injects reminders, manages deny-lists, and enables trusted parallel feature development. Brand: Ketchup. Package: auto-ketchup.
 
 ## Commands
 
@@ -47,14 +47,14 @@ Scripts are bundled via esbuild to `dist/bundle/scripts/` and executed from `$CL
 
 ### Key Source Modules (`src/`)
 
-- **`hooks/`** — Hook handlers: `session-start.ts`, `pre-tool-use.ts`, `user-prompt-submit.ts`, `auto-continue.ts`, `validate-commit.ts`
-- **`commit-validator.ts`** — Batched validator execution (default batch size: 3), appeals parsing, Claude CLI spawning
-- **`validator-loader.ts`** / **`reminder-loader.ts`** — Load markdown files with YAML frontmatter from `.ketchup/validators/` and `.ketchup/reminders/`
-- **`hook-state.ts`** — Manages `.claude.hooks.json` (autoContinue mode, validateCommit mode, deny-list config)
-- **`deny-list.ts`** — File path protection via micromatch glob patterns
-- **`path-resolver.ts`** — Resolves plugin and project paths from `CLAUDE_PLUGIN_ROOT` / `CLAUDE_PLUGIN_DATA` env vars
-- **`clue-collector.ts`** — Extracts signals from session transcripts for auto-continue decisions
-- **`subagent-classifier.ts`** — Classifies prompts as explore/work/unknown to control hook behavior
+- **`hooks/`**, Hook handlers: `session-start.ts`, `pre-tool-use.ts`, `user-prompt-submit.ts`, `auto-continue.ts`, `validate-commit.ts`
+- **`commit-validator.ts`**, Batched validator execution (default batch size: 3), appeals parsing, Claude CLI spawning
+- **`validator-loader.ts`** / **`reminder-loader.ts`**, Load markdown files with YAML frontmatter from `.ketchup/validators/` and `.ketchup/reminders/`
+- **`hook-state.ts`**, Manages `.claude.hooks.json` (autoContinue mode, validateCommit mode, deny-list config)
+- **`deny-list.ts`**, File path protection via micromatch glob patterns
+- **`path-resolver.ts`**, Resolves plugin and project paths from `CLAUDE_PLUGIN_ROOT` / `CLAUDE_PLUGIN_DATA` env vars
+- **`clue-collector.ts`**, Extracts signals from session transcripts for auto-continue decisions
+- **`subagent-classifier.ts`**, Classifies prompts as explore/work/unknown to control hook behavior
 
 ### Data Flow: Commit Validation
 

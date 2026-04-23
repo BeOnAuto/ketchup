@@ -68,7 +68,7 @@ Exclusions allowed ONLY for: barrel `index.ts` re-exports, `*.test.ts` files
 Forbidden:
 
 - Excluding files to avoid testing them
-- Standalone type files (`types.ts`, `interfaces.ts`) — types live inline where used
+- Standalone type files (`types.ts`, `interfaces.ts`), types live inline where used
 - `@ts-ignore`, `any`, `as SomeType` casts
 
 | Do                              | Don't                                    |
@@ -103,8 +103,8 @@ Litmus Test: "If I changed the internal data structure (e.g., Map to Array), wou
 
 ## Guardrails
 
-- No comments — write self-expressing code
-- No excuses, no "you're right" — keep working
+- No comments, write self-expressing code
+- No excuses, no "you're right", keep working
 - JS files only in `dist/`
 - When tests fail, assume you broke it. CI passed before; your change is the variable.
 

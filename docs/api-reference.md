@@ -74,7 +74,7 @@ interface ReminderWhen {
 }
 ```
 
-All conditions use AND logic — every key/value pair must match the context.
+All conditions use AND logic, every key/value pair must match the context.
 
 ---
 
@@ -176,7 +176,7 @@ const simple = parseReminder('# Simple\n\nJust content.', 'simple.md');
 
 ### `matchReminders(reminders: Reminder[], context: ReminderContext): Reminder[]`
 
-Filters reminders by context. All `when` conditions use AND logic — every key/value pair in `when` must match the corresponding key in `context`.
+Filters reminders by context. All `when` conditions use AND logic, every key/value pair in `when` must match the corresponding key in `context`.
 
 Reminders with empty `when` always match.
 
@@ -238,8 +238,8 @@ const reminders = loadReminders('/project/.ketchup/reminders', context);
 Loads deny patterns from project and local files. Returns empty array when no files exist.
 
 **Sources:**
-1. `{dir}/deny-list.project.txt` — project-wide patterns
-2. `{dir}/deny-list.local.txt` — personal patterns
+1. `{dir}/deny-list.project.txt`, project-wide patterns
+2. `{dir}/deny-list.local.txt`, personal patterns
 
 Empty lines and lines starting with `#` (comments) are ignored. Patterns from both files are merged.
 

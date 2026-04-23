@@ -17,7 +17,7 @@ Use that sentence wherever the two products meet. It's the through-line.
 | [on.auto](https://on.auto) | The product. Auto turns narratives into working software. |
 | **ketchup.on.auto** | The quality layer. Ketchup installs trust into the coding agent so you can let it run. |
 
-Each property is independently useful. You can adopt the methodology without the tool. You can use the tool without the broader movement. The composition is where the leverage is.
+Each property is independently useful. You can adopt the methodology without the tool. You can use the tool without the broader movement. The composition is where the value compounds.
 
 ## Where Ketchup sits
 
@@ -46,8 +46,8 @@ The Ketchup Technique is agent-agnostic. The Ketchup tool is Claude Code-first t
 
 ## Further reading
 
-- [The Ketchup Technique](/ketchup-technique) — the planning methodology
-- [Origin Story](/origin-story) — how this came to be
-- [Auto](https://on.auto) — the spec-driven platform
-- [Spec-driven development](https://specdriven.com) — the category
-- [Narrative-driven development](https://narrativedriven.org) — the spec dialect
+- [The Ketchup Technique](/ketchup-technique): the planning methodology
+- [Origin Story](/origin-story): how this came to be
+- [Auto](https://on.auto): the spec-driven platform
+- [Spec-driven development](https://specdriven.com): the category
+- [Narrative-driven development](https://narrativedriven.org): the spec dialect

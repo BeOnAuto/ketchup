@@ -4,7 +4,7 @@
 
 The Ketchup Technique is the methodology. The Quality Loop is the system. Ketchup is the tool.
 
-- **The Ketchup Technique** gives fresh vocabulary for AI-assisted planning: Bottles, Bursts, dependencies, and the `ketchup-plan.md` format. It is the contract between your requirements and what the AI builds—a detailed, disciplined breakdown of work that keeps agents focused on rigorous software development.
+- **The Ketchup Technique** gives fresh vocabulary for AI-assisted planning: Bottles, Bursts, dependencies, and the `ketchup-plan.md` format. It is the contract between your requirements and what the AI builds, a detailed, disciplined breakdown of work that keeps agents focused on rigorous software development.
 - **The Quality Loop** is the four-component validation system that executes those plans: Auto-Planner, Validators, TCR Discipline, and Auto-Continue. It is the _what runs_.
 - **Ketchup** is the open-source engine that implements both.
 
@@ -46,7 +46,7 @@ Feed your requirements. Get a complete plan.
 - [x] Burst 0: Project setup (abc123)
 ```
 
-Oversight over every detail, ahead of time. The ketchup plan surfaces decisions before they're made—no opaque reasoning from agents.
+Oversight over every detail, ahead of time. The ketchup plan surfaces decisions before they're made, no opaque reasoning from agents.
 
 ### 2. Validators
 
@@ -85,7 +85,7 @@ Red → Green → TCR → Refactor → TCR → Done
 - Tests fail → Revert completely
 - Never patch failing code
 
-Emergent design without bad foundations. When tests fail, revert and rethink—don't let the AI patch mistakes over and over.
+Emergent design without bad foundations. When tests fail, revert and rethink, don't let the AI patch mistakes over and over.
 
 ### 4. Auto-Continue
 
@@ -308,7 +308,7 @@ it("creates user with generated id", () => {
 
 ## Guardrails
 
-- No comments — write self-expressing code
+- No comments, write self-expressing code
 - JS files only in `dist/`
 - When tests fail, assume you broke it
 
