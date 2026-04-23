@@ -1,6 +1,8 @@
 # Ketchup
 
-A quality loop for Claude Code. Validators gate commits. Reminders inject guidelines. Deny-lists protect files. Auto-continue keeps the agent working. The system earns trust, and trust lets you parallelize.
+**Turn every AI mistake into a rule AI can't repeat.**
+
+Ketchup runs 15+ customizable LLM-powered guardrails on every AI commit, so bad commits don't land.
 
 [![Build](https://img.shields.io/github/actions/workflow/status/BeOnAuto/auto-ketchup/ci.yml?style=flat-square)](https://github.com/BeOnAuto/auto-ketchup/actions) [![npm](https://img.shields.io/npm/v/auto-ketchup?style=flat-square)](https://www.npmjs.com/package/auto-ketchup) [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE) [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square)]()
 
@@ -8,21 +10,21 @@ A quality loop for Claude Code. Validators gate commits. Reminders inject guidel
 /plugin install auto-ketchup
 ```
 
-*Ketchup is an open-source quality loop for Claude Code, from the team at [Auto](https://on.auto).*
+*Ketchup is an open-source guardrail engine for Claude Code, from the team at [Auto](https://on.auto).*
 
 ---
 
 ## Why
 
-Without Ketchup, you babysit every AI coding session. You watch, nudge, correct, context-switch. One task at a time, full attention required.
+AI coding agents have three problems: they're biased for delivery, they have no negative knowledge about your system, and every prompt is a clean slate that forgets yesterday's lessons. Static tools (eslint, husky, commitlint) can't catch semantic failures: a test that asserts nothing, a commit that bundles three unrelated concerns, a "fix" that rationalizes a shortcut, an architectural rule violated three months after you wrote it.
 
-Ketchup installs hooks that do the watching for you. Every commit gets validated against your criteria. Every prompt gets your guidelines injected. Files you name stay untouched. The agent keeps going until the plan is done.
+Ketchup runs a separate Claude subagent against every commit, with your rules as its context and no investment in whether the commit ships. When it finds a violation, it blocks the commit and tells you why.
 
-When the loop is trustworthy, you stop watching one agent and start running three. Git worktrees do the rest.
+The workflow is: observe an AI mistake, encode it as a rule, AI can't repeat it. The codebase gets permanently safer as you keep working, not just temporarily cleaner. See [Guardrail Engineering](./docs/guardrail-engineering.md) for the mechanism and [the Ketchup Technique](./docs/ketchup-technique.md) for the planning rhythm that feeds clean work into it.
 
-## In the Stack
+## In the stack
 
-Ketchup comes from the team building [Auto](https://on.auto), a spec-driven development platform. Auto turns specifications into working software. Ketchup is the execution discipline layer, the loop that keeps AI coding agents honest while they implement against your spec. If Auto decides what to build, Ketchup enforces how. Use them together, or use Ketchup on its own. Both work.
+Ketchup comes from the team building [Auto](https://on.auto), a spec-driven development platform. Auto decides what to build. Ketchup enforces how. Use them together, or use Ketchup on its own. Both work.
 
 ## Key Concepts
 
