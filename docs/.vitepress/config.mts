@@ -8,7 +8,7 @@ export default defineConfig({
   lang: 'en-US',
   title: 'Ketchup',
   description:
-    'A quality loop for Claude Code. Stop babysitting, start parallelizing. Run 3-5 features in parallel. Ship 10+ per week.',
+    'Turn every AI mistake into a rule AI can\'t repeat. Ketchup runs 15+ customizable LLM-powered guardrails on every AI commit, so bad commits don\'t land.',
   appearance: 'dark',
 
   themeConfig: {
@@ -30,6 +30,7 @@ export default defineConfig({
           { text: 'Architecture', link: '/architecture' },
         ],
       },
+      { text: 'Guardrail Engineering', link: '/guardrail-engineering' },
       { text: 'The Ketchup Technique', link: '/ketchup-technique' },
       { text: 'In the Stack', link: '/in-the-stack' },
       { text: 'Origin Story', link: '/origin-story' },
@@ -52,6 +53,7 @@ export default defineConfig({
       {
         text: 'Methodology',
         items: [
+          { text: 'Guardrail Engineering', link: '/guardrail-engineering' },
           { text: 'The Ketchup Technique', link: '/ketchup-technique' },
           { text: 'Origin Story', link: '/origin-story' },
         ],
@@ -116,7 +118,7 @@ export default defineConfig({
       'meta',
       {
         property: 'og:title',
-        content: 'Ketchup - Stop Babysitting. Start Parallelizing.',
+        content: 'Ketchup - Turn every AI mistake into a rule AI can\'t repeat.',
       },
     ],
     ['meta', { property: 'og:type', content: 'website' }],
@@ -125,7 +127,7 @@ export default defineConfig({
       {
         property: 'og:description',
         content:
-          'AI-assisted coding made you a babysitter. Ketchup earns the trust to parallelize. Validators gate every commit. Auto-continue keeps going. Git worktrees multiply.',
+          'Ketchup runs 15+ customizable LLM-powered guardrails on every AI commit, so bad commits don\'t land.',
       },
     ],
     [
@@ -148,7 +150,7 @@ export default defineConfig({
       'meta',
       {
         property: 'og:image:alt',
-        content: 'Ketchup - Stop Babysitting. Start Parallelizing.',
+        content: 'Ketchup - Turn every AI mistake into a rule AI can\'t repeat.',
       },
     ],
     ['meta', { property: 'og:site_name', content: 'Ketchup' }],
@@ -157,7 +159,7 @@ export default defineConfig({
       'meta',
       {
         name: 'twitter:title',
-        content: 'Ketchup - Stop Babysitting. Start Parallelizing.',
+        content: 'Ketchup - Turn every AI mistake into a rule AI can\'t repeat.',
       },
     ],
     [
@@ -165,7 +167,7 @@ export default defineConfig({
       {
         name: 'twitter:description',
         content:
-          'AI-assisted coding made you a babysitter. Ketchup earns the trust to parallelize. Validators gate every commit. Auto-continue keeps going. Git worktrees multiply.',
+          'Ketchup runs 15+ customizable LLM-powered guardrails on every AI commit, so bad commits don\'t land.',
       },
     ],
     [
