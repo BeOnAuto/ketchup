@@ -15,8 +15,8 @@ describe('resolvePathsFromEnv', () => {
   });
 
   it('returns plugin-mode paths when CLAUDE_PLUGIN_ROOT and CLAUDE_PLUGIN_DATA are set', async () => {
-    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/claude-auto');
-    vi.stubEnv('CLAUDE_PLUGIN_DATA', '/data/claude-auto');
+    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/auto-ketchup');
+    vi.stubEnv('CLAUDE_PLUGIN_DATA', '/data/auto-ketchup');
 
     const result = await resolvePathsFromEnv();
 
@@ -24,9 +24,9 @@ describe('resolvePathsFromEnv', () => {
       projectRoot: process.cwd(),
       claudeDir: path.join(process.cwd(), '.claude'),
       autoDir: path.join(process.cwd(), '.ketchup'),
-      validatorsDirs: ['/plugins/claude-auto/validators', path.join(process.cwd(), '.ketchup', 'validators')],
-      remindersDirs: ['/plugins/claude-auto/reminders', path.join(process.cwd(), '.ketchup', 'reminders')],
-      protectedValidatorsDirs: ['/plugins/claude-auto/validators'],
+      validatorsDirs: ['/plugins/auto-ketchup/validators', path.join(process.cwd(), '.ketchup', 'validators')],
+      remindersDirs: ['/plugins/auto-ketchup/reminders', path.join(process.cwd(), '.ketchup', 'reminders')],
+      protectedValidatorsDirs: ['/plugins/auto-ketchup/validators'],
     });
   });
 
@@ -35,7 +35,7 @@ describe('resolvePathsFromEnv', () => {
     delete process.env.CLAUDE_PLUGIN_DATA;
 
     await expect(resolvePathsFromEnv()).rejects.toThrow(
-      'CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.',
+      'CLAUDE_PLUGIN_ROOT must be set. Ketchup requires plugin mode.',
     );
   });
 
@@ -56,7 +56,7 @@ describe('resolvePathsFromEnv', () => {
   });
 
   it('works when only CLAUDE_PLUGIN_ROOT is set (skills context)', async () => {
-    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/claude-auto');
+    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/auto-ketchup');
     delete process.env.CLAUDE_PLUGIN_DATA;
 
     const result = await resolvePathsFromEnv();
@@ -65,26 +65,26 @@ describe('resolvePathsFromEnv', () => {
       projectRoot: process.cwd(),
       claudeDir: path.join(process.cwd(), '.claude'),
       autoDir: path.join(process.cwd(), '.ketchup'),
-      validatorsDirs: ['/plugins/claude-auto/validators', path.join(process.cwd(), '.ketchup', 'validators')],
-      remindersDirs: ['/plugins/claude-auto/reminders', path.join(process.cwd(), '.ketchup', 'reminders')],
-      protectedValidatorsDirs: ['/plugins/claude-auto/validators'],
+      validatorsDirs: ['/plugins/auto-ketchup/validators', path.join(process.cwd(), '.ketchup', 'validators')],
+      remindersDirs: ['/plugins/auto-ketchup/reminders', path.join(process.cwd(), '.ketchup', 'reminders')],
+      protectedValidatorsDirs: ['/plugins/auto-ketchup/validators'],
     });
   });
 
   it('includes project-local dirs for multi-dir loading', async () => {
-    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/claude-auto');
-    vi.stubEnv('CLAUDE_PLUGIN_DATA', '/data/claude-auto');
+    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/auto-ketchup');
+    vi.stubEnv('CLAUDE_PLUGIN_DATA', '/data/auto-ketchup');
 
     const result = await resolvePathsFromEnv();
 
     expect(result.validatorsDirs).toHaveLength(2);
     expect(result.remindersDirs).toHaveLength(2);
-    expect(result.validatorsDirs[0]).toBe('/plugins/claude-auto/validators');
-    expect(result.remindersDirs[0]).toBe('/plugins/claude-auto/reminders');
+    expect(result.validatorsDirs[0]).toBe('/plugins/auto-ketchup/validators');
+    expect(result.remindersDirs[0]).toBe('/plugins/auto-ketchup/reminders');
   });
 
   it('exposes protectedValidatorsDirs containing only the plugin validators dir', async () => {
-    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/claude-auto');
+    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/auto-ketchup');
 
     const result = await resolvePathsFromEnv();
 
@@ -92,9 +92,9 @@ describe('resolvePathsFromEnv', () => {
       projectRoot: process.cwd(),
       claudeDir: path.join(process.cwd(), '.claude'),
       autoDir: path.join(process.cwd(), '.ketchup'),
-      validatorsDirs: ['/plugins/claude-auto/validators', path.join(process.cwd(), '.ketchup', 'validators')],
-      remindersDirs: ['/plugins/claude-auto/reminders', path.join(process.cwd(), '.ketchup', 'reminders')],
-      protectedValidatorsDirs: ['/plugins/claude-auto/validators'],
+      validatorsDirs: ['/plugins/auto-ketchup/validators', path.join(process.cwd(), '.ketchup', 'validators')],
+      remindersDirs: ['/plugins/auto-ketchup/reminders', path.join(process.cwd(), '.ketchup', 'reminders')],
+      protectedValidatorsDirs: ['/plugins/auto-ketchup/validators'],
     });
   });
 });

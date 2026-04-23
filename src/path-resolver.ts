@@ -15,7 +15,7 @@ export async function resolvePathsFromEnv(explicitPluginRoot?: string): Promise<
   const pluginRoot = explicitPluginRoot || process.env.CLAUDE_PLUGIN_ROOT;
 
   if (!pluginRoot) {
-    throw new Error('CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.');
+    throw new Error(`CLAUDE_PLUGIN_ROOT must be set. ${BRAND.displayName} requires plugin mode.`);
   }
 
   const projectRoot = process.cwd();

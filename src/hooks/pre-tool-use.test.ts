@@ -66,7 +66,7 @@ describe('pre-tool-use hook', () => {
       hookSpecificOutput: {
         hookEventName: 'PreToolUse',
         permissionDecision: 'deny',
-        permissionDecisionReason: 'Path /project/config.secret is denied by claude-auto deny-list',
+        permissionDecisionReason: 'Path /project/config.secret is denied by auto-ketchup deny-list',
       },
     });
   });
@@ -107,14 +107,14 @@ describe('pre-tool-use hook', () => {
     expect(content).toContain('pre-tool-use:');
   });
 
-  it('logs deny-list check when DEBUG=claude-auto', async () => {
-    process.env.DEBUG = 'claude-auto';
+  it('logs deny-list check when DEBUG=auto-ketchup', async () => {
+    process.env.DEBUG = 'auto-ketchup';
     fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), '*.secret\n');
     const toolInput = { file_path: '/project/config.secret' };
 
     await handlePreToolUse(resolvedPaths, 'debug-session', toolInput);
 
-    const logPath = path.join(autoDir, 'logs', 'claude-auto', 'debug.log');
+    const logPath = path.join(autoDir, 'logs', 'auto-ketchup', 'debug.log');
     expect(fs.existsSync(logPath)).toBe(true);
     const content = fs.readFileSync(logPath, 'utf8');
     expect(content).toContain('[pre-tool-use]');
@@ -338,7 +338,7 @@ Validate this commit`,
   });
 
   it('denies Bash command targeting protected (plugin) validator files', async () => {
-    const pluginValidatorsDir = '/plugins/claude-auto/validators';
+    const pluginValidatorsDir = '/plugins/auto-ketchup/validators';
     const paths = { ...resolvedPaths, protectedValidatorsDirs: [pluginValidatorsDir] };
     const validatorPath = path.join(pluginValidatorsDir, 'burst-atomicity.md');
     const toolInput = { command: `rm ${validatorPath}` };
@@ -355,7 +355,7 @@ Validate this commit`,
   });
 
   it('denies Edit/Write to protected (plugin) validator files', async () => {
-    const pluginValidatorsDir = '/plugins/claude-auto/validators';
+    const pluginValidatorsDir = '/plugins/auto-ketchup/validators';
     const paths = { ...resolvedPaths, protectedValidatorsDirs: [pluginValidatorsDir] };
     const toolInput = { file_path: path.join(pluginValidatorsDir, 'burst-atomicity.md') };
 

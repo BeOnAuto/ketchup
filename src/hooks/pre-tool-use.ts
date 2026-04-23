@@ -1,6 +1,7 @@
 import * as fs from 'node:fs';
 
 import { activityLog } from '../activity-logger.js';
+import { BRAND } from '../brand.js';
 import {
   type Executor,
   getCommitContext,
@@ -108,7 +109,7 @@ export async function handlePreToolUse(
       hookSpecificOutput: {
         hookEventName: 'PreToolUse',
         permissionDecision: 'deny',
-        permissionDecisionReason: `Path ${filePath} is denied by claude-auto deny-list`,
+        permissionDecisionReason: `Path ${filePath} is denied by ${BRAND.packageName} deny-list`,
       },
     };
   }

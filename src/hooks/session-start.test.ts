@@ -103,8 +103,8 @@ Content.`,
     expect(content).toContain('session-start:');
   });
 
-  it('logs reminders loaded when DEBUG=claude-auto', async () => {
-    process.env.DEBUG = 'claude-auto';
+  it('logs reminders loaded when DEBUG=auto-ketchup', async () => {
+    process.env.DEBUG = 'auto-ketchup';
     const remindersDir = path.join(autoDir, 'reminders');
     fs.mkdirSync(remindersDir, { recursive: true });
     fs.writeFileSync(
@@ -129,7 +129,7 @@ Reminder B content.`,
 
     await handleSessionStart(resolvedPaths, 'debug-session');
 
-    const logPath = path.join(autoDir, 'logs', 'claude-auto', 'debug.log');
+    const logPath = path.join(autoDir, 'logs', 'auto-ketchup', 'debug.log');
     expect(fs.existsSync(logPath)).toBe(true);
     const content = fs.readFileSync(logPath, 'utf8');
     expect(content).toContain('[session-start]');
@@ -153,7 +153,7 @@ Test content.`,
     const result = await handleSessionStart(resolvedPaths, 'normal-session');
 
     expect(result.hookSpecificOutput.additionalContext).toBe('Test content.');
-    expect(result.hookSpecificOutput.additionalContext).not.toContain('Welcome to Claude Auto');
+    expect(result.hookSpecificOutput.additionalContext).not.toContain('Welcome to Ketchup');
   });
 
   it('skips reminders for validator subagent sessions', async () => {

@@ -3628,15 +3628,30 @@ var fs6 = __toESM(require("node:fs"));
 // src/debug-logger.ts
 var import_node_fs2 = __toESM(require("node:fs"));
 var import_node_path2 = __toESM(require("node:path"));
+
+// src/brand.ts
+var BRAND = {
+  packageName: "auto-ketchup",
+  displayName: "Ketchup",
+  attribution: "Ketchup, from Auto",
+  dataDir: ".ketchup",
+  docsUrl: "https://ketchup.on.auto",
+  repoUrl: "https://github.com/BeOnAuto/auto-ketchup",
+  leadTagline: "Stop Babysitting. Start Parallelizing.",
+  subTagline: "Trust the system. Run 3\u20135 features in parallel. Ship 10+ per week.",
+  categoryLine: "A quality loop for Claude Code."
+};
+
+// src/debug-logger.ts
 function debugLog(autoDir, hookName, message) {
   if (!import_node_fs2.default.existsSync(autoDir)) {
     return;
   }
   const debug = process.env.DEBUG;
-  if (!debug || !debug.includes("claude-auto")) {
+  if (!debug || !debug.includes(BRAND.packageName)) {
     return;
   }
-  const logsDir = import_node_path2.default.join(autoDir, "logs", "claude-auto");
+  const logsDir = import_node_path2.default.join(autoDir, "logs", BRAND.packageName);
   if (!import_node_fs2.default.existsSync(logsDir)) {
     import_node_fs2.default.mkdirSync(logsDir, { recursive: true });
   }
@@ -3870,25 +3885,10 @@ async function handleUserPromptSubmit(paths, sessionId, prompt) {
 
 // src/path-resolver.ts
 var path6 = __toESM(require("node:path"));
-
-// src/brand.ts
-var BRAND = {
-  packageName: "auto-ketchup",
-  displayName: "Ketchup",
-  attribution: "Ketchup, from Auto",
-  dataDir: ".ketchup",
-  docsUrl: "https://ketchup.on.auto",
-  repoUrl: "https://github.com/BeOnAuto/auto-ketchup",
-  leadTagline: "Stop Babysitting. Start Parallelizing.",
-  subTagline: "Trust the system. Run 3\u20135 features in parallel. Ship 10+ per week.",
-  categoryLine: "A quality loop for Claude Code."
-};
-
-// src/path-resolver.ts
 async function resolvePathsFromEnv(explicitPluginRoot) {
   const pluginRoot = explicitPluginRoot || process.env.CLAUDE_PLUGIN_ROOT;
   if (!pluginRoot) {
-    throw new Error("CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.");
+    throw new Error(`CLAUDE_PLUGIN_ROOT must be set. ${BRAND.displayName} requires plugin mode.`);
   }
   const projectRoot = process.cwd();
   const claudeDir = path6.join(projectRoot, ".claude");

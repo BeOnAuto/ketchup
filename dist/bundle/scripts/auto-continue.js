@@ -270,7 +270,7 @@ var BRAND = {
 async function resolvePathsFromEnv(explicitPluginRoot) {
   const pluginRoot = explicitPluginRoot || process.env.CLAUDE_PLUGIN_ROOT;
   if (!pluginRoot) {
-    throw new Error("CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.");
+    throw new Error(`CLAUDE_PLUGIN_ROOT must be set. ${BRAND.displayName} requires plugin mode.`);
   }
   const projectRoot = process.cwd();
   const claudeDir = path4.join(projectRoot, ".claude");

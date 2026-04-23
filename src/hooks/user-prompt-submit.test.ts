@@ -99,8 +99,8 @@ Remember to follow coding standards.`,
     expect(content).toContain('user-prompt-submit:');
   });
 
-  it('logs reminders injected when DEBUG=claude-auto', async () => {
-    process.env.DEBUG = 'claude-auto';
+  it('logs reminders injected when DEBUG=auto-ketchup', async () => {
+    process.env.DEBUG = 'auto-ketchup';
     const remindersDir = path.join(autoDir, 'reminders');
     fs.mkdirSync(remindersDir, { recursive: true });
     fs.writeFileSync(
@@ -116,7 +116,7 @@ Remember to follow coding standards.`,
 
     await handleUserPromptSubmit(resolvedPaths, 'debug-session');
 
-    const logPath = path.join(autoDir, 'logs', 'claude-auto', 'debug.log');
+    const logPath = path.join(autoDir, 'logs', 'auto-ketchup', 'debug.log');
     expect(fs.existsSync(logPath)).toBe(true);
     const content = fs.readFileSync(logPath, 'utf8');
     expect(content).toContain('[user-prompt-submit]');
