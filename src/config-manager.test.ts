@@ -26,8 +26,8 @@ describe('config-manager', () => {
   let paths: ResolvedPaths;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-auto-config-'));
-    autoDir = path.join(tempDir, '.claude-auto');
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ketchup-config-'));
+    autoDir = path.join(tempDir, '.ketchup');
     validatorsDir = path.join(tempDir, 'validators');
     remindersDir = path.join(tempDir, 'reminders');
     const projectRemindersDir = path.join(autoDir, 'reminders');

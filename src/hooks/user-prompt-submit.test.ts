@@ -6,7 +6,7 @@ import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import type { ResolvedPaths } from '../path-resolver.js';
 
-const DEFAULT_AUTO_DIR = '.claude-auto';
+const DEFAULT_AUTO_DIR = '.ketchup';
 
 import { handleUserPromptSubmit } from './user-prompt-submit.js';
 

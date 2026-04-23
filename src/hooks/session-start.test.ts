@@ -8,7 +8,7 @@ import { DEFAULT_HOOK_STATE } from '../hook-state.js';
 import type { ResolvedPaths } from '../path-resolver.js';
 import { INIT_HINT_MESSAGE } from '../welcome-message.js';
 
-const DEFAULT_AUTO_DIR = '.claude-auto';
+const DEFAULT_AUTO_DIR = '.ketchup';
 
 import { handleSessionStart } from './session-start.js';
 

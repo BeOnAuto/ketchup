@@ -11,8 +11,8 @@ describe('hook-state', () => {
   let autoDir: string;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-auto-hookstate-'));
-    autoDir = path.join(tempDir, '.claude-auto');
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ketchup-hookstate-'));
+    autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
   });
 
@@ -126,7 +126,7 @@ describe('hook-state', () => {
       expect(fs.existsSync(nonExistentDir)).toBe(false);
     });
 
-    it('writes state to .claude-auto/.claude.hooks.json', () => {
+    it('writes state to .ketchup/.claude.hooks.json', () => {
       const hookState = createHookState(autoDir);
       const newState: HookState = {
         ...DEFAULT_HOOK_STATE,

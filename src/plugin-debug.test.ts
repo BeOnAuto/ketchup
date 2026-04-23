@@ -64,8 +64,8 @@ describe('logPluginDiagnostics', () => {
       projectRoot: '/project',
       claudeDir: '/project/.claude',
       autoDir: tempDir,
-      validatorsDirs: ['/project/.claude-auto/validators'],
-      remindersDirs: ['/project/.claude-auto/reminders'],
+      validatorsDirs: ['/project/.ketchup/validators'],
+      remindersDirs: ['/project/.ketchup/reminders'],
       protectedValidatorsDirs: [],
     });
 
@@ -122,8 +122,8 @@ describe('logPluginDiagnostics', () => {
       projectRoot: '/project',
       claudeDir: '/project/.claude',
       autoDir: tempDir,
-      validatorsDirs: ['/project/.claude-auto/validators'],
-      remindersDirs: ['/project/.claude-auto/reminders'],
+      validatorsDirs: ['/project/.ketchup/validators'],
+      remindersDirs: ['/project/.ketchup/reminders'],
       protectedValidatorsDirs: [],
     });
 

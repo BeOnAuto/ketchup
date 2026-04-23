@@ -7,7 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import type { ResolvedPaths } from '../path-resolver.js';
 import { commandTargetsProtectedPath, handlePreToolUse, isProtectedPath } from './pre-tool-use.js';
 
-const DEFAULT_AUTO_DIR = '.claude-auto';
+const DEFAULT_AUTO_DIR = '.ketchup';
 
 describe('pre-tool-use hook', () => {
   let tempDir: string;
@@ -385,31 +385,31 @@ Validate this commit`,
 
   describe('isProtectedPath', () => {
     it('returns true for file inside a validatorsDirs path', () => {
-      const validatorsDirs = ['/plugin/validators', '/project/.claude-auto/validators'];
+      const validatorsDirs = ['/plugin/validators', '/project/.ketchup/validators'];
 
-      expect(isProtectedPath('/project/.claude-auto/validators/burst-atomicity.md', validatorsDirs)).toBe(true);
+      expect(isProtectedPath('/project/.ketchup/validators/burst-atomicity.md', validatorsDirs)).toBe(true);
       expect(isProtectedPath('/plugin/validators/coverage-rules.md', validatorsDirs)).toBe(true);
     });
 
     it('returns false for file outside validatorsDirs', () => {
-      const validatorsDirs = ['/plugin/validators', '/project/.claude-auto/validators'];
+      const validatorsDirs = ['/plugin/validators', '/project/.ketchup/validators'];
 
       expect(isProtectedPath('/project/src/hooks/pre-tool-use.ts', validatorsDirs)).toBe(false);
-      expect(isProtectedPath('/project/.claude-auto/reminders/tcr.md', validatorsDirs)).toBe(false);
+      expect(isProtectedPath('/project/.ketchup/reminders/tcr.md', validatorsDirs)).toBe(false);
     });
   });
 
   describe('commandTargetsProtectedPath', () => {
     it('returns matched path when command contains a validator path', () => {
-      const dirs = ['/project/.claude-auto/validators'];
+      const dirs = ['/project/.ketchup/validators'];
 
-      expect(commandTargetsProtectedPath('rm /project/.claude-auto/validators/test.md', dirs)).toBe(
-        '/project/.claude-auto/validators/test.md',
+      expect(commandTargetsProtectedPath('rm /project/.ketchup/validators/test.md', dirs)).toBe(
+        '/project/.ketchup/validators/test.md',
       );
     });
 
     it('returns undefined when command does not contain a validator path', () => {
-      const dirs = ['/project/.claude-auto/validators'];
+      const dirs = ['/project/.ketchup/validators'];
 
       expect(commandTargetsProtectedPath('rm /project/src/file.ts', dirs)).toBe(undefined);
     });

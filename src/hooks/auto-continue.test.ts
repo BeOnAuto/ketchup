@@ -166,7 +166,7 @@ describe('auto-continue hook', () => {
     });
 
     it('returns allow when mode is off', () => {
-      const autoDir = path.join(tempDir, '.claude-auto');
+      const autoDir = path.join(tempDir, '.ketchup');
       fs.mkdirSync(autoDir, { recursive: true });
       fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify({ autoContinue: { mode: 'off' } }));
 
@@ -177,7 +177,7 @@ describe('auto-continue hook', () => {
     });
 
     it('returns allow when stop_hook_active is true', () => {
-      const autoDir = path.join(tempDir, '.claude-auto');
+      const autoDir = path.join(tempDir, '.ketchup');
       fs.mkdirSync(autoDir, { recursive: true });
       fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify({ autoContinue: { mode: 'smart' } }));
 
@@ -188,7 +188,7 @@ describe('auto-continue hook', () => {
     });
 
     it('returns allow with no work remaining when smart mode has no signals', () => {
-      const autoDir = path.join(tempDir, '.claude-auto');
+      const autoDir = path.join(tempDir, '.ketchup');
       fs.mkdirSync(autoDir, { recursive: true });
       fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify({ autoContinue: { mode: 'smart' } }));
 
@@ -199,7 +199,7 @@ describe('auto-continue hook', () => {
     });
 
     it('defaults to skipping plan mode via DEFAULT_HOOK_STATE skipModes', () => {
-      const autoDir = path.join(tempDir, '.claude-auto');
+      const autoDir = path.join(tempDir, '.ketchup');
       fs.mkdirSync(autoDir, { recursive: true });
       fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify({ autoContinue: { mode: 'smart' } }));
 
@@ -210,7 +210,7 @@ describe('auto-continue hook', () => {
     });
 
     it('returns allow when permission_mode is in skipModes', () => {
-      const autoDir = path.join(tempDir, '.claude-auto');
+      const autoDir = path.join(tempDir, '.ketchup');
       fs.mkdirSync(autoDir, { recursive: true });
       fs.writeFileSync(
         path.join(autoDir, '.claude.hooks.json'),

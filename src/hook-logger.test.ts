@@ -11,8 +11,8 @@ describe('hook-logger', () => {
   let autoDir: string;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-auto-hook-logger-'));
-    autoDir = path.join(tempDir, '.claude-auto');
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ketchup-hook-logger-'));
+    autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
   });
 
@@ -33,7 +33,7 @@ describe('hook-logger', () => {
     expect(fs.existsSync(nonExistentDir)).toBe(false);
   });
 
-  it('creates log file in .claude-auto/logs/hooks/ named after hook', () => {
+  it('creates log file in .ketchup/logs/hooks/ named after hook', () => {
     writeHookLog(autoDir, {
       hookName: 'session-start',
       timestamp: '2026-01-28T12:00:00.000Z',
@@ -73,7 +73,7 @@ describe('hook-logger', () => {
       input: {},
       resolvedPaths: {
         projectRoot: '/tmp/my-project',
-        remindersDir: '/tmp/my-project/.claude-auto/reminders',
+        remindersDir: '/tmp/my-project/.ketchup/reminders',
       },
       output: {},
     });
@@ -84,7 +84,7 @@ describe('hook-logger', () => {
 
     expect(content).toContain('--- Resolved Paths ---');
     expect(content).toContain('projectRoot: /tmp/my-project');
-    expect(content).toContain('remindersDir: /tmp/my-project/.claude-auto/reminders');
+    expect(content).toContain('remindersDir: /tmp/my-project/.ketchup/reminders');
   });
 
   it('log file contains reminder files found', () => {

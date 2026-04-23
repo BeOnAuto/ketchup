@@ -9,7 +9,7 @@ describe('debug-logger', () => {
   const originalEnv = process.env.DEBUG;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-auto-debug-'));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ketchup-debug-'));
   });
 
   afterEach(() => {
@@ -30,9 +30,9 @@ describe('debug-logger', () => {
     expect(fs.existsSync(nonExistentDir)).toBe(false);
   });
 
-  it('writes to .claude-auto/logs/claude-auto/debug.log when DEBUG=claude-auto', () => {
+  it('writes to .ketchup/logs/claude-auto/debug.log when DEBUG=claude-auto', () => {
     process.env.DEBUG = 'claude-auto';
-    const autoDir = path.join(tempDir, '.claude-auto');
+    const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
 
     debugLog(autoDir, 'test-hook', 'test message');
@@ -46,7 +46,7 @@ describe('debug-logger', () => {
 
   it('does not write when DEBUG is not set', () => {
     delete process.env.DEBUG;
-    const autoDir = path.join(tempDir, '.claude-auto');
+    const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
 
     debugLog(autoDir, 'test-hook', 'test message');
@@ -57,7 +57,7 @@ describe('debug-logger', () => {
 
   it('includes ISO timestamp in log entries', () => {
     process.env.DEBUG = 'claude-auto';
-    const autoDir = path.join(tempDir, '.claude-auto');
+    const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
 
     debugLog(autoDir, 'test-hook', 'test message');
@@ -69,7 +69,7 @@ describe('debug-logger', () => {
 
   it('does not write when DEBUG is set to something else', () => {
     process.env.DEBUG = 'other';
-    const autoDir = path.join(tempDir, '.claude-auto');
+    const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
 
     debugLog(autoDir, 'test-hook', 'test message');
