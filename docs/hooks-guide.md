@@ -255,7 +255,7 @@ Control which subagent types trigger validation:
 ### Enable debug logging
 
 ```bash
-DEBUG=auto-ketchup* claude
+DEBUG=ketchup* claude
 ```
 
 Logs are written to `.ketchup/logs/debug.log`.

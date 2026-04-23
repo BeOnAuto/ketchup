@@ -1,5 +1,5 @@
 {
-  "name": "auto-ketchup",
+  "name": "ketchup",
   "version": "0.21.0",
   "description": "A quality loop for Claude Code. Validators, reminders, deny-lists, TCR. Stop babysitting, start parallelizing.",
   "author": {

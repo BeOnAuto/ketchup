@@ -48,7 +48,7 @@ How Ketchup works under the hood.
 
 ## Design Philosophy
 
-auto-ketchup follows several key principles:
+ketchup follows several key principles:
 
 1. **Convention over Configuration**: Sensible defaults that just work
 2. **Plugin Architecture**: Runs as a Claude Code plugin with bundled hook scripts
@@ -79,7 +79,7 @@ auto-ketchup follows several key principles:
                    Plugin loaded by Claude Code
                               │
 ┌─────────────────────────────────────────────────────────────┐
-│           auto-ketchup plugin                                 │
+│           ketchup plugin                                 │
 ├─────────────────────────────────────────────────────────────┤
 │  dist/bundle/scripts/       Bundled hook scripts             │
 │  reminders/                 Default reminders                │
@@ -356,7 +356,7 @@ transcript.jsonl
 ### Plugin Structure
 
 ```
-auto-ketchup/
+ketchup/
 ├── src/
 │   ├── index.ts            Barrel export (public API)
 │   ├── path-resolver.ts    Path resolution from environment

@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-Ketchup (npm: `auto-ketchup`) runs LLM-powered guardrails on every AI commit for Claude Code. It validates commits with an impartial LLM subagent, injects reminders to keep operating context loaded across sessions, manages deny-lists for structural file protection, and enforces TCR discipline. 17 validators and 10 reminders ship by default; all are runtime-configurable. Brand: Ketchup. Package: auto-ketchup.
+Ketchup (npm: `ketchup`) runs LLM-powered guardrails on every AI commit for Claude Code. It validates commits with an impartial LLM subagent, injects reminders to keep operating context loaded across sessions, manages deny-lists for structural file protection, and enforces TCR discipline. 17 validators and 10 reminders ship by default; all are runtime-configurable. Brand: Ketchup. Package: ketchup.
 
 ## Commands
 
@@ -71,7 +71,7 @@ Both are markdown files with YAML frontmatter. Validators gate commits (ACK/NACK
 
 ### Installation Model
 
-Ketchup runs as a Claude Code plugin. Install via `/plugin marketplace add BeOnAuto/auto-plugins` followed by `/plugin install auto-ketchup`, or as a local plugin via `claude --plugin-dir /path/to/auto-ketchup`. The plugin is opt-in per repository: hooks are inactive until the user runs `/auto-ketchup-init`, which creates `.ketchup/` with default config. Without initialization, session-start shows a non-blocking hint. The plugin provides validators, reminders, and hook scripts. Projects can add local overrides in `.ketchup/`. Existing `.claude-auto/` directories from the legacy package name auto-rename to `.ketchup/` on first session-start (see `src/migrate.ts`).
+Ketchup runs as a Claude Code plugin. Install via `/plugin marketplace add BeOnAuto/auto-plugins` followed by `/plugin install ketchup`, or as a local plugin via `claude --plugin-dir /path/to/ketchup`. The plugin is opt-in per repository: hooks are inactive until the user runs `/ketchup:init`, which creates `.ketchup/` with default config. Without initialization, session-start shows a non-blocking hint. The plugin provides validators, reminders, and hook scripts. Projects can add local overrides in `.ketchup/`. Existing `.claude-auto/` directories from the legacy package name auto-rename to `.ketchup/` on first session-start (see `src/migrate.ts`).
 
 ## Coding Patterns
 

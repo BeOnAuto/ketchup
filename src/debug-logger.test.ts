@@ -22,7 +22,7 @@ describe('debug-logger', () => {
   });
 
   it('does not write or create directories when autoDir does not exist', () => {
-    process.env.DEBUG = 'auto-ketchup';
+    process.env.DEBUG = 'ketchup';
     const nonExistentDir = path.join(tempDir, 'not-created');
 
     debugLog(nonExistentDir, 'test-hook', 'test message');
@@ -30,14 +30,14 @@ describe('debug-logger', () => {
     expect(fs.existsSync(nonExistentDir)).toBe(false);
   });
 
-  it('writes to .ketchup/logs/auto-ketchup/debug.log when DEBUG=auto-ketchup', () => {
-    process.env.DEBUG = 'auto-ketchup';
+  it('writes to .ketchup/logs/ketchup/debug.log when DEBUG=ketchup', () => {
+    process.env.DEBUG = 'ketchup';
     const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
 
     debugLog(autoDir, 'test-hook', 'test message');
 
-    const logPath = path.join(autoDir, 'logs', 'auto-ketchup', 'debug.log');
+    const logPath = path.join(autoDir, 'logs', 'ketchup', 'debug.log');
     expect(fs.existsSync(logPath)).toBe(true);
     const content = fs.readFileSync(logPath, 'utf8');
     expect(content).toContain('test-hook');
@@ -51,18 +51,18 @@ describe('debug-logger', () => {
 
     debugLog(autoDir, 'test-hook', 'test message');
 
-    const logPath = path.join(autoDir, 'logs', 'auto-ketchup', 'debug.log');
+    const logPath = path.join(autoDir, 'logs', 'ketchup', 'debug.log');
     expect(fs.existsSync(logPath)).toBe(false);
   });
 
   it('includes ISO timestamp in log entries', () => {
-    process.env.DEBUG = 'auto-ketchup';
+    process.env.DEBUG = 'ketchup';
     const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
 
     debugLog(autoDir, 'test-hook', 'test message');
 
-    const logPath = path.join(autoDir, 'logs', 'auto-ketchup', 'debug.log');
+    const logPath = path.join(autoDir, 'logs', 'ketchup', 'debug.log');
     const content = fs.readFileSync(logPath, 'utf8');
     expect(content).toMatch(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/);
   });
@@ -74,7 +74,7 @@ describe('debug-logger', () => {
 
     debugLog(autoDir, 'test-hook', 'test message');
 
-    const logPath = path.join(autoDir, 'logs', 'auto-ketchup', 'debug.log');
+    const logPath = path.join(autoDir, 'logs', 'ketchup', 'debug.log');
     expect(fs.existsSync(logPath)).toBe(false);
   });
 });

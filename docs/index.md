@@ -18,7 +18,7 @@ hero:
       link: /guardrail-engineering
     - theme: alt
       text: View on GitHub
-      link: https://github.com/BeOnAuto/auto-ketchup
+      link: https://github.com/BeOnAuto/ketchup
 
 features:
   - icon:
@@ -54,12 +54,12 @@ Observe an AI mistake. Encode it as a rule. AI can't repeat it.
 Ketchup is how you make that loop real. Validators on every commit. Reminders on every prompt. Deny-lists on every file. The codebase gets permanently safer as you keep working, not just temporarily cleaner.
 
 ```
-/plugin install auto-ketchup
+/plugin install ketchup
 ```
 
 Ketchup is an open-source guardrail engine for Claude Code, from the team at [Auto](https://on.auto).
 
-> Today: Claude Code only. If your agent exposes hooks or an equivalent integration surface, [open an issue](https://github.com/BeOnAuto/auto-ketchup/issues).
+> Today: Claude Code only. If your agent exposes hooks or an equivalent integration surface, [open an issue](https://github.com/BeOnAuto/ketchup/issues).
 
 ---
 
@@ -96,13 +96,13 @@ From within a Claude Code session:
 
 ```
 /plugin marketplace add BeOnAuto/auto-plugins
-/plugin install auto-ketchup
+/plugin install ketchup
 ```
 
 ### 2. Initialize
 
 ```
-/auto-ketchup-init
+/ketchup:init
 ```
 
 This creates `.ketchup/` with default configuration, seeded with the 17 validators and 10 reminders.

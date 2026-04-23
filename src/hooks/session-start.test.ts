@@ -103,8 +103,8 @@ Content.`,
     expect(content).toContain('session-start:');
   });
 
-  it('logs reminders loaded when DEBUG=auto-ketchup', async () => {
-    process.env.DEBUG = 'auto-ketchup';
+  it('logs reminders loaded when DEBUG=ketchup', async () => {
+    process.env.DEBUG = 'ketchup';
     const remindersDir = path.join(autoDir, 'reminders');
     fs.mkdirSync(remindersDir, { recursive: true });
     fs.writeFileSync(
@@ -129,7 +129,7 @@ Reminder B content.`,
 
     await handleSessionStart(resolvedPaths, 'debug-session');
 
-    const logPath = path.join(autoDir, 'logs', 'auto-ketchup', 'debug.log');
+    const logPath = path.join(autoDir, 'logs', 'ketchup', 'debug.log');
     expect(fs.existsSync(logPath)).toBe(true);
     const content = fs.readFileSync(logPath, 'utf8');
     expect(content).toContain('[session-start]');

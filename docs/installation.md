@@ -8,7 +8,7 @@ Ketchup is a plugin for Claude Code. There are two ways to install it.
 
 ```
 /plugin marketplace add BeOnAuto/auto-plugins
-/plugin install auto-ketchup
+/plugin install ketchup
 ```
 
 This installs the plugin and registers all hooks and skills automatically.
@@ -20,7 +20,7 @@ This installs the plugin and registers all hooks and skills automatically.
 For development or when working from a local clone:
 
 ```bash
-claude --plugin-dir /path/to/auto-ketchup
+claude --plugin-dir /path/to/ketchup
 ```
 
 ---
@@ -30,7 +30,7 @@ claude --plugin-dir /path/to/auto-ketchup
 After installing the plugin, Claude will mention that Ketchup is available. To activate it:
 
 ```
-/auto-ketchup-init
+/ketchup:init
 ```
 
 This creates the following structure in your project:
@@ -56,20 +56,20 @@ See the [Reminders Guide](/reminders-guide) and [Validators Guide](/validators-g
 After installing the plugin, use the config skill to check the current state:
 
 ```
-/auto-ketchup-config show
+/ketchup:config show
 ```
 
 ---
 
 ## Configuration
 
-All configuration is managed via the `/auto-ketchup-config` skill:
+All configuration is managed via the `/ketchup:config` skill:
 
 ```
-/auto-ketchup-config show          # View current configuration
-/auto-ketchup-config set <key> <value>  # Update a setting
-/auto-ketchup-config validators    # List active validators
-/auto-ketchup-config reminders     # List active reminders
+/ketchup:config show          # View current configuration
+/ketchup:config set <key> <value>  # Update a setting
+/ketchup:config validators    # List active validators
+/ketchup:config reminders     # List active reminders
 ```
 
 Configuration is stored in `.ketchup/.claude.hooks.json`.
@@ -80,7 +80,7 @@ Configuration is stored in `.ketchup/.claude.hooks.json`.
 
 ### Hooks not firing
 
-1. Verify the plugin is installed: check that Claude Code shows auto-ketchup in the active plugins
+1. Verify the plugin is installed: check that Claude Code shows ketchup in the active plugins
 2. Ensure you're in the project root when starting Claude
 3. Check logs in `.ketchup/logs/` for errors
 
@@ -99,7 +99,7 @@ chmod +x .ketchup/scripts/*.js
 Remove the plugin via Claude Code:
 
 ```
-/plugin uninstall auto-ketchup
+/plugin uninstall ketchup
 ```
 
 To clean up project files:
@@ -134,6 +134,6 @@ After installation:
 
 If you run into issues:
 
-1. Run `/auto-ketchup-config show` to check configuration state
+1. Run `/ketchup:config show` to check configuration state
 2. Check `.ketchup/logs/` for detailed error messages
-3. Report persistent issues at [GitHub Issues](https://github.com/BeOnAuto/auto-ketchup/issues)
+3. Report persistent issues at [GitHub Issues](https://github.com/BeOnAuto/ketchup/issues)

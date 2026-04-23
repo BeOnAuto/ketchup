@@ -25,13 +25,13 @@ From within a Claude Code session:
 
 ```
 /plugin marketplace add BeOnAuto/auto-plugins
-/plugin install auto-ketchup
+/plugin install ketchup
 ```
 
 Or for local development:
 
 ```bash
-claude --plugin-dir /path/to/auto-ketchup
+claude --plugin-dir /path/to/ketchup
 ```
 
 Claude will mention that Ketchup is available but not yet active.
@@ -41,13 +41,13 @@ Claude will mention that Ketchup is available but not yet active.
 ## Step 2: Activate in Your Project
 
 ```
-/auto-ketchup-init
+/ketchup:init
 ```
 
 This creates `.ketchup/` with default configuration. Then verify:
 
 ```
-/auto-ketchup-config show
+/ketchup:config show
 ```
 
 Ketchup is now active with commit validation, reminders, deny-lists, and auto-continue.
@@ -174,5 +174,5 @@ See the [transformation story](/origin-story#the-transformation) for the complet
 Having issues? See the [Configuration Guide](/configuration#troubleshooting) for common problems and solutions, or run:
 
 ```
-/auto-ketchup-config show
+/ketchup:config show
 ```

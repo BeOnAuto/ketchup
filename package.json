@@ -1,5 +1,5 @@
 {
-  "name": "auto-ketchup",
+  "name": "ketchup",
   "version": "0.21.0",
   "authors": [
     {
@@ -9,7 +9,7 @@
   "description": "A quality loop for Claude Code. Validators, reminders, deny-lists, TCR. Stop babysitting, start parallelizing.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/BeOnAuto/auto-ketchup.git"
+    "url": "https://github.com/BeOnAuto/ketchup.git"
   },
   "publishConfig": {
     "registry": "https://registry.npmjs.org",

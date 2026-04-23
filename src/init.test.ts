@@ -73,7 +73,7 @@ describe('formatInitResult', () => {
     expect(output).toContain('Initialized Ketchup at /project/.ketchup');
     expect(output).toContain('.gitignore');
     expect(output).toContain('On your next reply, mention once');
-    expect(output).toContain('Reminder: Defaults are active. Run /auto-ketchup:config show');
+    expect(output).toContain('Reminder: Defaults are active. Run /ketchup:config show');
     expect(output).not.toMatch(/ask the user/i);
   });
 
@@ -81,7 +81,7 @@ describe('formatInitResult', () => {
     const output = formatInitResult({ created: false, autoDir: '/project/.ketchup', gitignoreAdvice: false });
 
     expect(output).toContain('already initialized');
-    expect(output).not.toContain('/auto-ketchup:config');
+    expect(output).not.toContain('/ketchup:config');
   });
 });
 

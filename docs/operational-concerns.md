@@ -19,7 +19,7 @@ Ketchup runs every commit through a separate Claude subagent. The subagent is in
 
 **What we'll publish:** p50 / p95 latency per commit, median tokens per commit at default settings, and observed false-positive rate from our own usage. We're collecting these numbers from a month of dogfooding on the on.auto monorepo and will post them here.
 
-**What you can do today:** enable activity logging (`DEBUG=auto-ketchup`) and watch `.ketchup/logs/auto-ketchup/debug.log` in your own repo for one week. The logs include per-validator timing.
+**What you can do today:** enable activity logging (`DEBUG=ketchup`) and watch `.ketchup/logs/ketchup/debug.log` in your own repo for one week. The logs include per-validator timing.
 
 ---
 
@@ -32,7 +32,7 @@ Each call is bounded by Claude's response time on a short structured-output prom
 **If latency matters more than thoroughness:**
 
 - Reduce `validateCommit.batchCount` in `.ketchup/.claude.hooks.json` (raise from 3 to 5 or 7 to fewer total calls)
-- Disable validators you don't need: `/auto-ketchup-config validators disable <name>`
+- Disable validators you don't need: `/ketchup:config validators disable <name>`
 - Set `validateCommit.mode` to `warn` instead of `strict` (NACK becomes a warning, doesn't block)
 
 ---
@@ -43,7 +43,7 @@ It happens. The subagent occasionally returns a NACK for a reason that's wrong, 
 
 1. **The subagent can only return JSON** (`{"decision":"ACK"}` or `{"decision":"NACK","reason":"..."}`). Unparseable output is treated as ACK by default, so a malformed response doesn't block your commit.
 2. **The appeal system** is the bounded override. Add `[appeal: <reason>]` to the commit message and a separate `appeal-system` validator re-evaluates the NACK with your reason in context. Either the appeal is accepted and the commit proceeds, or it's rejected with the reason logged. Not a bypass; a formal re-evaluation that leaves a trail.
-3. **You can disable noisy validators** at runtime: `/auto-ketchup-config validators disable testing-weak-assertions`. No fork, no rebuild.
+3. **You can disable noisy validators** at runtime: `/ketchup:config validators disable testing-weak-assertions`. No fork, no rebuild.
 
 In our own usage the appeal rate is low single-digit percent of NACKs. We'll publish the observed rate once dogfooding is stable.
 
@@ -53,7 +53,7 @@ In our own usage the appeal rate is low single-digit percent of NACKs. We'll pub
 
 Each Claude CLI call has a process-level timeout. If a call doesn't return in time, the validator is treated as failed (not as ACK), and the commit is blocked with a "validator timeout" reason. You can re-run the commit immediately (often the second attempt succeeds) or appeal with a reason.
 
-Logs are written to `.ketchup/logs/auto-ketchup/debug.log` so you can see which validator timed out and why.
+Logs are written to `.ketchup/logs/ketchup/debug.log` so you can see which validator timed out and why.
 
 ---
 
@@ -71,7 +71,7 @@ What's not portable:
 - The hook integrations (SessionStart, PreToolUse, UserPromptSubmit, Stop) are Claude Code-specific.
 - The subagent invocation uses the `claude` CLI directly.
 
-If your agent exposes hooks or an equivalent integration surface, [open an issue](https://github.com/BeOnAuto/auto-ketchup/issues) and we'll scope adapter work.
+If your agent exposes hooks or an equivalent integration surface, [open an issue](https://github.com/BeOnAuto/ketchup/issues) and we'll scope adapter work.
 
 ---
 
@@ -89,7 +89,7 @@ Three ways:
 
 ```bash
 # Inside Claude Code
-/auto-ketchup-config validators disable testing-weak-assertions
+/ketchup:config validators disable testing-weak-assertions
 ```
 
 ```bash
@@ -115,13 +115,13 @@ The first form is the easiest and is auditable in `git log` because the change l
 
 Today: no. Ketchup runs as a Claude Code plugin and depends on the local Claude Code session for the validator subagent. It's an interactive-loop tool, not a CI tool.
 
-What's possible: the validators themselves (Markdown + YAML + prompt) are reusable artifacts. A CI integration that runs them against PR diffs is on the roadmap. If this is high-priority for your team, [open an issue](https://github.com/BeOnAuto/auto-ketchup/issues).
+What's possible: the validators themselves (Markdown + YAML + prompt) are reusable artifacts. A CI integration that runs them against PR diffs is on the roadmap. If this is high-priority for your team, [open an issue](https://github.com/BeOnAuto/ketchup/issues).
 
 ---
 
 ## What's the false-positive rate?
 
-We're publishing this number from our own dogfooding. To self-measure today: count NACKs that you appealed and won (the validator was wrong) vs. total NACKs over a week. Activity logging (`DEBUG=auto-ketchup`) records both.
+We're publishing this number from our own dogfooding. To self-measure today: count NACKs that you appealed and won (the validator was wrong) vs. total NACKs over a week. Activity logging (`DEBUG=ketchup`) records both.
 
 In our usage the appeals system catches most false positives without manual intervention being painful. We'll publish the observed rate once stable.
 
@@ -133,7 +133,7 @@ Three things to know:
 
 1. **There is no separate billing.** Subagent calls go through the same `claude` CLI on your existing Claude Pro / Team subscription.
 2. **You control how often it fires.** Disabling validators or raising `batchCount` reduces calls per commit. Setting `validateCommit.mode` to `warn` removes the blocking call entirely (validators still run for visibility but don't gate the commit).
-3. **Activity logs tell you exactly what's running.** `DEBUG=auto-ketchup` writes per-validator timing and decisions to `.ketchup/logs/auto-ketchup/debug.log`.
+3. **Activity logs tell you exactly what's running.** `DEBUG=ketchup` writes per-validator timing and decisions to `.ketchup/logs/ketchup/debug.log`.
 
 If you're rate-limited on Claude Pro and Ketchup is making it worse, switch to `warn` mode or disable the heaviest validators until you're back inside your budget.
 
@@ -152,4 +152,4 @@ If you're rate-limited on Claude Pro and Ketchup is making it worse, switch to `
 
 ---
 
-If you have an operational concern not covered here, [open an issue](https://github.com/BeOnAuto/auto-ketchup/issues) and we'll add it.
+If you have an operational concern not covered here, [open an issue](https://github.com/BeOnAuto/ketchup/issues) and we'll add it.

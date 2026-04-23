@@ -458,7 +458,7 @@ Consider NACK only if performance is critical for this change.
 From within a Claude Code session:
 
 ```
-/auto-ketchup-config validators
+/ketchup:config validators
 ```
 
 ### Temporarily Disable
@@ -790,7 +790,7 @@ If team pushes back on validators:
 
 ## Next Steps
 
-- [View built-in validators](https://github.com/BeOnAuto/auto-ketchup/tree/main/.ketchup/validators)
+- [View built-in validators](https://github.com/BeOnAuto/ketchup/tree/main/.ketchup/validators)
 - [Create your first validator](#creating-custom-validators)
 - [Configure validation modes](/configuration#validatecommit)
 - [Learn about reminders](/reminders-guide)

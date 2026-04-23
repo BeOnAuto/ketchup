@@ -22,7 +22,7 @@ Ketchup uses a layered configuration system with multiple files:
 
 The primary runtime configuration file. Controls auto-continue, commit validation, and other behaviors.
 
-**Location:** `.ketchup/.claude.hooks.json` (inside the auto-ketchup directory)
+**Location:** `.ketchup/.claude.hooks.json` (inside the ketchup directory)
 
 ### Full Schema
 
@@ -139,13 +139,13 @@ Patterns use [micromatch](https://github.com/micromatch/micromatch) glob syntax.
 
 ## Managing Configuration
 
-Configuration is managed via the `/auto-ketchup-config` skill from within a Claude Code session:
+Configuration is managed via the `/ketchup:config` skill from within a Claude Code session:
 
 ```
-/auto-ketchup-config show          # View current configuration
-/auto-ketchup-config set <key> <value>  # Update a setting
-/auto-ketchup-config validators    # List active validators
-/auto-ketchup-config reminders     # List active reminders
+/ketchup:config show          # View current configuration
+/ketchup:config set <key> <value>  # Update a setting
+/ketchup:config validators    # List active validators
+/ketchup:config reminders     # List active reminders
 ```
 
 ---
@@ -175,7 +175,7 @@ AUTO_ROOT=/path/to/project claude
 Enable debug logging:
 
 ```bash
-DEBUG=auto-ketchup* claude
+DEBUG=ketchup* claude
 ```
 
 Logs written to `.ketchup/logs/debug.log`.
@@ -335,7 +335,7 @@ Ketchup finds the project root in this order:
 
 **Location:** `.ketchup/logs/debug.log`
 
-**Enable:** `DEBUG=auto-ketchup*`
+**Enable:** `DEBUG=ketchup*`
 
 **Format:** Timestamp, hook name, debug message
 

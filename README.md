@@ -4,15 +4,15 @@
 
 Ketchup runs 15+ LLM-powered guardrails on every AI commit, so bad commits don't land.
 
-[![Build](https://img.shields.io/github/actions/workflow/status/BeOnAuto/auto-ketchup/ci.yml?style=flat-square)](https://github.com/BeOnAuto/auto-ketchup/actions) [![npm](https://img.shields.io/npm/v/auto-ketchup?style=flat-square)](https://www.npmjs.com/package/auto-ketchup) [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE) [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square)]()
+[![Build](https://img.shields.io/github/actions/workflow/status/BeOnAuto/ketchup/ci.yml?style=flat-square)](https://github.com/BeOnAuto/ketchup/actions) [![npm](https://img.shields.io/npm/v/ketchup?style=flat-square)](https://www.npmjs.com/package/ketchup) [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE) [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square)]()
 
 ```
-/plugin install auto-ketchup
+/plugin install ketchup
 ```
 
 *Ketchup is an open-source guardrail engine for Claude Code, from the team at [Auto](https://on.auto).*
 
-> Today: Claude Code only. If your agent exposes hooks or an equivalent integration surface, [open an issue](https://github.com/BeOnAuto/auto-ketchup/issues).
+> Today: Claude Code only. If your agent exposes hooks or an equivalent integration surface, [open an issue](https://github.com/BeOnAuto/ketchup/issues).
 
 ---
 
@@ -47,32 +47,32 @@ Inside any Claude Code session:
 
 ```
 /plugin marketplace add BeOnAuto/auto-plugins
-/plugin install auto-ketchup
+/plugin install ketchup
 ```
 
 ### As a Local Plugin
 
 ```bash
-claude --plugin-dir /path/to/auto-ketchup
+claude --plugin-dir /path/to/ketchup
 ```
 
-Claude Code sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` automatically. Run `/auto-ketchup-init` inside a session to activate per-project configuration, validators, and logging.
+Claude Code sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` automatically. Run `/ketchup:init` inside a session to activate per-project configuration, validators, and logging.
 
 ## Quick Start
 
 ```bash
 # Marketplace (inside Claude Code)
 /plugin marketplace add BeOnAuto/auto-plugins
-/plugin install auto-ketchup
+/plugin install ketchup
 
 # Or local plugin mode
-claude --plugin-dir /path/to/auto-ketchup
+claude --plugin-dir /path/to/ketchup
 ```
 
 After installation, Claude will mention that Ketchup is available. To activate it in a project:
 
 ```
-/auto-ketchup-init
+/ketchup:init
 ```
 
 This creates `.ketchup/` with default configuration. You can add it to `.gitignore` for personal use, or commit it for the whole team.
@@ -142,10 +142,10 @@ Higher `priority` = appears first. Project-local files are loaded alongside plug
 Toggle validators and reminders without editing files:
 
 ```bash
-/auto-ketchup-config show
-/auto-ketchup-config validators disable no-comments
-/auto-ketchup-config reminders priority my-reminder 200
-/auto-ketchup-config reminders add my-rule --hook UserPromptSubmit --priority 50 --content "Always use early returns"
+/ketchup:config show
+/ketchup:config validators disable no-comments
+/ketchup:config reminders priority my-reminder 200
+/ketchup:config reminders add my-rule --hook UserPromptSubmit --priority 50 --content "Always use early returns"
 ```
 
 ---
@@ -201,7 +201,7 @@ Hook scripts read JSON from stdin, delegate to handlers in `src/hooks/`, log res
 
 ## Roadmap
 
-Ketchup is Claude Code-first today. The Ketchup Technique (the methodology) works with any AI coding agent by hand. If your agent exposes hooks or an equivalent integration surface, [open an issue](https://github.com/BeOnAuto/auto-ketchup/issues) so we can scope adapter work.
+Ketchup is Claude Code-first today. The Ketchup Technique (the methodology) works with any AI coding agent by hand. If your agent exposes hooks or an equivalent integration surface, [open an issue](https://github.com/BeOnAuto/ketchup/issues) so we can scope adapter work.
 
 ---
 
@@ -216,16 +216,16 @@ Ketchup is Claude Code-first today. The Ketchup Technique (the methodology) work
 **Solution:**
 
 ```
-/plugin install auto-ketchup
+/plugin install ketchup
 ```
 
 ### Enable Debug Logging
 
 ```bash
-DEBUG=auto-ketchup claude --plugin-dir /path/to/auto-ketchup
+DEBUG=ketchup claude --plugin-dir /path/to/ketchup
 ```
 
-`DEBUG=auto-ketchup` writes diagnostics to `.ketchup/logs/auto-ketchup/debug.log`.
+`DEBUG=ketchup` writes diagnostics to `.ketchup/logs/ketchup/debug.log`.
 
 ---
 
@@ -294,8 +294,8 @@ scripts/
 ### Setup
 
 ```bash
-git clone https://github.com/BeOnAuto/auto-ketchup.git
-cd auto-ketchup
+git clone https://github.com/BeOnAuto/ketchup.git
+cd ketchup
 pnpm install
 pnpm build
 ```

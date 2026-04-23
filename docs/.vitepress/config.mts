@@ -35,7 +35,7 @@ export default defineConfig({
       { text: 'Origin Story', link: '/origin-story' },
       {
         text: 'GitHub',
-        link: 'https://github.com/BeOnAuto/auto-ketchup',
+        link: 'https://github.com/BeOnAuto/ketchup',
       },
     ],
 
@@ -80,11 +80,11 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/BeOnAuto/auto-ketchup/edit/main/docs/:path',
+      pattern: 'https://github.com/BeOnAuto/ketchup/edit/main/docs/:path',
       text: 'Suggest changes to this page',
     },
 
-    socialLinks: [{ icon: 'github', link: 'https://github.com/BeOnAuto/auto-ketchup' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/BeOnAuto/ketchup' }],
 
     footer: {
       message: 'Released under the MIT License.',

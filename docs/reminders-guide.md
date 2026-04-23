@@ -391,7 +391,7 @@ Commit project reminders (not personal preferences):
 See which reminders are active from within a Claude Code session:
 
 ```
-/auto-ketchup-config reminders
+/ketchup:config reminders
 ```
 
 ### Test Reminder Loading
@@ -400,7 +400,7 @@ Manually test a reminder:
 
 ```bash
 npx tsx -e "
-import { parseReminder } from 'auto-ketchup';
+import { parseReminder } from 'ketchup';
 import { readFileSync } from 'fs';
 
 const content = readFileSync('.ketchup/reminders/my-reminder.md', 'utf-8');
@@ -551,6 +551,6 @@ If reminders conflict:
 ## Next Steps
 
 - [Create your first reminder](#creating-your-first-reminder)
-- [View built-in reminders](https://github.com/BeOnAuto/auto-ketchup/tree/main/.ketchup/reminders)
+- [View built-in reminders](https://github.com/BeOnAuto/ketchup/tree/main/.ketchup/reminders)
 - [Configure validators](/validators-guide)
 - [Manage hook state](./configuration.md#hook-state)
