@@ -100,7 +100,7 @@ export async function handlePreToolUse(
     };
   }
 
-  const patterns = loadDenyPatterns(paths.claudeDir);
+  const patterns = loadDenyPatterns(paths.autoDir);
 
   if (filePath && isDenied(filePath, patterns)) {
     activityLog(paths.autoDir, sessionId, 'pre-tool-use', `blocked: ${filePath}`);

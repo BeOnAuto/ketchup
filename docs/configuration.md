@@ -11,8 +11,8 @@ Ketchup uses a layered configuration system with multiple files:
 | File | Purpose | Committed? | Auto-Created? |
 |------|---------|------------|---------------|
 | `.ketchup/state.json` | Primary runtime hook state | No | Yes |
-| `.claude/deny-list.project.txt` | Project file protection | Yes | No |
-| `.claude/deny-list.local.txt` | Local file protection | No | No |
+| `.ketchup/deny-list.project.txt` | Project file protection | Yes | No |
+| `.ketchup/deny-list.local.txt` | Local file protection | No | No |
 | `.ketchup/reminders/*.md` | Context injection reminders | Yes/No | Yes |
 | `.ketchup/validators/*.md` | Commit validation rules | Yes/No | Yes |
 
@@ -130,8 +130,8 @@ See the [Hooks Guide](/hooks-guide#protect-files-with-deny-list) for detailed de
 
 ### Quick Reference
 
-- **`.claude/deny-list.project.txt`** - Project-wide patterns (committed to repo)
-- **`.claude/deny-list.local.txt`** - Personal patterns (gitignored)
+- **`.ketchup/deny-list.project.txt`** - Project-wide patterns (committed to repo)
+- **`.ketchup/deny-list.local.txt`** - Personal patterns (gitignored)
 
 Patterns use [micromatch](https://github.com/micromatch/micromatch) glob syntax.
 

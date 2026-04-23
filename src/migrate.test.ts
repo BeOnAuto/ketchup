@@ -4,7 +4,7 @@ import * as path from 'node:path';
 
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
-import { migrateLegacyDataDir, migrateLegacyStateFile } from './migrate.js';
+import { migrateLegacyDataDir, migrateLegacyDenyList, migrateLegacyStateFile } from './migrate.js';
 
 describe('migrateLegacyDataDir', () => {
   let projectRoot: string;
@@ -123,5 +123,93 @@ describe('migrateLegacyStateFile', () => {
     expect(result).toEqual({ migrated: false, conflict: true });
     expect(fs.readFileSync(path.join(dataDir, 'state.json'), 'utf-8')).toBe('{"current": true}');
     expect(fs.readFileSync(path.join(dataDir, '.claude.hooks.json'), 'utf-8')).toBe('{"legacy": true}');
+  });
+});
+
+describe('migrateLegacyDenyList', () => {
+  let projectRoot: string;
+  let claudeDir: string;
+  let dataDir: string;
+
+  beforeEach(() => {
+    projectRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'ketchup-deny-migrate-'));
+    claudeDir = path.join(projectRoot, '.claude');
+    dataDir = path.join(projectRoot, '.ketchup');
+  });
+
+  afterEach(() => {
+    fs.rmSync(projectRoot, { recursive: true, force: true });
+  });
+
+  it('moves deny-list files from .claude/ into .ketchup/ when only legacy exists', () => {
+    fs.mkdirSync(claudeDir, { recursive: true });
+    fs.mkdirSync(dataDir, { recursive: true });
+    fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), '*.secret\n');
+    fs.writeFileSync(path.join(claudeDir, 'deny-list.local.txt'), '/private/**\n');
+
+    const result = migrateLegacyDenyList(projectRoot);
+
+    expect(result).toEqual({ migrated: true });
+    expect(fs.existsSync(path.join(claudeDir, 'deny-list.project.txt'))).toBe(false);
+    expect(fs.existsSync(path.join(claudeDir, 'deny-list.local.txt'))).toBe(false);
+    expect(fs.readFileSync(path.join(dataDir, 'deny-list.project.txt'), 'utf-8')).toBe('*.secret\n');
+    expect(fs.readFileSync(path.join(dataDir, 'deny-list.local.txt'), 'utf-8')).toBe('/private/**\n');
+  });
+
+  it('migrates only files that exist in .claude/', () => {
+    fs.mkdirSync(claudeDir, { recursive: true });
+    fs.mkdirSync(dataDir, { recursive: true });
+    fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), '*.secret\n');
+
+    const result = migrateLegacyDenyList(projectRoot);
+
+    expect(result).toEqual({ migrated: true });
+    expect(fs.readFileSync(path.join(dataDir, 'deny-list.project.txt'), 'utf-8')).toBe('*.secret\n');
+    expect(fs.existsSync(path.join(dataDir, 'deny-list.local.txt'))).toBe(false);
+  });
+
+  it('is a no-op when .ketchup/ does not exist', () => {
+    fs.mkdirSync(claudeDir, { recursive: true });
+    fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), '*.secret\n');
+
+    const result = migrateLegacyDenyList(projectRoot);
+
+    expect(result).toEqual({ migrated: false });
+    expect(fs.readFileSync(path.join(claudeDir, 'deny-list.project.txt'), 'utf-8')).toBe('*.secret\n');
+  });
+
+  it('is a no-op when .claude/ does not exist', () => {
+    fs.mkdirSync(dataDir, { recursive: true });
+
+    const result = migrateLegacyDenyList(projectRoot);
+
+    expect(result).toEqual({ migrated: false });
+  });
+
+  it('does not overwrite existing files in .ketchup/', () => {
+    fs.mkdirSync(claudeDir, { recursive: true });
+    fs.mkdirSync(dataDir, { recursive: true });
+    fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), 'legacy-pattern\n');
+    fs.writeFileSync(path.join(dataDir, 'deny-list.project.txt'), 'current-pattern\n');
+
+    const result = migrateLegacyDenyList(projectRoot);
+
+    expect(result).toEqual({ migrated: false, conflict: true });
+    expect(fs.readFileSync(path.join(dataDir, 'deny-list.project.txt'), 'utf-8')).toBe('current-pattern\n');
+    expect(fs.readFileSync(path.join(claudeDir, 'deny-list.project.txt'), 'utf-8')).toBe('legacy-pattern\n');
+  });
+
+  it('migrates one file even if the other conflicts', () => {
+    fs.mkdirSync(claudeDir, { recursive: true });
+    fs.mkdirSync(dataDir, { recursive: true });
+    fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), 'legacy-project\n');
+    fs.writeFileSync(path.join(claudeDir, 'deny-list.local.txt'), 'legacy-local\n');
+    fs.writeFileSync(path.join(dataDir, 'deny-list.project.txt'), 'current-project\n');
+
+    const result = migrateLegacyDenyList(projectRoot);
+
+    expect(result).toEqual({ migrated: true });
+    expect(fs.readFileSync(path.join(dataDir, 'deny-list.local.txt'), 'utf-8')).toBe('legacy-local\n');
+    expect(fs.readFileSync(path.join(dataDir, 'deny-list.project.txt'), 'utf-8')).toBe('current-project\n');
   });
 });

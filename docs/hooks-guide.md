@@ -133,7 +133,7 @@ With deny-list: sensitive files are untouchable.
 ### Create project-wide patterns
 
 ```bash
-cat > .claude/deny-list.project.txt << 'EOF'
+cat > .ketchup/deny-list.project.txt << 'EOF'
 # Comments start with #
 
 # Secrets
@@ -157,7 +157,7 @@ EOF
 For patterns you don't want to commit:
 
 ```bash
-cat > .claude/deny-list.local.txt << 'EOF'
+cat > .ketchup/deny-list.local.txt << 'EOF'
 # Personal files
 TODO.md
 notes/**

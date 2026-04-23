@@ -59,7 +59,7 @@ Drift can't accumulate across prompts because the rules re-inject every turn. [F
 
 Some files must not be edited by AI: `.env`, CI configs, migrations, secrets, generated code. The deny-list is a set of micromatch glob patterns. On any tool call that would edit or touch a denied path, the PreToolUse hook blocks it.
 
-Configured via `.claude/deny-list.project.txt` (team) and `.claude/deny-list.local.txt` (personal).
+Configured via `.ketchup/deny-list.project.txt` (team) and `.ketchup/deny-list.local.txt` (personal).
 
 Structural protection, not procedural trust. AI can't forget not to touch denied files; it's physically prevented.
 

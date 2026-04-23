@@ -3873,6 +3873,8 @@ var fs7 = __toESM(require("node:fs"));
 var path6 = __toESM(require("node:path"));
 var LEGACY_DATA_DIR = ".claude-auto";
 var LEGACY_STATE_FILE = ".claude.hooks.json";
+var LEGACY_CLAUDE_DIR = ".claude";
+var DENY_LIST_FILES = ["deny-list.project.txt", "deny-list.local.txt"];
 function migrateLegacyDataDir(projectRoot) {
   const legacy = path6.join(projectRoot, LEGACY_DATA_DIR);
   const current = path6.join(projectRoot, BRAND.dataDir);
@@ -3904,6 +3906,32 @@ function migrateLegacyStateFile(projectRoot) {
     return { migrated: true };
   }
   return { migrated: false };
+}
+function migrateLegacyDenyList(projectRoot) {
+  const dataDir = path6.join(projectRoot, BRAND.dataDir);
+  const legacyDir = path6.join(projectRoot, LEGACY_CLAUDE_DIR);
+  if (!fs7.existsSync(dataDir) || !fs7.existsSync(legacyDir)) {
+    return { migrated: false };
+  }
+  let migratedAny = false;
+  let conflictedAny = false;
+  for (const file of DENY_LIST_FILES) {
+    const legacy = path6.join(legacyDir, file);
+    const current = path6.join(dataDir, file);
+    if (!fs7.existsSync(legacy)) {
+      continue;
+    }
+    if (fs7.existsSync(current)) {
+      conflictedAny = true;
+      continue;
+    }
+    fs7.renameSync(legacy, current);
+    migratedAny = true;
+  }
+  if (conflictedAny && !migratedAny) {
+    return { migrated: false, conflict: true };
+  }
+  return { migrated: migratedAny };
 }
 
 // src/path-resolver.ts
@@ -3965,6 +3993,7 @@ var startTime = Date.now();
 (async () => {
   migrateLegacyDataDir(process.cwd());
   migrateLegacyStateFile(process.cwd());
+  migrateLegacyDenyList(process.cwd());
   const paths = await resolvePathsFromEnv();
   logPluginDiagnostics("SessionStart", paths);
   try {

@@ -57,7 +57,7 @@ describe('pre-tool-use hook', () => {
   });
 
   it('blocks tool use when path matches deny pattern', async () => {
-    fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), '*.secret\n');
+    fs.writeFileSync(path.join(autoDir, 'deny-list.project.txt'), '*.secret\n');
     const toolInput = { file_path: '/project/config.secret' };
 
     const result = await handlePreToolUse(resolvedPaths, 'session-1', toolInput);
@@ -72,7 +72,7 @@ describe('pre-tool-use hook', () => {
   });
 
   it('allows tool use when path does not match deny pattern', async () => {
-    fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), '*.secret\n');
+    fs.writeFileSync(path.join(autoDir, 'deny-list.project.txt'), '*.secret\n');
     const toolInput = { file_path: '/project/config.json' };
 
     const result = await handlePreToolUse(resolvedPaths, 'session-2', toolInput);
@@ -95,7 +95,7 @@ describe('pre-tool-use hook', () => {
   });
 
   it('logs to activity.log with session ID', async () => {
-    fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), '*.secret\n');
+    fs.writeFileSync(path.join(autoDir, 'deny-list.project.txt'), '*.secret\n');
     const toolInput = { file_path: '/project/config.secret' };
 
     await handlePreToolUse(resolvedPaths, 'my-session-id', toolInput);
@@ -109,7 +109,7 @@ describe('pre-tool-use hook', () => {
 
   it('logs deny-list check when DEBUG=ketchup', async () => {
     process.env.DEBUG = 'ketchup';
-    fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), '*.secret\n');
+    fs.writeFileSync(path.join(autoDir, 'deny-list.project.txt'), '*.secret\n');
     const toolInput = { file_path: '/project/config.secret' };
 
     await handlePreToolUse(resolvedPaths, 'debug-session', toolInput);
