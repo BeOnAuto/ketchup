@@ -1,6 +1,6 @@
 ---
-name: claude-auto-config
-description: Manage claude-auto configuration — toggle validators, reminders, set hook options
+name: auto-ketchup-config
+description: Manage Ketchup configuration. Toggle validators, reminders, set hook options.
 user-invocable: true
 argument-hint: show | set <key> <value> | validators [enable|disable|reset] <name> | reminders [enable|disable|priority|reset|add] <name>
 ---
