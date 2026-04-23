@@ -1,24 +1,36 @@
-# Claude Auto
+# Ketchup
 
-Husky-style hooks and skills management for Claude Code.
+A quality loop for Claude Code. Validators gate commits. Reminders inject guidelines. Deny-lists protect files. Auto-continue keeps the agent working. The system earns trust, and trust lets you parallelize.
 
-[![Build](https://img.shields.io/github/actions/workflow/status/BeOnAuto/claude-auto/ci.yml?style=flat-square)](https://github.com/BeOnAuto/claude-auto/actions) [![npm](https://img.shields.io/npm/v/claude-auto?style=flat-square)](https://www.npmjs.com/package/claude-auto) [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE) [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square)]()
+[![Build](https://img.shields.io/github/actions/workflow/status/BeOnAuto/auto-ketchup/ci.yml?style=flat-square)](https://github.com/BeOnAuto/auto-ketchup/actions) [![npm](https://img.shields.io/npm/v/auto-ketchup?style=flat-square)](https://www.npmjs.com/package/auto-ketchup) [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE) [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square)]()
+
+```
+/plugin install auto-ketchup
+```
+
+*Ketchup is an open-source quality loop for Claude Code, from the team at [Auto](https://on.auto).*
 
 ---
 
-## Purpose
+## Why
 
-Without Claude Auto, you babysit every AI coding session. You watch, nudge, correct, and context-switch constantly. One task at a time, full attention required.
+Without Ketchup, you babysit every AI coding session. You watch, nudge, correct, context-switch. One task at a time, full attention required.
 
-Claude Auto installs a quality loop into Claude Code via hooks. Validators gate every commit. Reminders inject your guidelines into every prompt. Deny-lists protect files from modification. Auto-continue keeps the agent working until the plan is done. The system earns trust, and trust enables parallelization via git worktrees.
+Ketchup installs hooks that do the watching for you. Every commit gets validated against your criteria. Every prompt gets your guidelines injected. Files you name stay untouched. The agent keeps going until the plan is done.
+
+When the loop is trustworthy, you stop watching one agent and start running three. Git worktrees do the rest.
+
+## In the Stack
+
+Ketchup comes from the team building [Auto](https://on.auto), a spec-driven development platform. Auto turns specifications into working software. Ketchup is the execution discipline layer, the loop that keeps AI coding agents honest while they implement against your spec. If Auto decides what to build, Ketchup enforces how. Use them together, or use Ketchup on its own. Both work.
 
 ## Key Concepts
 
-- **Hooks**: Four integration points (SessionStart, PreToolUse, UserPromptSubmit, Stop) that let Claude Auto observe and control Claude Code's behavior
+- **Hooks**: Four integration points (SessionStart, PreToolUse, UserPromptSubmit, Stop) that let Ketchup observe and control Claude Code's behavior
 - **Validators**: Markdown files with YAML frontmatter that ACK or NACK commits based on your criteria
 - **Reminders**: Context-injection files that surface your guidelines at the right moment
 - **Deny-list**: Glob patterns that protect files from modification
-- **TCR Discipline**: Test && Commit || Revert. Bad code auto-reverts
+- **TCR Discipline**: Test && Commit || Revert. Bad code auto-reverts.
 - **Auto-Continue**: Keeps the agent going until the plan is done
 
 ---
@@ -31,50 +43,53 @@ Inside any Claude Code session:
 
 ```
 /plugin marketplace add BeOnAuto/auto-plugins
-/plugin install claude-auto
+/plugin install auto-ketchup
 ```
 
 ### As a Local Plugin
 
 ```bash
-claude --plugin-dir /path/to/claude-auto
+claude --plugin-dir /path/to/auto-ketchup
 ```
 
-Claude Code sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` automatically. Run `/claude-auto-init` inside a session to activate per-project configuration, validators, and logging.
+Claude Code sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` automatically. Run `/auto-ketchup-init` inside a session to activate per-project configuration, validators, and logging.
 
 ## Quick Start
 
 ```bash
 # Marketplace (inside Claude Code)
 /plugin marketplace add BeOnAuto/auto-plugins
-/plugin install claude-auto
+/plugin install auto-ketchup
 
 # Or local plugin mode
-claude --plugin-dir /path/to/claude-auto
+claude --plugin-dir /path/to/auto-ketchup
 ```
 
-After installation, Claude will mention that claude-auto is available. To activate it in a project:
+After installation, Claude will mention that Ketchup is available. To activate it in a project:
 
 ```
-/claude-auto-init
+/auto-ketchup-init
 ```
 
-This creates `.claude-auto/` with default configuration. You can add it to `.gitignore` for personal use, or commit it for the whole team.
+This creates `.ketchup/` with default configuration. You can add it to `.gitignore` for personal use, or commit it for the whole team.
+
+If you're upgrading from `claude-auto`, your existing `.claude-auto/` directory will be auto-renamed to `.ketchup/` on first session-start. No manual action required.
 
 **Next steps:**
 
 - [Getting Started guide](./docs/getting-started.md)
 - [The Ketchup Technique](./docs/ketchup-technique.md)
+- [In the Stack](./docs/in-the-stack.md)
 
 ---
 
 ## Custom Validators and Reminders
 
-Add project-specific rules by creating markdown files in `.claude-auto/validators/` and `.claude-auto/reminders/`.
+Add project-specific rules by creating markdown files in `.ketchup/validators/` and `.ketchup/reminders/`.
 
 ### Custom Validator
 
-Create `.claude-auto/validators/my-rule.md`:
+Create `.ketchup/validators/my-rule.md`:
 
 ```markdown
 ---
@@ -94,7 +109,7 @@ Validators receive the staged diff, file list, and commit message. They must ret
 
 ### Custom Reminder
 
-Create `.claude-auto/reminders/my-reminder.md`:
+Create `.ketchup/reminders/my-reminder.md`:
 
 ```markdown
 ---
@@ -123,10 +138,10 @@ Higher `priority` = appears first. Project-local files are loaded alongside plug
 Toggle validators and reminders without editing files:
 
 ```bash
-/claude-auto-config show
-/claude-auto-config validators disable no-comments
-/claude-auto-config reminders priority my-reminder 200
-/claude-auto-config reminders add my-rule --hook UserPromptSubmit --priority 50 --content "Always use early returns"
+/auto-ketchup-config show
+/auto-ketchup-config validators disable no-comments
+/auto-ketchup-config reminders priority my-reminder 200
+/auto-ketchup-config reminders add my-rule --hook UserPromptSubmit --priority 50 --content "Always use early returns"
 ```
 
 ---
@@ -138,7 +153,7 @@ git worktree add ../feature-auth feature/auth
 git worktree add ../feature-payments feature/payments
 ```
 
-Each worktree runs its own Claude Auto instance, all quality-validated.
+Each worktree runs its own Ketchup instance, all quality-validated.
 
 ---
 
@@ -158,7 +173,7 @@ Each worktree runs its own Claude Auto instance, all quality-validated.
 }
 ```
 
-Configuration lives in `.claude-auto/.claude.hooks.json`. See the [Configuration guide](./docs/configuration.md) for all options.
+Configuration lives in `.ketchup/.claude.hooks.json`. See the [Configuration guide](./docs/configuration.md) for all options.
 
 ---
 
@@ -180,6 +195,12 @@ Hook scripts read JSON from stdin, delegate to handlers in `src/hooks/`, log res
 
 ---
 
+## Roadmap
+
+Ketchup is Claude Code-first today. The Ketchup Technique (the methodology) works with any AI coding agent by hand. If your agent exposes hooks or an equivalent integration surface, [open an issue](https://github.com/BeOnAuto/auto-ketchup/issues) so we can scope adapter work.
+
+---
+
 ## Troubleshooting
 
 ### Hooks Not Firing
@@ -191,16 +212,16 @@ Hook scripts read JSON from stdin, delegate to handlers in `src/hooks/`, log res
 **Solution:**
 
 ```
-/plugin install claude-auto
+/plugin install auto-ketchup
 ```
 
 ### Enable Debug Logging
 
 ```bash
-CLAUDE_AUTO_DEBUG=1 claude --plugin-dir /path/to/claude-auto
+DEBUG=auto-ketchup claude --plugin-dir /path/to/auto-ketchup
 ```
 
-`CLAUDE_AUTO_DEBUG` writes diagnostics to `.claude-auto/logs/plugin-debug.log`.
+`DEBUG=auto-ketchup` writes diagnostics to `.ketchup/logs/auto-ketchup/debug.log`.
 
 ---
 
@@ -211,13 +232,14 @@ CLAUDE_AUTO_DEBUG=1 claude --plugin-dir /path/to/claude-auto
 | [Getting Started](./docs/getting-started.md) | First-time setup and core concepts |
 | [Installation](./docs/installation.md) | Detailed installation guide |
 | [The Ketchup Technique](./docs/ketchup-technique.md) | The planning methodology |
+| [In the Stack](./docs/in-the-stack.md) | How Ketchup fits with Auto and spec-driven development |
 | [Configuration](./docs/configuration.md) | All configuration options |
 | [Hooks Guide](./docs/hooks-guide.md) | Hook system deep-dive |
 | [Reminders Guide](./docs/reminders-guide.md) | Context injection system |
 | [Validators Guide](./docs/validators-guide.md) | Commit validation rules |
 | [API Reference](./docs/api-reference.md) | Programmatic access |
 | [Architecture](./docs/architecture.md) | System design internals |
-| [Origin Story](./docs/origin-story.md) | How Claude Auto came to be |
+| [Origin Story](./docs/origin-story.md) | How Ketchup came to be |
 
 ---
 
@@ -232,7 +254,9 @@ validators/               # Default commit validators (17 rules)
 reminders/                # Default context-injection reminders (10 files)
 agents/                   # Sub-agent definitions (validator agent)
 src/
+├── brand.ts              # BRAND constants (single source of truth for naming)
 ├── hooks/                # Hook handlers (session-start, pre-tool-use, user-prompt-submit, auto-continue)
+├── migrate.ts            # .claude-auto -> .ketchup auto-migration
 ├── path-resolver.ts      # Plugin-mode path resolution
 ├── commit-validator.ts   # Batched commit validation with appeal support
 ├── deny-list.ts          # File protection via micromatch patterns
@@ -241,7 +265,7 @@ src/
 ├── validator-loader.ts   # Multi-directory validator loader
 └── index.ts              # Public API barrel exports
 scripts/
-├── session-start.ts      # SessionStart hook entry-point
+├── session-start.ts      # SessionStart hook entry-point (runs migration first)
 ├── pre-tool-use.ts       # PreToolUse hook entry-point
 ├── user-prompt-submit.ts # UserPromptSubmit hook entry-point
 └── auto-continue.ts      # Stop hook entry-point
@@ -266,8 +290,8 @@ scripts/
 ### Setup
 
 ```bash
-git clone https://github.com/BeOnAuto/claude-auto.git
-cd claude-auto
+git clone https://github.com/BeOnAuto/auto-ketchup.git
+cd auto-ketchup
 pnpm install
 pnpm build
 ```
