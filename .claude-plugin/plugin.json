@@ -1,7 +1,7 @@
 {
-  "name": "claude-auto",
+  "name": "auto-ketchup",
   "version": "0.21.0",
-  "description": "Husky-style hooks and skills management for Claude Code",
+  "description": "A quality loop for Claude Code. Validators, reminders, deny-lists, TCR. Stop babysitting, start parallelizing.",
   "author": {
     "name": "Sam Hatoum"
   }
