@@ -64,9 +64,9 @@ The plan is a real artifact in the repo. It's the first thing the `ketchup-plan-
 
 Every burst ends with `[depends: ...]`:
 
-- `[depends: none]` — can start immediately, parallelizable with other `none` bursts
-- `[depends: N]` — must wait for burst N to complete
-- `[depends: N, M]` — must wait for both N and M
+- `[depends: none]`: can start immediately, parallelizable with other `none` bursts
+- `[depends: N]`: must wait for burst N to complete
+- `[depends: N, M]`: must wait for both N and M
 
 Bursts at the same dependency level can run in parallel worktrees.
 
@@ -76,10 +76,10 @@ Bursts at the same dependency level can run in parallel worktrees.
 
 A burst is:
 
-- **Independent** — can be reverted without unravelling anything else
-- **Valuable** — delivers one observable behavior
-- **Small** — reviewable in minutes
-- **Testable** — covered by the test that drove it
+- **Independent**: can be reverted without unravelling anything else
+- **Valuable**: delivers one observable behavior
+- **Small**: reviewable in minutes
+- **Testable**: covered by the test that drove it
 
 One test, one behavior, one commit. This is enforced by the `burst-atomicity` validator at commit time. Multi-concern commits get NACK'd.
 

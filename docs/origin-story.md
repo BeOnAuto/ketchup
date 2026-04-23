@@ -78,7 +78,7 @@ That's guardrail engineering. The first time AI wrote a meaningless test with `t
 
 Each mistake got paid once, not repeatedly. The codebase got permanently safer, not just temporarily cleaner.
 
-My attention didn't disappear. It moved. From supervising keystrokes to engineering constraints. That's a higher-leverage place for a senior engineer to spend their time, and it's the only place where the investment compounds.
+My attention didn't disappear. It moved. From supervising keystrokes to engineering constraints. That's a higher-value place for a senior engineer to spend their time, and it's the only place where the investment compounds.
 
 ---
 

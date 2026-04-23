@@ -120,7 +120,7 @@ You can use guardrails without the planning rhythm. You can follow the rhythm wi
 
 ## Further reading
 
-- [Fool Me Once, I Write a Spec](https://specdriven.com/perspectives/the-spec-driven-shift/fool-me-once-i-write-a-spec-fool-me-twice-there-is-no-twice) — the essay behind this page, with Sam's broader daily workflow
-- [Validators Guide](/validators-guide) — every built-in validator and how to write your own
-- [Reminders Guide](/reminders-guide) — every built-in reminder and how to write your own
-- [The Ketchup Technique](/ketchup-technique) — the planning rhythm that feeds work into the guardrails
+- [Fool Me Once, I Write a Spec](https://specdriven.com/perspectives/the-spec-driven-shift/fool-me-once-i-write-a-spec-fool-me-twice-there-is-no-twice): the essay behind this page, with Sam's broader daily workflow
+- [Validators Guide](/validators-guide): every built-in validator and how to write your own
+- [Reminders Guide](/reminders-guide): every built-in reminder and how to write your own
+- [The Ketchup Technique](/ketchup-technique): the planning rhythm that feeds work into the guardrails
