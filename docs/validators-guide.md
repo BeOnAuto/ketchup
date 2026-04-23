@@ -4,6 +4,97 @@ Complete guide to using validators to enforce commit quality and project standar
 
 ---
 
+## See it work
+
+A validator is a Markdown file with YAML frontmatter and an LLM prompt. Here's the entire content of `testing-weak-assertions`, one of the 17 that ship by default:
+
+```markdown
+---
+name: testing-weak-assertions
+description: Prohibits weak test assertions
+enabled: true
+---
+
+You are a commit validator. You MUST respond with ONLY a JSON object, no other text.
+
+Valid responses:
+{"decision":"ACK"}
+{"decision":"NACK","reason":"one sentence explanation"}
+
+**Scope:** Only validate .test.ts and .test.tsx files in the diff.
+
+Enforce strong assertions that verify exact values:
+
+**NACK if the diff contains:**
+- `toBeDefined()` - assert the actual value instead
+- `toBeTruthy()` - assert the exact truthy value
+- `not.toBeNull()` - assert what it actually is
+
+**ACK if:**
+- Tests use strong assertions (`toEqual`, `toBe`, `toMatch`, `toThrow`)
+- The diff only contains non-test files
+```
+
+When a commit hits the `git commit` PreToolUse hook, Ketchup loads every enabled validator, batches them 3 per Claude CLI call, passes the staged diff + file list + commit message, and waits for ACK or NACK. NACK blocks the commit with the validator's reason. ACK lets it through.
+
+### A real NACK in action
+
+You write this test:
+
+```ts
+it('returns a user', () => {
+  const result = createUser({ name: 'Alice' });
+  expect(result).toBeDefined();
+});
+```
+
+You run `git commit -m "feat(users): createUser returns a user"`. The PreToolUse hook fires, the `testing-weak-assertions` validator reads the diff, and you see this in your terminal:
+
+```
+✗ Commit blocked by 1 validator:
+
+  testing-weak-assertions: toBeDefined() does not verify the
+  actual return value; assert the user object shape instead
+  (e.g. toEqual({ id: expect.any(String), name: 'Alice' })).
+
+  To override (and leave a trail): add [appeal: <reason>]
+  to your commit message.
+```
+
+You fix the test:
+
+```ts
+it('returns a user', () => {
+  const result = createUser({ name: 'Alice' });
+  expect(result).toEqual({ id: expect.any(String), name: 'Alice' });
+});
+```
+
+Re-run `git commit`. Validator returns ACK. The commit lands.
+
+### Write your own in 30 seconds
+
+Project-specific rules live in `.ketchup/validators/`. Drop a new Markdown file in that directory:
+
+```markdown
+---
+name: no-axios-imports
+description: Block direct axios imports; use the project http client
+enabled: true
+---
+
+You are a commit validator. Respond with JSON only.
+
+NACK if the diff adds a line like `import ... from 'axios'` or `require('axios')`.
+ACK in all other cases.
+
+{"decision":"ACK"} or {"decision":"NACK","reason":"..."}
+```
+
+Save. The next commit that touches an `import 'axios'` line is rejected automatically. No build step. No restart. The agent that wrote the violation can read the NACK reason and fix it on the next try.
+
+---
+
 ## What Are Validators?
 
 Validators are rules that automatically check every commit against your project's quality standards. They act as an impartial reviewer that ensures consistency and prevents common mistakes.
