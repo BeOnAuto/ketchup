@@ -1,6 +1,6 @@
 ---
-name: claude-auto-init
-description: Initialize claude-auto in the current repository
+name: auto-ketchup-init
+description: Initialize Ketchup in the current repository
 user-invocable: true
 ---
 
