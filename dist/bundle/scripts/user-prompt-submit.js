@@ -3870,7 +3870,21 @@ async function handleUserPromptSubmit(paths, sessionId, prompt) {
 
 // src/path-resolver.ts
 var path6 = __toESM(require("node:path"));
-var AUTO_DIR = ".claude-auto";
+
+// src/brand.ts
+var BRAND = {
+  packageName: "auto-ketchup",
+  displayName: "Ketchup",
+  attribution: "Ketchup, from Auto",
+  dataDir: ".ketchup",
+  docsUrl: "https://ketchup.on.auto",
+  repoUrl: "https://github.com/BeOnAuto/auto-ketchup",
+  leadTagline: "Stop Babysitting. Start Parallelizing.",
+  subTagline: "Trust the system. Run 3\u20135 features in parallel. Ship 10+ per week.",
+  categoryLine: "A quality loop for Claude Code."
+};
+
+// src/path-resolver.ts
 async function resolvePathsFromEnv(explicitPluginRoot) {
   const pluginRoot = explicitPluginRoot || process.env.CLAUDE_PLUGIN_ROOT;
   if (!pluginRoot) {
@@ -3878,7 +3892,7 @@ async function resolvePathsFromEnv(explicitPluginRoot) {
   }
   const projectRoot = process.cwd();
   const claudeDir = path6.join(projectRoot, ".claude");
-  const autoDir = path6.join(projectRoot, AUTO_DIR);
+  const autoDir = path6.join(projectRoot, BRAND.dataDir);
   const pluginValidatorsDir = path6.join(pluginRoot, "validators");
   return {
     projectRoot,

@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 
-const AUTO_DIR = '.claude-auto';
+import { BRAND } from './brand.js';
 
 export interface ResolvedPaths {
   projectRoot: string;
@@ -20,7 +20,7 @@ export async function resolvePathsFromEnv(explicitPluginRoot?: string): Promise<
 
   const projectRoot = process.cwd();
   const claudeDir = path.join(projectRoot, '.claude');
-  const autoDir = path.join(projectRoot, AUTO_DIR);
+  const autoDir = path.join(projectRoot, BRAND.dataDir);
 
   const pluginValidatorsDir = path.join(pluginRoot, 'validators');
 

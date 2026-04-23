@@ -23,9 +23,9 @@ describe('resolvePathsFromEnv', () => {
     expect(result).toEqual({
       projectRoot: process.cwd(),
       claudeDir: path.join(process.cwd(), '.claude'),
-      autoDir: path.join(process.cwd(), '.claude-auto'),
-      validatorsDirs: ['/plugins/claude-auto/validators', path.join(process.cwd(), '.claude-auto', 'validators')],
-      remindersDirs: ['/plugins/claude-auto/reminders', path.join(process.cwd(), '.claude-auto', 'reminders')],
+      autoDir: path.join(process.cwd(), '.ketchup'),
+      validatorsDirs: ['/plugins/claude-auto/validators', path.join(process.cwd(), '.ketchup', 'validators')],
+      remindersDirs: ['/plugins/claude-auto/reminders', path.join(process.cwd(), '.ketchup', 'reminders')],
       protectedValidatorsDirs: ['/plugins/claude-auto/validators'],
     });
   });
@@ -48,9 +48,9 @@ describe('resolvePathsFromEnv', () => {
     expect(result).toEqual({
       projectRoot: process.cwd(),
       claudeDir: path.join(process.cwd(), '.claude'),
-      autoDir: path.join(process.cwd(), '.claude-auto'),
-      validatorsDirs: ['/explicit/plugin-root/validators', path.join(process.cwd(), '.claude-auto', 'validators')],
-      remindersDirs: ['/explicit/plugin-root/reminders', path.join(process.cwd(), '.claude-auto', 'reminders')],
+      autoDir: path.join(process.cwd(), '.ketchup'),
+      validatorsDirs: ['/explicit/plugin-root/validators', path.join(process.cwd(), '.ketchup', 'validators')],
+      remindersDirs: ['/explicit/plugin-root/reminders', path.join(process.cwd(), '.ketchup', 'reminders')],
       protectedValidatorsDirs: ['/explicit/plugin-root/validators'],
     });
   });
@@ -64,9 +64,9 @@ describe('resolvePathsFromEnv', () => {
     expect(result).toEqual({
       projectRoot: process.cwd(),
       claudeDir: path.join(process.cwd(), '.claude'),
-      autoDir: path.join(process.cwd(), '.claude-auto'),
-      validatorsDirs: ['/plugins/claude-auto/validators', path.join(process.cwd(), '.claude-auto', 'validators')],
-      remindersDirs: ['/plugins/claude-auto/reminders', path.join(process.cwd(), '.claude-auto', 'reminders')],
+      autoDir: path.join(process.cwd(), '.ketchup'),
+      validatorsDirs: ['/plugins/claude-auto/validators', path.join(process.cwd(), '.ketchup', 'validators')],
+      remindersDirs: ['/plugins/claude-auto/reminders', path.join(process.cwd(), '.ketchup', 'reminders')],
       protectedValidatorsDirs: ['/plugins/claude-auto/validators'],
     });
   });
@@ -91,9 +91,9 @@ describe('resolvePathsFromEnv', () => {
     expect(result).toEqual({
       projectRoot: process.cwd(),
       claudeDir: path.join(process.cwd(), '.claude'),
-      autoDir: path.join(process.cwd(), '.claude-auto'),
-      validatorsDirs: ['/plugins/claude-auto/validators', path.join(process.cwd(), '.claude-auto', 'validators')],
-      remindersDirs: ['/plugins/claude-auto/reminders', path.join(process.cwd(), '.claude-auto', 'reminders')],
+      autoDir: path.join(process.cwd(), '.ketchup'),
+      validatorsDirs: ['/plugins/claude-auto/validators', path.join(process.cwd(), '.ketchup', 'validators')],
+      remindersDirs: ['/plugins/claude-auto/reminders', path.join(process.cwd(), '.ketchup', 'reminders')],
       protectedValidatorsDirs: ['/plugins/claude-auto/validators'],
     });
   });
