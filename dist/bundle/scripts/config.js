@@ -3536,11 +3536,6 @@ var BRAND = {
 
 // src/hook-state.ts
 var DEFAULT_HOOK_STATE = {
-  autoContinue: {
-    mode: "smart",
-    maxIterations: 0,
-    skipModes: ["plan"]
-  },
   validateCommit: {
     mode: "strict",
     batchCount: 3
@@ -3577,7 +3572,6 @@ function createHookState(autoDir) {
     const content = fs.readFileSync(stateFile, "utf-8");
     const partial = JSON.parse(content);
     return {
-      autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, ...partial.autoContinue },
       validateCommit: { ...DEFAULT_HOOK_STATE.validateCommit, ...partial.validateCommit },
       denyList: { ...DEFAULT_HOOK_STATE.denyList, ...partial.denyList },
       promptReminder: { ...DEFAULT_HOOK_STATE.promptReminder, ...partial.promptReminder },
@@ -3603,7 +3597,6 @@ function createHookState(autoDir) {
     const newState = {
       ...current,
       ...updates,
-      autoContinue: { ...current.autoContinue, ...updates.autoContinue },
       validateCommit: { ...current.validateCommit, ...updates.validateCommit },
       denyList: { ...current.denyList, ...updates.denyList },
       promptReminder: { ...current.promptReminder, ...updates.promptReminder },
@@ -3863,14 +3856,11 @@ Subcommands:
   reminders priority <name> <n>     Override a reminder's priority
   reminders reset <name>            Remove override, restore default
   reminders add <name> [options]    Create a custom reminder
-    --hook <hook>                   Hook point (SessionStart|PreToolUse|UserPromptSubmit|Stop)
+    --hook <hook>                   Hook point (SessionStart|PreToolUse|UserPromptSubmit)
     --priority <n>                  Priority (higher = first)
     --content <text>                Reminder content
 
 Config keys:
-  autoContinue.mode                 smart | non-stop | off
-  autoContinue.maxIterations        number (0 = unlimited)
-  autoContinue.skipModes            JSON array (e.g., ["plan"])
   validateCommit.mode               strict | warn | off
   validateCommit.batchCount         number
   denyList.enabled                  true | false
@@ -3884,11 +3874,7 @@ Config keys:
 function formatState(result) {
   const { state } = result;
   const lines = ["## Current Configuration\n"];
-  lines.push("### Auto Continue");
-  lines.push(`  mode: ${state.autoContinue.mode}`);
-  lines.push(`  maxIterations: ${state.autoContinue.maxIterations}`);
-  lines.push(`  skipModes: ${JSON.stringify(state.autoContinue.skipModes)}`);
-  lines.push("\n### Commit Validation");
+  lines.push("### Commit Validation");
   lines.push(`  mode: ${state.validateCommit.mode}`);
   lines.push(`  batchCount: ${state.validateCommit.batchCount}`);
   lines.push("\n### Deny List");

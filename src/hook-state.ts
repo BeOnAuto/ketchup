@@ -3,14 +3,7 @@ import * as path from 'node:path';
 
 import { BRAND } from './brand.js';
 
-export type ContinueMode = 'smart' | 'non-stop' | 'off';
 export type CommitMode = 'strict' | 'warn' | 'off';
-
-export interface AutoContinueState {
-  mode: ContinueMode;
-  maxIterations?: number;
-  skipModes: string[];
-}
 
 export interface ValidateCommitState {
   mode: CommitMode;
@@ -48,7 +41,6 @@ export interface OverridesState {
 }
 
 export interface HookState {
-  autoContinue: AutoContinueState;
   validateCommit: ValidateCommitState;
   denyList: DenyListState;
   promptReminder: PromptReminderState;
@@ -57,11 +49,6 @@ export interface HookState {
 }
 
 export const DEFAULT_HOOK_STATE: HookState = {
-  autoContinue: {
-    mode: 'smart',
-    maxIterations: 0,
-    skipModes: ['plan'],
-  },
   validateCommit: {
     mode: 'strict',
     batchCount: 3,
@@ -109,7 +96,6 @@ export function createHookState(autoDir: string): HookStateManager {
     const partial = JSON.parse(content) as Partial<HookState>;
 
     return {
-      autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, ...partial.autoContinue },
       validateCommit: { ...DEFAULT_HOOK_STATE.validateCommit, ...partial.validateCommit },
       denyList: { ...DEFAULT_HOOK_STATE.denyList, ...partial.denyList },
       promptReminder: { ...DEFAULT_HOOK_STATE.promptReminder, ...partial.promptReminder },
@@ -136,7 +122,6 @@ export function createHookState(autoDir: string): HookStateManager {
     const newState: HookState = {
       ...current,
       ...updates,
-      autoContinue: { ...current.autoContinue, ...updates.autoContinue },
       validateCommit: { ...current.validateCommit, ...updates.validateCommit },
       denyList: { ...current.denyList, ...updates.denyList },
       promptReminder: { ...current.promptReminder, ...updates.promptReminder },

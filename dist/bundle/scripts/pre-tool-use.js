@@ -6627,11 +6627,6 @@ function isDenied(filePath, patterns) {
 var fs5 = __toESM(require("node:fs"));
 var path5 = __toESM(require("node:path"));
 var DEFAULT_HOOK_STATE = {
-  autoContinue: {
-    mode: "smart",
-    maxIterations: 0,
-    skipModes: ["plan"]
-  },
   validateCommit: {
     mode: "strict",
     batchCount: 3
@@ -6668,7 +6663,6 @@ function createHookState(autoDir) {
     const content = fs5.readFileSync(stateFile, "utf-8");
     const partial = JSON.parse(content);
     return {
-      autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, ...partial.autoContinue },
       validateCommit: { ...DEFAULT_HOOK_STATE.validateCommit, ...partial.validateCommit },
       denyList: { ...DEFAULT_HOOK_STATE.denyList, ...partial.denyList },
       promptReminder: { ...DEFAULT_HOOK_STATE.promptReminder, ...partial.promptReminder },
@@ -6694,7 +6688,6 @@ function createHookState(autoDir) {
     const newState = {
       ...current,
       ...updates,
-      autoContinue: { ...current.autoContinue, ...updates.autoContinue },
       validateCommit: { ...current.validateCommit, ...updates.validateCommit },
       denyList: { ...current.denyList, ...updates.denyList },
       promptReminder: { ...current.promptReminder, ...updates.promptReminder },

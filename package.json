@@ -7,14 +7,14 @@
       "name": "Sam Hatoum"
     }
   ],
-  "description": "A quality loop for Claude Code. Validators, reminders, deny-lists, TCR. Stop babysitting, start parallelizing.",
+  "description": "LLM-powered guardrails for Claude Code. Turn every AI mistake into a rule AI can't repeat.",
   "repository": {
     "type": "git",
     "url": "https://github.com/BeOnAuto/ketchup.git"
   },
   "scripts": {
     "build": "tsc && pnpm build:bundle",
-    "build:bundle": "esbuild scripts/session-start.ts scripts/pre-tool-use.ts scripts/user-prompt-submit.ts scripts/auto-continue.ts scripts/config.ts scripts/init.ts --bundle --platform=node --target=node18 --format=cjs --outdir=dist/bundle/scripts --external:typescript",
+    "build:bundle": "esbuild scripts/session-start.ts scripts/pre-tool-use.ts scripts/user-prompt-submit.ts scripts/config.ts scripts/init.ts --bundle --platform=node --target=node18 --format=cjs --outdir=dist/bundle/scripts --external:typescript",
     "test": "vitest run",
     "test:watch": "vitest",
     "type-check": "tsc --noEmit",

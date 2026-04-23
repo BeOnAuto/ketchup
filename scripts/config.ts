@@ -39,14 +39,11 @@ Subcommands:
   reminders priority <name> <n>     Override a reminder's priority
   reminders reset <name>            Remove override, restore default
   reminders add <name> [options]    Create a custom reminder
-    --hook <hook>                   Hook point (SessionStart|PreToolUse|UserPromptSubmit|Stop)
+    --hook <hook>                   Hook point (SessionStart|PreToolUse|UserPromptSubmit)
     --priority <n>                  Priority (higher = first)
     --content <text>                Reminder content
 
 Config keys:
-  autoContinue.mode                 smart | non-stop | off
-  autoContinue.maxIterations        number (0 = unlimited)
-  autoContinue.skipModes            JSON array (e.g., ["plan"])
   validateCommit.mode               strict | warn | off
   validateCommit.batchCount         number
   denyList.enabled                  true | false
@@ -62,12 +59,7 @@ function formatState(result: ReturnType<typeof showConfig>): string {
   const { state } = result;
   const lines: string[] = ['## Current Configuration\n'];
 
-  lines.push('### Auto Continue');
-  lines.push(`  mode: ${state.autoContinue.mode}`);
-  lines.push(`  maxIterations: ${state.autoContinue.maxIterations}`);
-  lines.push(`  skipModes: ${JSON.stringify(state.autoContinue.skipModes)}`);
-
-  lines.push('\n### Commit Validation');
+  lines.push('### Commit Validation');
   lines.push(`  mode: ${state.validateCommit.mode}`);
   lines.push(`  batchCount: ${state.validateCommit.batchCount}`);
 

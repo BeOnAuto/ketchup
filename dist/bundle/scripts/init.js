@@ -43,11 +43,6 @@ var BRAND = {
 
 // src/hook-state.ts
 var DEFAULT_HOOK_STATE = {
-  autoContinue: {
-    mode: "smart",
-    maxIterations: 0,
-    skipModes: ["plan"]
-  },
   validateCommit: {
     mode: "strict",
     batchCount: 3
