@@ -86,12 +86,6 @@ Semantic failures need semantic understanding. Ketchup runs a separate Claude su
 
 ---
 
-## In the stack
-
-Ketchup comes from the team building [Auto](https://on.auto), a spec-driven development platform. Auto decides what to build. Ketchup enforces how. [Read more](/in-the-stack).
-
----
-
 ## Three steps
 
 ### 1. Install
@@ -116,3 +110,7 @@ This creates `.ketchup/` with default configuration, seeded with the 17 validato
 Write a test, let AI implement it, commit. Validators read the diff. If anything's off, the commit is rejected with a reason. Encode any new failure pattern as a validator in `.ketchup/validators/`. The next AI agent can't repeat it.
 
 **[Get Started →](/getting-started)**
+
+---
+
+<sub>From the team building [Auto](https://on.auto), a spec-driven development platform. [How Ketchup fits in the stack →](/in-the-stack)</sub>

@@ -32,7 +32,6 @@ export default defineConfig({
       },
       { text: 'Guardrail Engineering', link: '/guardrail-engineering' },
       { text: 'The Ketchup Technique', link: '/ketchup-technique' },
-      { text: 'In the Stack', link: '/in-the-stack' },
       { text: 'Origin Story', link: '/origin-story' },
       {
         text: 'GitHub',
@@ -47,7 +46,6 @@ export default defineConfig({
           { text: 'Overview', link: '/' },
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Installation', link: '/installation' },
-          { text: 'In the Stack', link: '/in-the-stack' },
         ],
       },
       {

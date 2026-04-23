@@ -8,17 +8,17 @@ You can use the Technique on any project without the tool. You can use the tool 
 
 ---
 
-## The vocabulary problem
+## Why work needs a smaller unit than "a feature"
 
-The internet is polluted with PM vocabulary. Epics, sprints, stories, SAFe. LLM training data is saturated with these terms. When you tell an AI to plan work using established agile terminology, it hallucinates toward Jira tickets, estimation theater, and ceremony-heavy processes.
+Hand AI "a feature" to build and you get a 30-file diff that bundles ten concerns. The validators can't evaluate it. You can't review it. The TCR loop can't revert any single mistake without losing all the work that was right.
 
-The Ketchup Technique uses fresh vocabulary on purpose:
+The Ketchup Technique exists to break work into units small enough for the validators to actually evaluate, one commit at a time:
 
-- **Burst**: one test, one behavior, one commit. Atomic, independent, valuable.
+- **Burst**: the atomic unit Ketchup can validate. One test, one behavior, one commit.
 - **Bottle**: a named group of related bursts, organized by capability, not sequence.
-- **ketchup-plan.md**: the durable plan. TODO / DONE sections, committed before coding.
+- **`ketchup-plan.md`**: the durable plan, committed to the repo. TODO / DONE sections.
 
-Same way the Pomodoro Technique used a tomato timer instead of "timeboxing" to escape existing baggage, these terms exist to stop pattern-matching against someone else's process.
+> *Why the names?* The internet is polluted with PM vocabulary (epics, sprints, stories, SAFe). LLM training data is saturated with these, which means any prompt using them collapses toward Jira-ticket ceremony. Fresh vocabulary, like Pomodoro's "tomato timer" instead of "timeboxing", exists to stop pattern-matching against someone else's process.
 
 ---
 
