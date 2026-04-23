@@ -173,7 +173,7 @@ jobs:
           VERSION=$(node -p "require('./package.json').version")
           gh api repos/BeOnAuto/auto-plugins/dispatches \
             -f event_type=plugin-release \
-            -f 'client_payload[plugin_name]=claude-auto' \
+            -f 'client_payload[plugin_name]=auto-ketchup' \
             -f "client_payload[plugin_version]=${VERSION}"
         env:
           GITHUB_TOKEN: ${{ secrets.MARKETPLACE_TOKEN }}
