@@ -1,10 +1,10 @@
 # Architecture
 
-Understanding how the Quality Loop works under the hood.
+How Ketchup works under the hood.
 
 ---
 
-## The Quality Loop Implementation
+## The Guardrail Stack
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -15,23 +15,22 @@ Understanding how the Quality Loop works under the hood.
                            │
                            ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    THE QUALITY STACK                         │
+│                    GUARDRAIL STACK                           │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │ Auto-       │  │ Parallel    │  │ Supervisor  │         │
-│  │ Planning    │  │ Execution   │  │ Validation  │         │
+│  │ Reminders   │  │ Deny-list   │  │ Validators  │         │
 │  │             │  │             │  │             │         │
-│  │ ketchup-    │  │ Sub-agents  │  │ ACK / NACK  │         │
-│  │ plan.md     │  │ [depends:]  │  │ hooks       │         │
+│  │ Session +   │  │ Glob file   │  │ ACK / NACK  │         │
+│  │ per-prompt  │  │ protection  │  │ on commit   │         │
 │  └─────────────┘  └─────────────┘  └─────────────┘         │
 │                                                              │
 │        ┌─────────────┐        ┌─────────────┐              │
 │        │ Auto-       │        │ TCR         │              │
-│        │ Continue    │        │ Discipline  │              │
+│        │ Continue    │        │ gate        │              │
 │        │             │        │             │              │
 │        │ Stop hook   │        │ test &&     │              │
-│        │ checks plan │        │ commit ||   │              │
+│        │ reads plan  │        │ commit ||   │              │
 │        │ for TODOs   │        │ revert      │              │
 │        └─────────────┘        └─────────────┘              │
 │                                                              │
