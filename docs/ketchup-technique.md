@@ -1,353 +1,182 @@
 # The Ketchup Technique
 
-> The planning methodology behind Ketchup
+> The planning rhythm that feeds clean work into the guardrails.
 
-The Ketchup Technique is the methodology. The Quality Loop is the system. Ketchup is the tool.
+The Ketchup Technique is the *methodology*. [Guardrail Engineering](/guardrail-engineering) is the *mechanism*. Ketchup is the tool that implements both.
 
-- **The Ketchup Technique** gives fresh vocabulary for AI-assisted planning: Bottles, Bursts, dependencies, and the `ketchup-plan.md` format. It is the contract between your requirements and what the AI builds, a detailed, disciplined breakdown of work that keeps agents focused on rigorous software development.
-- **The Quality Loop** is the four-component validation system that executes those plans: Auto-Planner, Validators, TCR Discipline, and Auto-Continue. It is the _what runs_.
-- **Ketchup** is the open-source engine that implements both.
+You can use the Technique on any project without the tool. You can use the tool without the Technique. They compose best together, because the Technique structures work into atomic units the mechanism can evaluate one commit at a time.
 
 ---
 
-## The Trap
+## The vocabulary problem
 
-AI-assisted coding promised multiplication.
+The internet is polluted with PM vocabulary. Epics, sprints, stories, SAFe. LLM training data is saturated with these terms. When you tell an AI to plan work using established agile terminology, it hallucinates toward Jira tickets, estimation theater, and ceremony-heavy processes.
 
-What it delivered was faster serial work with supervision requirements. You're still doing one thing at a time. You have help, but help that requires your constant attention.
+The Ketchup Technique uses fresh vocabulary on purpose:
 
-The bottleneck moved from typing speed to cognitive load.
+- **Burst**: one test, one behavior, one commit. Atomic, independent, valuable.
+- **Bottle**: a named group of related bursts, organized by capability, not sequence.
+- **ketchup-plan.md**: the durable plan. TODO / DONE sections, committed before coding.
 
-You're faster at producing, but you can't shift focus. You can't parallelize.
-
-True multiplication requires trust. Trust that the system will execute correctly without you watching.
-
-The Quality Loop earns that trust.
+Same way the Pomodoro Technique used a tomato timer instead of "timeboxing" to escape existing baggage, these terms exist to stop pattern-matching against someone else's process.
 
 ---
 
-## The Quality Loop: Four Components
+## The rhythm
 
-### 1. Auto-Planner
+```
+Red → Green → TCR → Refactor → TCR → Done
+```
 
-Feed your requirements. Get a complete plan.
+- **Red**: write one failing test. One behavior. Not a suite.
+- **Green**: write the minimum code to make that test pass.
+- **TCR**: `test && commit || revert`. Tests pass, the change is committed. Tests fail, the change is reverted.
+- **Refactor**: improve what works without changing behavior. Tests still pass.
+- **TCR again**: commit the refactor.
+- **Done**: move the burst from TODO to DONE.
+
+Never patch failing code. Revert and rethink.
+
+---
+
+## The `ketchup-plan.md` format
 
 ```markdown
-# ketchup-plan.md
+# Ketchup Plan: User Authentication
 
 ## TODO
 
-- [ ] Burst 1: createUser returns user object [depends: none]
-- [ ] Burst 2: hashPassword uses bcrypt [depends: none]
-- [ ] Burst 3: validatePassword checks hash [depends: 2]
+### Bottle: Authentication
+- [ ] Burst 10: createUser returns user object [depends: none]
+- [ ] Burst 11: hashPassword uses bcrypt [depends: none]
+- [ ] Burst 12: validatePassword checks hash [depends: 11]
+- [ ] Burst 13: generateToken creates JWT [depends: 10]
+- [ ] Burst 14: login combines all [depends: 10, 12, 13]
 
 ## DONE
 
 - [x] Burst 0: Project setup (abc123)
 ```
 
-Oversight over every detail, ahead of time. The ketchup plan surfaces decisions before they're made, no opaque reasoning from agents.
+The plan is a real artifact in the repo. It's the first thing the `ketchup-plan-format` validator checks, and it's what [Auto-Continue](/guardrail-engineering#_5-auto-continue) reads to decide whether to keep working.
 
-### 2. Validators
+### Dependency notation
 
-An impartial AI validates every commit.
+Every burst ends with `[depends: ...]`:
 
-```
-Claude attempts commit
-        │
-        ▼
-┌───────────────────┐
-│  Supervisor Hook  │
-│  Checks:          │
-│  - TDD compliance │
-│  - 100% coverage  │
-│  - Your ADRs      │
-└────────┬──────────┘
-         │
-    ┌────┴────┐
-    ▼         ▼
-  ACK       NACK
-  Ships     Reverts
-            & learns
-```
+- `[depends: none]` — can start immediately, parallelizable with other `none` bursts
+- `[depends: N]` — must wait for burst N to complete
+- `[depends: N, M]` — must wait for both N and M
 
-Bad code is minimized because the adversarial AI follows rules you created. Validators are a highly customizable way to codify qualitative standards, like an intelligent lint enforcer.
-
-### 3. TCR Discipline
-
-Test && Commit || Revert. No middle ground.
-
-```
-Red → Green → TCR → Refactor → TCR → Done
-```
-
-- Tests pass → Commit automatically
-- Tests fail → Revert completely
-- Never patch failing code
-
-Emergent design without bad foundations. When tests fail, revert and rethink, don't let the AI patch mistakes over and over.
-
-### 4. Auto-Continue
-
-Keeps going until the plan is done.
-
-```
-Burst completes
-     │
-     ▼
-┌───────────────────┐
-│  Stop Hook fires  │
-│  Checks:          │
-│  - ketchup-plan.md│
-│  - Unchecked TODOs│
-└────────┬──────────┘
-         │
-    ┌────┴────┐
-    ▼         ▼
-  CONTINUE   STOP
-  More work  Plan
-  remains    complete
-```
-
-You check back on results, not babysit the process.
+Bursts at the same dependency level can run in parallel worktrees.
 
 ---
 
-## The Core Loop
+## Burst atomicity
 
-One test. One behavior. One commit.
+A burst is:
 
-Each **Burst** is atomic:
+- **Independent** — can be reverted without unravelling anything else
+- **Valuable** — delivers one observable behavior
+- **Small** — reviewable in minutes
+- **Testable** — covered by the test that drove it
 
-- Independent (can run in parallel if no dependencies)
-- Valuable (delivers observable behavior)
-- Small (easy to review, safe to revert)
-- Testable (100% coverage by construction)
-
-**Bottles** group related bursts by capability, not sequence number.
-
-```markdown
-### Bottle: Settings Merger
-
-- [ ] Burst 26: mergeSettings loads settings.project.json
-- [ ] Burst 27: mergeSettings loads settings.local.json
-```
+One test, one behavior, one commit. This is enforced by the `burst-atomicity` validator at commit time. Multi-concern commits get NACK'd.
 
 ---
 
-## Why It Works
+## RETHINK after a revert
 
-### Emergent Design
+A revert isn't punishment. It's information. But it's also a signal to change approach, not try harder at the same thing.
 
-Individual ants follow simple rules. Colonies exhibit complex behavior.
+After a revert, ask:
 
-The Quality Loop works the same way:
+1. **Was the burst too big?** → Split it smaller.
+2. **Was the design flawed?** → Try a different approach.
+3. **Was the test wrong?** → Clarify the requirement first.
 
-- Each burst follows simple rules (red/green/TCR)
-- Architecture emerges from passing tests
-- No upfront design that AI will ignore anyway
+Only then write the next failing test. Never patch.
 
-### Context Preservation Across Reverts
+---
 
-When TCR reverts code, the learning stays:
+## Testing rules
 
-- Claude remembers what failed
-- It has a clean slate to try differently
-- The context window contains the lesson
+The validators enforce these. The Technique reminds you of them before you write the test:
 
-Reverts aren't punishment. They're information.
+- **Title = Spec**: the test body proves exactly what `it('should...')` claims. One assertion per behavior.
+- **Assert whole objects**: `expect(result).toEqual({...})`, not cherry-picked properties.
+- **No weak assertions**: never `toBeDefined`, `toBeTruthy`, `not.toBeNull`. Assert the exact shape.
+- **Stubs over mocks**: deterministic stubs preferred. Mock only at boundaries.
+- **Setup → Execute → Verify**: one cycle per test, no multiple execute/verify loops.
+- **No state peeking**: test observable behavior, not internal state. If a change to internal data structures would break the test, the test is wrong.
 
-### 100% Coverage by Construction
+---
 
-If code exists, a test demanded it.
+## Coverage by construction
 
-This isn't enforced through willpower. It's structural:
+If code exists, a test demanded it. This isn't enforced through willpower. It's structural:
 
 - Write test first (red)
 - Write minimal code to pass (green)
 - No code without a test
 
-Uncovered code = code nobody asked for = deleted by next revert.
+Uncovered code = code nobody asked for = delete on the next revert. 100% enforced via the `coverage-rules` validator.
+
+Exclusions are narrow: barrel `index.ts` re-exports, `*.test.ts` files. That's it.
 
 ---
 
-## Planning Rules
+## Extreme ownership
 
-### Sub-Agent Rules
+Every problem is your problem. See a problem → fix it or add a burst to fix it. No third option.
 
-Sub-agents follow identical rules to the parent. When spawning a Task agent:
-
-1. **Include Ketchup context** - Sub-agents receive the same reminders and rules automatically
-2. **Include ketchup-plan.md** - Sub-agents work from the same plan
-3. **No orphan work** - Sub-agent output must be committed by parent or sub-agent
-
-### Parallelization
-
-Maximize parallel execution. Launch multiple sub-agents when:
-
-- Bursts have no dependencies on each other
-- Exploration can be split by area
-- Multiple files need similar changes
-
-### Dependency Notation
-
-Every burst ends with `[depends: ...]`:
-
-```markdown
-### Bottle: Authentication
-
-- [ ] Burst 10: createUser returns user object [depends: none]
-- [ ] Burst 11: hashPassword uses bcrypt [depends: none]
-- [ ] Burst 12: validatePassword checks hash [depends: 11]
-- [ ] Burst 13: generateToken creates JWT [depends: 10]
-- [ ] Burst 14: login combines all [depends: 10, 12, 13]
-```
-
-**Rules:**
-
-- `[depends: none]` - can start immediately, parallelizable
-- `[depends: N]` - must wait for burst N to complete
-- `[depends: N, M]` - must wait for bursts N and M to complete
+| Situation | Wrong response | Ownership response |
+|-----------|----------------|---------------------|
+| Bug in existing code | "The existing code has a bug where..." | Fix it or add a burst to fix it |
+| Test suite has gaps | "Coverage was incomplete before..." | Add the missing tests |
+| Confusing function names | "The naming is unclear..." | Rename in refactor step |
 
 ---
 
-## Git Worktrees: The Multiplier
+## Infrastructure commits
 
-The Quality Loop earns trust. Trust enables delegation. Delegation enables parallelization.
+Config files need no tests: `package.json`, `tsconfig.json`, `vitest.config.ts`, `.gitignore`, `ketchup-plan.md`.
 
-```bash
-# Create worktrees for parallel features
-git worktree add ../feature-auth feature/auth
-git worktree add ../feature-payments feature/payments
-git worktree add ../feature-dashboard feature/dashboard
-```
-
-Three isolated workspaces. Each running a Ketchup instance.
-
-| Worktree            | Feature               | Status                   |
-| ------------------- | --------------------- | ------------------------ |
-| `feature-auth`      | Authentication system | Ketchup executing... |
-| `feature-payments`  | Payment integration   | Ketchup executing... |
-| `feature-dashboard` | Admin dashboard       | Ketchup executing... |
-
-The bottleneck becomes defining requirements, not executing them.
+Format: `chore(scope): description`. Enforced by the `infra-commit-format` validator.
 
 ---
 
-## Workflow
-
-1. Create `ketchup-plan.md` with TODO/DONE sections, commit before coding
-2. Write ONE failing test
-3. Write MINIMAL passing code
-4. TCR (update plan in same commit)
-5. Refactor if needed → TCR
-6. Move burst to DONE → TCR
-7. Next burst
-
-### RETHINK After Revert
-
-After a revert, do not immediately retry the same approach. Ask:
-
-1. Was the burst too big? → Split it smaller
-2. Was the design flawed? → Try a different approach
-3. Was the test wrong? → Clarify the requirement first
-
-Only then write the next failing test.
-
----
-
-## Testing Rules
-
-**Title = Spec:** Test body proves exactly what `it('should...')` claims. One assertion per behavior.
-
-**Assertion Strength:** Never use weak assertions (`toBeDefined`, `toBeTruthy`, `not.toBeNull`). Assert the exact shape and value.
-
-**Stubs over mocks:** Deterministic stubs preferred. Mock only at boundaries.
-
-**Assert whole objects:** `expect(result).toEqual({...})` not cherry-picked properties.
-
-**Squint test:** All tests must follow: SETUP → EXECUTE → VERIFY. No multiple execute/verify cycles.
-
-**No state peeking:** Test observable behavior, not internal state.
-
-| Forbidden (Implementation)                    | Allowed (Behavior)         |
-| --------------------------------------------- | -------------------------- |
-| `expect(tracker.getActiveCount()).toBe(0)`    | Test via callbacks/events  |
-| `expect(manager.clientCount).toBe(3)`         | Test via return values     |
-| `expect(service["internalMap"].size).toBe(2)` | Test via observable output |
-
----
-
-## Coverage
-
-100% enforced. No escape hatches.
-
-Exclusions allowed ONLY for: barrel `index.ts` re-exports, `*.test.ts` files
-
-| Do                              | Don't                                    |
-| ------------------------------- | ---------------------------------------- |
-| Let tests drive all code        | Write code without a failing test first  |
-| Add branches only when tested   | Defensive `??`, `?:`, `if/else` untested |
-| Test all error paths            | Leave error handling unverified          |
-| Remove dead code after each run | Keep unused code "just in case"          |
-
----
-
-## Design
-
-Behavior first. Types/interfaces emerge from tests.
-
-```ts
-it("creates user with generated id", () => {
-  const result = createUser({ name: "Alice" });
-  expect(result).toEqual({ id: expect.any(String), name: "Alice" });
-});
-```
-
----
-
-## Guardrails
-
-- No comments, write self-expressing code
-- JS files only in `dist/`
-- When tests fail, assume you broke it
-
-**Backwards compatibility:** Ask first. Default to clean breaks.
-
----
-
-## Extreme Ownership
-
-Every problem is your problem. No deflection.
-
-See a problem → fix it or add a burst to fix it. No third option.
-
-| Situation                | Wrong Response                         | Ownership Response            |
-| ------------------------ | -------------------------------------- | ----------------------------- |
-| Bug in existing code     | "The existing code has a bug where..." | Fix it or add burst to fix it |
-| Test suite has gaps      | "Coverage was incomplete before..."    | Add the missing tests         |
-| Confusing function names | "The naming is unclear..."             | Rename in refactor step       |
-
----
-
-## Infrastructure Commits
-
-Config files need no tests: `package.json`, `tsconfig.json`, `vitest.config.ts`, `.gitignore`, `ketchup-plan.md`
-
-Format: `chore(scope): description`
-
----
-
-## TCR Command
+## The TCR command
 
 ```bash
 pnpm test --run && git add -A && git commit -m "<MSG>" || git checkout -- .
 ```
 
+Tests pass, everything commits. Tests fail, everything reverts. This is the operation Ketchup's `tcr-workflow` validator enforces at commit time.
+
 ---
 
-## The Transformation
+## Git worktrees
 
-See the [transformation story](/origin-story#the-transformation) for the complete journey.
+Once a Bottle's bursts are running cleanly, open another worktree and work on an independent Bottle in parallel. Each worktree runs its own Ketchup instance. The guardrails enforce quality in each; the Technique keeps each focused.
 
-**[Get Started →](/getting-started)**
+```bash
+git worktree add ../feature-auth feature/auth
+git worktree add ../feature-payments feature/payments
+```
+
+This compounds only when the rhythm holds inside each worktree. Broken rhythm in one worktree is not solved by opening another.
+
+---
+
+## Relation to Guardrail Engineering
+
+The Technique and the Engineering exist because AI does two things badly: it doesn't know what to *not* produce, and it forgets everything between prompts.
+
+[Guardrail Engineering](/guardrail-engineering) handles the "doesn't know what to not produce" problem by encoding rules AI can't get past. The Ketchup Technique handles the "forgets everything" problem by giving work a durable shape (the plan) and an enforced rhythm (TCR on atomic bursts).
+
+Together: the plan says *what*, the Technique says *how to break it down*, and the guardrails verify *that what got built matches what was specified*.
+
+---
+
+**[Get Started →](/getting-started)** or read the [Guardrail Engineering](/guardrail-engineering) mechanism page.
