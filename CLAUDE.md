@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-Claude Auto — a Husky-style hooks and skills management system for Claude Code that enforces the Ketchup Technique (TDD-driven TCR discipline). It validates commits, injects reminders, manages deny-lists, and enables trusted parallel feature development.
+Ketchup (npm: `auto-ketchup`) — a quality loop for Claude Code that enforces the Ketchup Technique (TDD-driven TCR discipline). It validates commits, injects reminders, manages deny-lists, and enables trusted parallel feature development. Brand: Ketchup. Package: auto-ketchup.
 
 ## Commands
 
@@ -49,7 +49,7 @@ Scripts are bundled via esbuild to `dist/bundle/scripts/` and executed from `$CL
 
 - **`hooks/`** — Hook handlers: `session-start.ts`, `pre-tool-use.ts`, `user-prompt-submit.ts`, `auto-continue.ts`, `validate-commit.ts`
 - **`commit-validator.ts`** — Batched validator execution (default batch size: 3), appeals parsing, Claude CLI spawning
-- **`validator-loader.ts`** / **`reminder-loader.ts`** — Load markdown files with YAML frontmatter from `.claude-auto/validators/` and `.claude-auto/reminders/`
+- **`validator-loader.ts`** / **`reminder-loader.ts`** — Load markdown files with YAML frontmatter from `.ketchup/validators/` and `.ketchup/reminders/`
 - **`hook-state.ts`** — Manages `.claude.hooks.json` (autoContinue mode, validateCommit mode, deny-list config)
 - **`deny-list.ts`** — File path protection via micromatch glob patterns
 - **`path-resolver.ts`** — Resolves plugin and project paths from `CLAUDE_PLUGIN_ROOT` / `CLAUDE_PLUGIN_DATA` env vars
@@ -60,7 +60,7 @@ Scripts are bundled via esbuild to `dist/bundle/scripts/` and executed from `$CL
 
 1. PreToolUse hook detects `git commit` command
 2. Gets staged diff, files, commit message
-3. Loads validators from `.claude-auto/validators/` (markdown with YAML frontmatter)
+3. Loads validators from `.ketchup/validators/` (markdown with YAML frontmatter)
 4. Batches validators (3 per Claude CLI call), each returns ACK or NACK
 5. If NACK and commit message contains `[appeal: reason]`, runs appeal validator
 6. Returns allow/block decision
@@ -71,7 +71,7 @@ Both are markdown files with YAML frontmatter. Validators gate commits (ACK/NACK
 
 ### Installation Model
 
-Claude Auto runs as a Claude Code plugin. Install via `/plugin marketplace add BeOnAuto/auto-plugins` or `claude --plugin-dir /path/to/claude-auto`. The plugin is opt-in per repository: hooks are inactive until the user runs `/claude-auto-init`, which creates `.claude-auto/` with default config. Without initialization, session-start shows a non-blocking hint. The plugin provides validators, reminders, and hook scripts. Projects can add local overrides in `.claude-auto/`.
+Ketchup runs as a Claude Code plugin. Install via `/plugin marketplace add BeOnAuto/auto-plugins` followed by `/plugin install auto-ketchup`, or as a local plugin via `claude --plugin-dir /path/to/auto-ketchup`. The plugin is opt-in per repository: hooks are inactive until the user runs `/auto-ketchup-init`, which creates `.ketchup/` with default config. Without initialization, session-start shows a non-blocking hint. The plugin provides validators, reminders, and hook scripts. Projects can add local overrides in `.ketchup/`. Existing `.claude-auto/` directories from the legacy package name auto-rename to `.ketchup/` on first session-start (see `src/migrate.ts`).
 
 ## Coding Patterns
 
