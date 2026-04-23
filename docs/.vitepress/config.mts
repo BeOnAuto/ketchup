@@ -1,13 +1,14 @@
 import { defineConfig } from 'vitepress';
 
 const base = '/';
-const siteUrl = 'https://claude.on.auto';
+const siteUrl = 'https://ketchup.on.auto';
 
 export default defineConfig({
   base,
   lang: 'en-US',
-  title: 'Claude Auto',
-  description: 'Stop Babysitting. Start Parallelizing. Trust the system. Run 3-5 features in parallel. Ship 10+ per week.',
+  title: 'Ketchup',
+  description:
+    'A quality loop for Claude Code. Stop babysitting, start parallelizing. Run 3-5 features in parallel. Ship 10+ per week.',
   appearance: 'dark',
 
   themeConfig: {
@@ -30,10 +31,11 @@ export default defineConfig({
         ],
       },
       { text: 'The Ketchup Technique', link: '/ketchup-technique' },
+      { text: 'In the Stack', link: '/in-the-stack' },
       { text: 'Origin Story', link: '/origin-story' },
       {
         text: 'GitHub',
-        link: 'https://github.com/BeOnAuto/claude-auto',
+        link: 'https://github.com/BeOnAuto/auto-ketchup',
       },
     ],
 
@@ -44,6 +46,7 @@ export default defineConfig({
           { text: 'Overview', link: '/' },
           { text: 'Getting Started', link: '/getting-started' },
           { text: 'Installation', link: '/installation' },
+          { text: 'In the Stack', link: '/in-the-stack' },
         ],
       },
       {
@@ -76,11 +79,11 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/BeOnAuto/claude-auto/edit/main/docs/:path',
+      pattern: 'https://github.com/BeOnAuto/auto-ketchup/edit/main/docs/:path',
       text: 'Suggest changes to this page',
     },
 
-    socialLinks: [{ icon: 'github', link: 'https://github.com/BeOnAuto/claude-auto' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/BeOnAuto/auto-ketchup' }],
 
     footer: {
       message: 'Released under the MIT License.',
@@ -113,7 +116,7 @@ export default defineConfig({
       'meta',
       {
         property: 'og:title',
-        content: 'Claude Auto - Stop Babysitting. Start Parallelizing.',
+        content: 'Ketchup - Stop Babysitting. Start Parallelizing.',
       },
     ],
     ['meta', { property: 'og:type', content: 'website' }],
@@ -122,7 +125,7 @@ export default defineConfig({
       {
         property: 'og:description',
         content:
-          'AI-assisted coding made you a babysitter. Claude Auto earns the trust to parallelize. Supervisor AI validates every commit. Auto-continue keeps going. Git worktrees multiply. 10+ features/week.',
+          'AI-assisted coding made you a babysitter. Ketchup earns the trust to parallelize. Validators gate every commit. Auto-continue keeps going. Git worktrees multiply.',
       },
     ],
     [
@@ -145,16 +148,16 @@ export default defineConfig({
       'meta',
       {
         property: 'og:image:alt',
-        content: 'Claude Auto - Stop Babysitting. Start Parallelizing.',
+        content: 'Ketchup - Stop Babysitting. Start Parallelizing.',
       },
     ],
-    ['meta', { property: 'og:site_name', content: 'Claude Auto' }],
+    ['meta', { property: 'og:site_name', content: 'Ketchup' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     [
       'meta',
       {
         name: 'twitter:title',
-        content: 'Claude Auto - Stop Babysitting. Start Parallelizing.',
+        content: 'Ketchup - Stop Babysitting. Start Parallelizing.',
       },
     ],
     [
@@ -162,7 +165,7 @@ export default defineConfig({
       {
         name: 'twitter:description',
         content:
-          'AI-assisted coding made you a babysitter. Claude Auto earns the trust to parallelize. Supervisor AI validates commits. Auto-continue keeps going. Git worktrees multiply. 10+ features/week.',
+          'AI-assisted coding made you a babysitter. Ketchup earns the trust to parallelize. Validators gate every commit. Auto-continue keeps going. Git worktrees multiply.',
       },
     ],
     [
