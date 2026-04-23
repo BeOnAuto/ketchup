@@ -4,19 +4,19 @@
 
 I was running an infinitely productive amnesiac, and I was the only memory in the system.
 
-Every Claude session demanded my full attention. Watching for drift. Nudging it back on track. Worse: I'd fix a mistake once, and the next session would make the same mistake. I'd caught the failure, but the fix didn't persist. Nothing I did transferred *negative knowledge* (what not to do, what I'd already caught) into something the next session could enforce.
+Every Claude session demanded my full attention, watching for drift and nudging it back on track. Worse, I'd fix a mistake once and the next session would make the same mistake: I'd caught the failure but the fix didn't persist, because nothing I did transferred *negative knowledge* (what not to do, what I'd already caught) into something the next session could enforce.
 
-You can only relax attention if the system enforces what you'd otherwise enforce yourself. I didn't have that system. So I watched.
+You can only relax attention if the system enforces what you'd otherwise enforce yourself. I didn't have that system, so I watched.
 
 ## The XP and TCR lineage
 
 My background is Extreme Programming: TDD, pair programming, continuous integration. The key insight from TDD: if it's hard to test, the design is wrong. When you're fighting the tests, you're fighting a smell.
 
-In 2019, I read [Kent Beck's article on TCR](https://medium.com/@kentbeck_7670/test-commit-revert-870bbd756864) (Test && Commit || Revert). Run your tests, and if they pass, commit automatically. If they fail, revert everything. No debugging. No patching. Start fresh.
+In 2019, I read [Kent Beck's article on TCR](https://medium.com/@kentbeck_7670/test-commit-revert-870bbd756864) (Test && Commit || Revert). The rule: run your tests, and if they pass, commit automatically; if they fail, revert everything. No debugging, no patching, just start fresh.
 
-Put that in a loop with AI: the thought experiment of infinite monkeys with typewriters producing Shakespeare, but with tests as the filter. A million AIs, and the ones that work are the ones that meet the tests.
+Run that loop with AI in the seat and you get something close to the infinite-monkeys thought experiment, except the tests act as the filter and only the work that holds up is allowed through.
 
-The revert isn't a problem. It's a tool. The code disappears; the learning stays in the context window. The LLM still has the context of why it failed. It has a clean slate to apply that lesson differently. Reverts aren't punishment. They're information.
+The revert isn't a problem; it's a tool. The code disappears, but the learning stays in the context window: the LLM still has the reasoning that led to the failure, and a clean slate to apply that lesson differently. Reverts aren't punishment, they're information.
 
 ## What changed
 
@@ -26,7 +26,7 @@ The first time AI wrote a meaningless test with `toBeDefined()`, I wrote `testin
 
 Each mistake got paid once, not repeatedly. The codebase got permanently safer, not just temporarily cleaner.
 
-My attention didn't disappear. It moved. From supervising keystrokes to engineering constraints. That's a higher-value place to spend it, and it's the only place where the investment compounds.
+My attention didn't disappear; it moved from supervising keystrokes to engineering constraints, which is a higher-value place to spend it and the only place where the investment compounds.
 
 ## Now
 

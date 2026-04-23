@@ -26,7 +26,7 @@ The workflow is: observe an AI mistake, encode it as a rule, AI can't repeat it.
 
 ## In the stack
 
-Ketchup comes from the team building [Auto](https://on.auto), a spec-driven development platform. Auto decides what to build. Ketchup enforces how. Use them together, or use Ketchup on its own. Both work.
+Ketchup comes from the team building [Auto](https://on.auto), a spec-driven development platform: Auto decides what to build, and Ketchup enforces how. Use them together or use Ketchup on its own; both work.
 
 ## Key Concepts
 
@@ -34,7 +34,7 @@ Ketchup comes from the team building [Auto](https://on.auto), a spec-driven deve
 - **Validators**: Markdown files with YAML frontmatter that ACK or NACK commits based on your criteria
 - **Reminders**: Context-injection files that surface your guidelines at the right moment
 - **Deny-list**: Glob patterns that protect files from modification
-- **TCR Discipline**: Test && Commit || Revert. Bad code auto-reverts.
+- **TCR Discipline**: Test && Commit || Revert, so bad code auto-reverts
 - **Auto-Continue**: Keeps the agent going until the plan is done
 
 ---

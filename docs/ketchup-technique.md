@@ -28,14 +28,14 @@ The Ketchup Technique exists to break work into units small enough for the valid
 Red → Green → TCR → Refactor → TCR → Done
 ```
 
-- **Red**: write one failing test. One behavior. Not a suite.
+- **Red**: write one failing test for one behavior, not a suite.
 - **Green**: write the minimum code to make that test pass.
 - **TCR**: `test && commit || revert`. Tests pass, the change is committed. Tests fail, the change is reverted.
 - **Refactor**: improve what works without changing behavior. Tests still pass.
 - **TCR again**: commit the refactor.
 - **Done**: move the burst from TODO to DONE.
 
-Never patch failing code. Revert and rethink.
+Never patch failing code; revert and rethink.
 
 ---
 
@@ -81,13 +81,13 @@ A burst is:
 - **Small**: reviewable in minutes
 - **Testable**: covered by the test that drove it
 
-One test, one behavior, one commit. This is enforced by the `burst-atomicity` validator at commit time. Multi-concern commits get NACK'd.
+One test, one behavior, one commit, enforced by the `burst-atomicity` validator at commit time so multi-concern commits get NACK'd.
 
 ---
 
 ## RETHINK after a revert
 
-A revert isn't punishment. It's information. But it's also a signal to change approach, not try harder at the same thing.
+A revert isn't punishment, it's information, and it's also a signal to change your approach rather than try harder at the same thing.
 
 After a revert, ask:
 
@@ -95,13 +95,13 @@ After a revert, ask:
 2. **Was the design flawed?** → Try a different approach.
 3. **Was the test wrong?** → Clarify the requirement first.
 
-Only then write the next failing test. Never patch.
+Only then write the next failing test, and never patch.
 
 ---
 
 ## Testing rules
 
-The validators enforce these. The Technique reminds you of them before you write the test:
+The validators enforce these, and the Technique reminds you of them before you write the test:
 
 - **Title = Spec**: the test body proves exactly what `it('should...')` claims. One assertion per behavior.
 - **Assert whole objects**: `expect(result).toEqual({...})`, not cherry-picked properties.
@@ -114,7 +114,7 @@ The validators enforce these. The Technique reminds you of them before you write
 
 ## Coverage by construction
 
-If code exists, a test demanded it. This isn't enforced through willpower. It's structural:
+If code exists, a test demanded it, and that isn't enforced through willpower but through structure:
 
 - Write test first (red)
 - Write minimal code to pass (green)
@@ -122,13 +122,13 @@ If code exists, a test demanded it. This isn't enforced through willpower. It's 
 
 Uncovered code = code nobody asked for = delete on the next revert. 100% enforced via the `coverage-rules` validator.
 
-Exclusions are narrow: barrel `index.ts` re-exports, `*.test.ts` files. That's it.
+Exclusions are narrow: barrel `index.ts` re-exports and `*.test.ts` files, and that's it.
 
 ---
 
 ## Extreme ownership
 
-Every problem is your problem. See a problem → fix it or add a burst to fix it. No third option.
+Every problem is your problem: see one, and either fix it or add a burst to fix it. There's no third option.
 
 | Situation | Wrong response | Ownership response |
 |-----------|----------------|---------------------|
@@ -142,7 +142,7 @@ Every problem is your problem. See a problem → fix it or add a burst to fix it
 
 Config files need no tests: `package.json`, `tsconfig.json`, `vitest.config.ts`, `.gitignore`, `ketchup-plan.md`.
 
-Format: `chore(scope): description`. Enforced by the `infra-commit-format` validator.
+Format: `chore(scope): description`, enforced by the `infra-commit-format` validator.
 
 ---
 
@@ -152,13 +152,13 @@ Format: `chore(scope): description`. Enforced by the `infra-commit-format` valid
 pnpm test --run && git add -A && git commit -m "<MSG>" || git checkout -- .
 ```
 
-Tests pass, everything commits. Tests fail, everything reverts. This is the operation Ketchup's `tcr-workflow` validator enforces at commit time.
+If tests pass everything commits, and if tests fail everything reverts. This is the operation Ketchup's `tcr-workflow` validator enforces at commit time.
 
 ---
 
 ## Git worktrees
 
-Once a Bottle's bursts are running cleanly, open another worktree and work on an independent Bottle in parallel. Each worktree runs its own Ketchup instance. The guardrails enforce quality in each; the Technique keeps each focused.
+Once a Bottle's bursts are running cleanly, open another worktree and work on an independent Bottle in parallel. Each worktree runs its own Ketchup instance, with the guardrails enforcing quality and the Technique keeping each one focused.
 
 ```bash
 git worktree add ../feature-auth feature/auth

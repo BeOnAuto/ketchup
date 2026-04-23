@@ -15,19 +15,19 @@ Ketchup doesn't sit alone. It's one property in a wider stack that takes specifi
 | [on.auto](https://on.auto) | The product. Auto turns narratives into working software. |
 | **ketchup.on.auto** | The guardrail layer. Ketchup encodes the rules AI can't get past so the output is trusted, not hoped for. |
 
-Each property is independently useful. Adopt the methodology without the tool. Use the tool without the broader movement. The composition is where value compounds.
+Each property is independently useful: you can adopt the methodology without the tool, or use the tool without the broader movement. The composition is where value compounds.
 
 ## Where Ketchup sits
 
-Auto drives the model. Ketchup enforces the rules while AI implements against that model. The spec says what. The agent does. Ketchup verifies. You direct.
+Auto drives the model and Ketchup enforces the rules while AI implements against that model: the spec says what, the agent does, Ketchup verifies, and you direct.
 
-If Auto decides *what* to build, Ketchup enforces *how*. They compose:
+If Auto decides *what* to build, Ketchup enforces *how*, and they compose:
 
-- Auto generates vertical slices from a narrative spec
-- Ketchup keeps the implementation honest, commit by commit, test by test
-- Open another worktree. Repeat.
+- Auto generates vertical slices from a narrative spec.
+- Ketchup keeps the implementation honest, commit by commit, test by test.
+- Open another worktree and repeat the loop in parallel.
 
-If you don't use Auto yet, Ketchup is still useful. The [Ketchup Technique](/ketchup-technique) works with any AI coding agent by hand. [Guardrail Engineering](/guardrail-engineering) automates the loop for Claude Code.
+If you don't use Auto yet, Ketchup is still useful on its own: [the Ketchup Technique](/ketchup-technique) works with any AI coding agent by hand, and [Guardrail Engineering](/guardrail-engineering) automates the loop for Claude Code.
 
 ## Further reading
 

@@ -24,7 +24,7 @@ features:
   - icon:
       src: /icon-supervisor.png
     title: Validators
-    details: "LLM-powered commit gate. An impartial AI reads every diff against your rules and returns ACK or NACK. 17 ship. Add your own."
+    details: "LLM-powered commit gate: an impartial AI reads every diff against your rules and returns ACK or NACK. 17 ship by default, and you add your own."
   - icon:
       src: /icon-janitor.png
     title: Reminders
@@ -32,7 +32,7 @@ features:
   - icon:
       src: /icon-architect.png
     title: Deny-list
-    details: "Glob-pattern protection for files AI must never touch. Structural, not procedural."
+    details: "Glob-pattern protection for the files AI must never touch, enforced structurally rather than asked for politely."
   - icon:
       src: /icon-parallel.png
     title: Auto-Continue
@@ -40,7 +40,7 @@ features:
   - icon:
       src: /icon-tcr.png
     title: TCR gate
-    details: "<code>test && commit || revert</code>. Red commits don't land. The rhythm holds."
+    details: "<code>test && commit || revert</code> at the commit boundary, so red commits don't land and the rhythm holds."
   - icon:
       src: /icon-coverage.png
     title: Appeals
@@ -49,9 +49,9 @@ features:
 
 ## The loop
 
-Observe an AI mistake. Encode it as a rule. AI can't repeat it.
+You observe an AI mistake, encode it as a rule, and AI can't repeat it.
 
-Ketchup is how you make that loop real. Validators on every commit. Reminders on every prompt. Deny-lists on every file. The codebase gets permanently safer as you keep working, not just temporarily cleaner.
+Ketchup makes that loop real with validators on every commit, reminders on every prompt, and deny-lists on every file. The codebase gets permanently safer as you keep working, not just temporarily cleaner.
 
 ```
 /plugin install ketchup
@@ -82,7 +82,7 @@ Static tools catch syntax. Tests catch regressions. Neither catches *semantic* f
 - A "fix" that rationalizes a shortcut
 - A new data-access pattern that contradicts an architectural rule you wrote three months ago
 
-Semantic failures need semantic understanding. Ketchup runs a separate Claude subagent against every commit. It has no investment in shipping, no attachment to the diff, no reason to rationalize. Just the rules, read from your validator files.
+Semantic failures need semantic understanding, which is why Ketchup runs a separate Claude subagent against every commit, with no investment in shipping, no attachment to the diff, and no reason to rationalize. Just the rules, read from your validator files, returning ACK or NACK.
 
 Cost, latency, false-positive rate, and what happens when the subagent hallucinates: see [Operational Concerns](/operational-concerns).
 
@@ -109,7 +109,7 @@ This creates `.ketchup/` with default configuration, seeded with the 17 validato
 
 ### 3. Work
 
-Write a test, let AI implement it, commit. Validators read the diff. If anything's off, the commit is rejected with a reason. Encode any new failure pattern as a validator in `.ketchup/validators/`. The next AI agent can't repeat it.
+Write a test, let AI implement it, then commit. Validators read the diff and reject the commit with a reason if anything is off. When you spot a new failure pattern, encode it as a validator in `.ketchup/validators/`, and the next AI agent can't repeat it.
 
 **[Get Started →](/getting-started)**
 
