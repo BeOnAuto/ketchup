@@ -28937,6 +28937,24 @@ function createEventWebSocket(httpServer, deps) {
   return { wss, publish };
 }
 
+// src/event-store/find-available-port.ts
+var import_node_net = require("node:net");
+async function findAvailablePort(startPort, maxTries) {
+  for (let offset = 0; offset < maxTries; offset++) {
+    const port = startPort + offset;
+    if (await isPortFree(port)) return port;
+  }
+  throw new Error(`No free port in range ${startPort}..${startPort + maxTries - 1}`);
+}
+function isPortFree(port) {
+  return new Promise((resolve3) => {
+    const server = (0, import_node_net.createServer)();
+    server.once("error", () => resolve3(false));
+    server.once("listening", () => server.close(() => resolve3(true)));
+    server.listen(port, "127.0.0.1");
+  });
+}
+
 // src/event-store/ingest-project.ts
 var import_promises2 = require("node:fs/promises");
 var import_node_path = require("node:path");
@@ -29300,7 +29318,8 @@ function watchProject(projectDir, onJsonlChange, watchFn = import_node_fs.watch)
 // scripts/events-viewer.ts
 async function main() {
   const dbPath = (0, import_node_path4.resolve)(process.argv[2] ?? "./events.db");
-  const port = Number(process.argv[3] ?? 4321);
+  const requestedPort = Number(process.argv[3] ?? 4321);
+  const port = await findAvailablePort(requestedPort, 20);
   const projectDir = process.argv[4] ? (0, import_node_path4.resolve)(process.argv[4]) : deriveProjectDir(process.cwd());
   const store = await createEventStore(dbPath);
   const connection = sqliteConnection({ fileName: dbPath });

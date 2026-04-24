@@ -6,6 +6,7 @@ import { sqliteConnection } from '@event-driven-io/emmett-sqlite';
 
 import { deriveProjectDir } from '../src/event-store/derive-project-dir.js';
 import { createEventWebSocket } from '../src/event-store/event-websocket.js';
+import { findAvailablePort } from '../src/event-store/find-available-port.js';
 import { ingestProject } from '../src/event-store/ingest-project.js';
 import { ingestSession } from '../src/event-store/ingest-session.js';
 import { listSessions } from '../src/event-store/list-sessions.js';
@@ -18,7 +19,8 @@ import { watchProject } from '../src/event-store/watch-project.js';
 
 async function main(): Promise<void> {
   const dbPath = resolve(process.argv[2] ?? './events.db');
-  const port = Number(process.argv[3] ?? 4321);
+  const requestedPort = Number(process.argv[3] ?? 4321);
+  const port = await findAvailablePort(requestedPort, 20);
   const projectDir = process.argv[4] ? resolve(process.argv[4]) : deriveProjectDir(process.cwd());
 
   const store = await createEventStore(dbPath);
