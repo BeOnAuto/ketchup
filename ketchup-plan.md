@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 72: Sidebar (session picker) is fixed in the viewport and scrolls independently
 - [ ] Burst 73: Selected session is highlighted in the session picker
 
 
@@ -118,3 +117,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 69: Timeline bubbles keep light palette and flip to dark-gray/near-white in dark mode
 - [x] Burst 70: Floating round chevron "scroll to bottom" button appears when content is below the fold
 - [x] Burst 71: Timeline auto-scrolls to bottom when new events arrive while pinned
+- [x] Burst 72: Sidebar is sticky full-height and scrolls independently of the main pane

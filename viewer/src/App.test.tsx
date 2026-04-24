@@ -29,6 +29,19 @@ describe('App', () => {
     });
   });
 
+  it('renders the sidebar as a sticky full-height column that scrolls independently', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ sessions: [] }))),
+    );
+
+    render(<App />);
+
+    expect(screen.getByRole('complementary').className).toEqual(
+      'sticky top-0 flex h-screen w-80 shrink-0 flex-col overflow-y-auto border-r border-slate-200 pr-4 dark:border-ketchup-divider',
+    );
+  });
+
   it('renders the viewer title with the Ketchup rainbow gradient class', async () => {
     vi.stubGlobal(
       'fetch',
