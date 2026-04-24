@@ -8,8 +8,8 @@ import { Timeline } from './Timeline';
 export function App() {
   const [selected, setSelected] = useState<SessionSummary | null>(null);
   return (
-    <div className="flex min-h-screen gap-4 bg-ketchup-bg p-4 font-sans text-ketchup-text">
-      <aside className="w-80 shrink-0 border-r border-ketchup-divider pr-4">
+    <div className="flex min-h-screen gap-4 bg-white p-4 font-sans text-slate-900 dark:bg-ketchup-bg dark:text-ketchup-text">
+      <aside className="w-80 shrink-0 border-r border-slate-200 pr-4 dark:border-ketchup-divider">
         <div className="mb-4 flex items-center gap-2">
           <h1 className="ketchup-brand-gradient text-xl font-semibold">Ketchup Viewer</h1>
           <span className="ml-auto">
@@ -29,7 +29,7 @@ export function App() {
             <Timeline sessionId={selected.sessionId} />
           </>
         ) : (
-          <p className="text-ketchup-text-3">Pick a session.</p>
+          <p className="text-slate-500 dark:text-ketchup-text-3">Pick a session.</p>
         )}
       </main>
     </div>

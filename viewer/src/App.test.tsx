@@ -23,7 +23,8 @@ describe('App', () => {
       shellClasses: shell?.className,
       placeholder: screen.getByText(/pick a session/i).textContent,
     }).toEqual({
-      shellClasses: 'flex min-h-screen gap-4 bg-ketchup-bg p-4 font-sans text-ketchup-text',
+      shellClasses:
+        'flex min-h-screen gap-4 bg-white p-4 font-sans text-slate-900 dark:bg-ketchup-bg dark:text-ketchup-text',
       placeholder: 'Pick a session.',
     });
   });

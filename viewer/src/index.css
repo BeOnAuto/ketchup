@@ -19,6 +19,12 @@
 
 html,
 body {
+  background-color: #ffffff;
+  color: #0f172a;
+}
+
+html.dark,
+html.dark body {
   background-color: var(--color-ketchup-bg);
   color: var(--color-ketchup-text);
 }
