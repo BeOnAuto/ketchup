@@ -391,7 +391,7 @@ Commit project reminders (not personal preferences):
 See which reminders are active from within a Claude Code session:
 
 ```
-/ketchup:config reminders
+/ketchup-config reminders
 ```
 
 ### Test Reminder Loading

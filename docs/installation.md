@@ -30,7 +30,7 @@ claude --plugin-dir /path/to/ketchup
 After installing the plugin, Claude will mention that Ketchup is available. To activate it:
 
 ```
-/ketchup:init
+/ketchup-init
 ```
 
 This creates the following structure in your project:
@@ -56,20 +56,20 @@ See the [Reminders Guide](/reminders-guide) and [Validators Guide](/validators-g
 After installing the plugin, use the config skill to check the current state:
 
 ```
-/ketchup:config show
+/ketchup-config show
 ```
 
 ---
 
 ## Configuration
 
-All configuration is managed via the `/ketchup:config` skill:
+All configuration is managed via the `/ketchup-config` skill:
 
 ```
-/ketchup:config show          # View current configuration
-/ketchup:config set <key> <value>  # Update a setting
-/ketchup:config validators    # List active validators
-/ketchup:config reminders     # List active reminders
+/ketchup-config show          # View current configuration
+/ketchup-config set <key> <value>  # Update a setting
+/ketchup-config validators    # List active validators
+/ketchup-config reminders     # List active reminders
 ```
 
 Configuration is stored in `.ketchup/state.json`.
@@ -134,6 +134,6 @@ After installation:
 
 If you run into issues:
 
-1. Run `/ketchup:config show` to check configuration state
+1. Run `/ketchup-config show` to check configuration state
 2. Check `.ketchup/logs/` for detailed error messages
 3. Report persistent issues at [GitHub Issues](https://github.com/BeOnAuto/ketchup/issues)

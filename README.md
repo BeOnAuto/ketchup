@@ -56,7 +56,7 @@ Inside any Claude Code session:
 claude --plugin-dir /path/to/ketchup
 ```
 
-Claude Code sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` automatically. Run `/ketchup:init` inside a session to activate per-project configuration, validators, and logging.
+Claude Code sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` automatically. Run `/ketchup-init` inside a session to activate per-project configuration, validators, and logging.
 
 ## Quick Start
 
@@ -72,7 +72,7 @@ claude --plugin-dir /path/to/ketchup
 After installation, Claude will mention that Ketchup is available. To activate it in a project:
 
 ```
-/ketchup:init
+/ketchup-init
 ```
 
 This creates `.ketchup/` with default configuration. You can add it to `.gitignore` for personal use, or commit it for the whole team.
@@ -142,10 +142,10 @@ Higher `priority` = appears first. Project-local files are loaded alongside plug
 Toggle validators and reminders without editing files:
 
 ```bash
-/ketchup:config show
-/ketchup:config validators disable no-comments
-/ketchup:config reminders priority my-reminder 200
-/ketchup:config reminders add my-rule --hook UserPromptSubmit --priority 50 --content "Always use early returns"
+/ketchup-config show
+/ketchup-config validators disable no-comments
+/ketchup-config reminders priority my-reminder 200
+/ketchup-config reminders add my-rule --hook UserPromptSubmit --priority 50 --content "Always use early returns"
 ```
 
 ---
