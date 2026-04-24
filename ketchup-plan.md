@@ -35,6 +35,7 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 85: ThemeToggle uses light defaults with dark overrides so hover isn't near-black in light mode
 
 ## DONE
 
