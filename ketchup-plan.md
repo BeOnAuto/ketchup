@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 65: Viewer has a theme toggle that flips `dark` class on html and persists choice
 - [ ] Burst 66: App shell restores light defaults + dark overrides via Tailwind `dark:` variants
 - [ ] Burst 67: SessionPicker renders correctly in both light and dark modes
 - [ ] Burst 68: SessionHeader renders correctly in both light and dark modes
@@ -118,3 +117,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 62: SessionPicker renders cards on Ketchup dark surface tokens
 - [x] Burst 63: SessionHeader adopts Ketchup dark tokens and pill-shaped copy button
 - [x] Burst 64: Timeline event variants adopt Ketchup dark theme tokens
+- [x] Burst 65: Viewer has a `ThemeToggle` that flips dark class on html and persists choice

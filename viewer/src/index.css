@@ -1,5 +1,7 @@
 @import 'tailwindcss';
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
   --color-ketchup-bg: #0e051b;
   --color-ketchup-bg-alt: #130c1e;

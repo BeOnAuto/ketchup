@@ -17,7 +17,7 @@ describe('App', () => {
 
     render(<App />);
 
-    const shell = screen.getByRole('heading', { name: /ketchup viewer/i }).closest('div');
+    const shell = screen.getByRole('main').parentElement;
 
     expect({
       shellClasses: shell?.className,
@@ -37,7 +37,7 @@ describe('App', () => {
     render(<App />);
 
     expect(screen.getByRole('heading', { name: /ketchup viewer/i }).className).toEqual(
-      'mb-4 ketchup-brand-gradient text-xl font-semibold',
+      'ketchup-brand-gradient text-xl font-semibold',
     );
   });
 
@@ -73,7 +73,7 @@ describe('App', () => {
     const user = userEvent.setup();
 
     render(<App />);
-    const pickerButton = await screen.findByRole('button');
+    const pickerButton = await screen.findByRole('button', { name: /my first prompt/i });
     await user.click(pickerButton);
     const header = await screen.findByTestId('session-header');
 
