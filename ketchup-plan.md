@@ -35,8 +35,9 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-
-
+- [ ] Burst 75: Selected-session ring uses `ring-inset` so it doesn't get clipped by sidebar overflow
+- [ ] Burst 76: ScrollToBottomButton centers under the right-hand main pane instead of the full viewport
+- [ ] Burst 77: Clickable buttons/cards get `cursor-pointer` affordance
 
 ## DONE
 
