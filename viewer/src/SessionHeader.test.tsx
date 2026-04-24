@@ -24,4 +24,17 @@ describe('SessionHeader', () => {
       copied: 'claude --resume abc-12345678',
     });
   });
+
+  it('renders on Ketchup dark tokens with a pill-shaped copy button', () => {
+    render(<SessionHeader sessionId="abc" summary="s" onCopy={() => {}} />);
+
+    expect({
+      wrapper: screen.getByTestId('session-header').className,
+      button: screen.getByRole('button').className,
+    }).toEqual({
+      wrapper: 'mb-4 border-b border-ketchup-divider pb-3',
+      button:
+        'ml-auto rounded-full border border-ketchup-divider px-3 py-0.5 text-xs text-ketchup-text-2 transition hover:bg-ketchup-bg-soft',
+    });
+  });
 });
