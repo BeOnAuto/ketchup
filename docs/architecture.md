@@ -26,12 +26,12 @@ How Ketchup works under the hood.
 │  └─────────────┘  └─────────────┘  └─────────────┘         │
 │                                                              │
 │        ┌─────────────┐        ┌─────────────┐              │
-│        │ Auto-       │        │ TCR         │              │
-│        │ Continue    │        │ gate        │              │
+│        │ Parallel    │        │ TCR         │              │
+│        │ subagents   │        │ gate        │              │
 │        │             │        │             │              │
-│        │ Stop hook   │        │ test &&     │              │
-│        │ reads plan  │        │ commit ||   │              │
-│        │ for TODOs   │        │ revert      │              │
+│        │ plan deps   │        │ test &&     │              │
+│        │ drive Task  │        │ commit ||   │              │
+│        │ launches    │        │ revert      │              │
 │        └─────────────┘        └─────────────┘              │
 │                                                              │
 └──────────────────────────┬──────────────────────────────────┘
@@ -191,39 +191,6 @@ User Submits Prompt
 └─────────────────────────────┘
 ```
 
-### Stop Hook
-
-```
-Claude Execution Pauses
-         │
-         ▼
-┌─────────────────────────────┐
-│  settings.json hooks config │
-│  Stop: [...]                │
-└──────────────┬──────────────┘
-               │
-               ▼
-┌─────────────────────────────┐
-│  scripts/auto-continue.ts   │
-│  Input: transcript & plan   │
-└──────────────┬──────────────┘
-               │
-               ▼
-┌─────────────────────────────┐
-│  handleStop()               │
-│  ├─► readKetchupPlan()      │
-│  ├─► countTodos()           │
-│  ├─► analyzeTranscript()    │
-│  └─► checkContinuation()    │
-└──────────────┬──────────────┘
-               │
-        ┌──────┴──────┐
-        │             │
-        ▼             ▼
-   { CONTINUE }   { STOP }
-   Resume work    End session
-```
-
 ### Validator Execution (PreToolUse for git commit)
 
 ```
@@ -374,7 +341,6 @@ ketchup/
 │       ├── session-start.ts     SessionStart handler
 │       ├── pre-tool-use.ts      PreToolUse handler
 │       ├── user-prompt-submit.ts  UserPromptSubmit handler
-│       ├── auto-continue.ts     Stop hook / auto-continue
 │       └── validate-commit.ts   Commit validation
 │
 ├── scripts/                 Source scripts (bundled to dist/bundle/scripts/)

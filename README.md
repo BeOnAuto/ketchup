@@ -30,12 +30,12 @@ Ketchup comes from the team building [Auto](https://on.auto), a spec-driven deve
 
 ## Key Concepts
 
-- **Hooks**: Four integration points (SessionStart, PreToolUse, UserPromptSubmit, Stop) that let Ketchup observe and control Claude Code's behavior
+- **Hooks**: Three integration points (SessionStart, PreToolUse, UserPromptSubmit) that let Ketchup observe and gate Claude Code's behavior
 - **Validators**: Markdown files with YAML frontmatter that ACK or NACK commits based on your criteria
 - **Reminders**: Context-injection files that surface your guidelines at the right moment
 - **Deny-list**: Glob patterns that protect files from modification
 - **TCR Discipline**: Test && Commit || Revert, so bad code auto-reverts
-- **Auto-Continue**: Keeps the agent going until the plan is done
+- **Parallel subagent planning**: `ketchup-plan.md` carries dependency notation so independent bursts launch in parallel sub-agents
 
 ---
 
@@ -165,7 +165,6 @@ Each worktree runs its own Ketchup instance, all quality-validated.
 
 ```json
 {
-  "autoContinue": { "mode": "smart" },
   "validateCommit": { "mode": "strict", "batchCount": 3 },
   "denyList": { "enabled": true },
   "promptReminder": { "enabled": true },
@@ -190,7 +189,6 @@ flowchart LR
     C -->|SessionStart| D[Load Reminders]
     C -->|PreToolUse| E[Validate Commits + Deny-list]
     C -->|UserPromptSubmit| F[Inject Reminders]
-    C -->|Stop| G[Auto-Continue Decision]
     E -->|ACK| H[Allow]
     E -->|NACK| I[Block + Revert]
 ```
@@ -258,7 +256,7 @@ reminders/                # Default context-injection reminders (10 files)
 agents/                   # Sub-agent definitions (validator agent)
 src/
 ├── brand.ts              # BRAND constants (single source of truth for naming)
-├── hooks/                # Hook handlers (session-start, pre-tool-use, user-prompt-submit, auto-continue)
+├── hooks/                # Hook handlers (session-start, pre-tool-use, user-prompt-submit)
 ├── migrate.ts            # .claude-auto -> .ketchup auto-migration
 ├── path-resolver.ts      # Plugin-mode path resolution
 ├── commit-validator.ts   # Batched commit validation with appeal support
@@ -270,8 +268,7 @@ src/
 scripts/
 ├── session-start.ts      # SessionStart hook entry-point (runs migration first)
 ├── pre-tool-use.ts       # PreToolUse hook entry-point
-├── user-prompt-submit.ts # UserPromptSubmit hook entry-point
-└── auto-continue.ts      # Stop hook entry-point
+└── user-prompt-submit.ts # UserPromptSubmit hook entry-point
 ```
 
 ### Dependencies

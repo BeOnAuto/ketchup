@@ -38,22 +38,21 @@ Claude Code hooks are the core integration. Four hook points with bundled script
 
 | Hook | Script | Purpose |
 |------|--------|---------|
-| SessionStart | `session-start.ts` | Load and inject reminders |
+| SessionStart | `session-start.ts` | Load and inject reminders, run migrations |
 | PreToolUse | `pre-tool-use.ts` | Validate commits, enforce deny-list |
 | UserPromptSubmit | `user-prompt-submit.ts` | Inject context-aware reminders |
-| Stop | `auto-continue.ts` | Decide auto-continue vs stop |
 
 Scripts are bundled via esbuild to `dist/bundle/scripts/` and executed from `$CLAUDE_PLUGIN_ROOT/dist/bundle/scripts/` in plugin mode.
 
 ### Key Source Modules (`src/`)
 
-- **`hooks/`**, Hook handlers: `session-start.ts`, `pre-tool-use.ts`, `user-prompt-submit.ts`, `auto-continue.ts`, `validate-commit.ts`
+- **`hooks/`**, Hook handlers: `session-start.ts`, `pre-tool-use.ts`, `user-prompt-submit.ts`, `validate-commit.ts`
 - **`commit-validator.ts`**, Batched validator execution (default batch size: 3), appeals parsing, Claude CLI spawning
 - **`validator-loader.ts`** / **`reminder-loader.ts`**, Load markdown files with YAML frontmatter from `.ketchup/validators/` and `.ketchup/reminders/`
-- **`hook-state.ts`**, Manages `state.json` (autoContinue mode, validateCommit mode, deny-list config)
+- **`hook-state.ts`**, Manages `state.json` (validateCommit mode, deny-list config, subagent hooks)
 - **`deny-list.ts`**, File path protection via micromatch glob patterns
 - **`path-resolver.ts`**, Resolves plugin and project paths from `CLAUDE_PLUGIN_ROOT` / `CLAUDE_PLUGIN_DATA` env vars
-- **`clue-collector.ts`**, Extracts signals from session transcripts for auto-continue decisions
+- **`migrate.ts`**, One-time migrations for legacy data dir, state filename, and deny-list location
 - **`subagent-classifier.ts`**, Classifies prompts as explore/work/unknown to control hook behavior
 
 ### Data Flow: Commit Validation

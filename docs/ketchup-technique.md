@@ -58,7 +58,7 @@ Never patch failing code; revert and rethink.
 - [x] Burst 0: Project setup (abc123)
 ```
 
-The plan is a real artifact in the repo. It's the first thing the `ketchup-plan-format` validator checks, and it's what [Auto-Continue](/guardrail-engineering#_5-auto-continue) reads to decide whether to keep working.
+The plan is a real artifact in the repo. It's the first thing the `ketchup-plan-format` validator checks, and it's what the [parallel subagent planning](/guardrail-engineering#_5-parallel-subagent-planning) reminder reads to decide which bursts can launch in parallel sub-agents.
 
 ### Dependency notation
 

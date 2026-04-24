@@ -20,7 +20,7 @@ Ketchup uses a layered configuration system with multiple files:
 
 ## Hook State (`.ketchup/state.json`)
 
-The primary runtime configuration file. Controls auto-continue, commit validation, and other behaviors.
+The primary runtime configuration file. Controls commit validation, deny-list behavior, prompt reminders, and subagent gating.
 
 **Location:** `.ketchup/state.json` (inside the ketchup directory)
 
@@ -28,14 +28,9 @@ The primary runtime configuration file. Controls auto-continue, commit validatio
 
 ```json
 {
-  "autoContinue": {
-    "mode": "smart",
-    "maxIterations": 0,
-    "iteration": 0,
-    "skipModes": ["plan"]
-  },
   "validateCommit": {
-    "mode": "strict"
+    "mode": "strict",
+    "batchCount": 3
   },
   "denyList": {
     "enabled": true,
@@ -49,30 +44,9 @@ The primary runtime configuration file. Controls auto-continue, commit validatio
     "validateCommitOnExplore": false,
     "validateCommitOnWork": true,
     "validateCommitOnUnknown": true
-  },
-  "updatedAt": "2026-01-21T00:00:00.000Z",
-  "updatedBy": "init"
+  }
 }
 ```
-
-### `autoContinue`
-
-Controls automatic continuation after Claude stops.
-
-| Field | Type | Default | Description |
-|-------|------|---------|-------------|
-| `mode` | `'smart' \| 'non-stop' \| 'off'` | `'smart'` | Continuation strategy |
-| `maxIterations` | `number` | `0` | Max iterations (0 = unlimited) |
-| `iteration` | `number` | `0` | Current iteration count |
-| `skipModes` | `string[]` | `['plan']` | Modes that skip auto-continue |
-
-**Mode behaviors:**
-
-| Mode | Behavior |
-|------|----------|
-| `smart` | Analyzes transcript for continuation signals before deciding |
-| `non-stop` | Always continues until `maxIterations` reached |
-| `off` | Never auto-continues |
 
 ### `validateCommit`
 
@@ -160,7 +134,6 @@ Configuration is managed via the `/ketchup:config` skill from within a Claude Co
 | `AUTO_LOG` | Filter activity logging | Log everything |
 | `CI` | Detect CI environment | - |
 | `AUTO_VALIDATOR_MODE` | Override validator mode | From config |
-| `AUTO_AUTO_CONTINUE` | Override auto-continue mode | From config |
 
 ### `AUTO_ROOT`
 
@@ -213,23 +186,6 @@ AUTO_VALIDATOR_MODE=warn claude
 ```
 
 Overrides the `validateCommit.mode` setting in `.ketchup/state.json`.
-
-### `AUTO_AUTO_CONTINUE`
-
-Override the auto-continue mode at runtime:
-
-```bash
-# Enable non-stop mode
-AUTO_AUTO_CONTINUE=non-stop claude
-
-# Use smart mode
-AUTO_AUTO_CONTINUE=smart claude
-
-# Disable auto-continue
-AUTO_AUTO_CONTINUE=off claude
-```
-
-Overrides the `autoContinue.mode` setting in `.ketchup/state.json`.
 
 ---
 
@@ -361,8 +317,7 @@ Ketchup finds the project root in this order:
   "hooks": {
     "SessionStart": { "_mode": "replace", "_value": [] },
     "PreToolUse": { "_mode": "replace", "_value": [] },
-    "UserPromptSubmit": { "_mode": "replace", "_value": [] },
-    "Stop": { "_mode": "replace", "_value": [] }
+    "UserPromptSubmit": { "_mode": "replace", "_value": [] }
   }
 }
 ```
@@ -370,18 +325,6 @@ Ketchup finds the project root in this order:
 ::: tip Hook Scripts
 Hook scripts are bundled within the plugin and registered automatically. No manual script setup is needed.
 :::
-
-### Enable non-stop mode
-
-```json
-// .ketchup/state.json
-{
-  "autoContinue": {
-    "mode": "non-stop",
-    "maxIterations": 50
-  }
-}
-```
 
 ### Disable commit validation
 

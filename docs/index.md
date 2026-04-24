@@ -35,8 +35,8 @@ features:
     details: "Glob-pattern protection for the files AI must never touch, enforced structurally rather than asked for politely."
   - icon:
       src: /icon-parallel.png
-    title: Auto-Continue
-    details: "Reads `ketchup-plan.md` and session signals. Keeps the agent working while work remains and commits stay clean."
+    title: Parallel subagent planning
+    details: "`ketchup-plan.md` carries dependency notation on every burst, so independent bursts launch in parallel sub-agents and the work composes."
   - icon:
       src: /icon-tcr.png
     title: TCR gate

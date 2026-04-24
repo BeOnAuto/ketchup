@@ -126,7 +126,7 @@ After installation:
 1. [Configure your hooks](/hooks-guide) - Customize supervision rules
 2. [Add reminders](/configuration#reminder-frontmatter) - Inject your guidelines
 3. [Set up file protection](/hooks-guide#protect-files-with-deny-list) - Protect sensitive files
-4. [Enable auto-continue](/configuration#autocontinue) - Keep AI working
+4. [Plan for parallel sub-agents](/guardrail-engineering#_5-parallel-subagent-planning) - Run independent bursts in parallel
 
 ---
 

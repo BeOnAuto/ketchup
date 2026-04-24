@@ -50,7 +50,7 @@ This creates `.ketchup/` with default configuration. Then verify:
 /ketchup:config show
 ```
 
-Ketchup is now active with commit validation, reminders, deny-lists, and auto-continue.
+Ketchup is now active with commit validation, reminders, deny-lists, and parallel subagent planning.
 
 ---
 
@@ -148,8 +148,8 @@ You installed Ketchup:
 | Validators        | ACK/NACK every commit via LLM         | PreToolUse hooks         |
 | Reminders         | Your rules, every session + prompt    | SessionStart + prompt    |
 | Deny-list         | Structural file protection            | PreToolUse deny-list     |
-| Auto-Continue     | Agent keeps working while plan has work | Stop hooks             |
 | TCR gate          | `test && commit || revert` enforced   | `tcr-workflow` validator |
+| Parallel subagent planning | `ketchup-plan.md` deps drive Task sub-agents | `reminder-parallelization` |
 
 ---
 

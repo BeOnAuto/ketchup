@@ -69,15 +69,13 @@ If tests pass, the commit lands automatically; if they fail, the change is rever
 
 The rhythm is red → green → TCR → refactor → TCR → done, and it holds because the validators won't let it slip. [Planning rhythm details →](/ketchup-technique)
 
-### 5. Auto-Continue
+### 5. Parallel subagent planning
 
-Ketchup reads the `.ketchup/state.json` state and decides whether the agent should keep going or stop. The Stop hook runs an LLM classifier that reads:
+`ketchup-plan.md` carries dependency notation on every burst (`[depends: none]`, `[depends: 11]`, `[depends: 10, 12]`), and the SessionStart reminder tells the agent to read that graph and launch one sub-agent per independent burst. Bursts at the same dependency level run together, downstream bursts wait, and the work composes.
 
-- Session log clues (by time, by type)
-- Last 5 chat exchanges
-- `ketchup-plan.md` TODO section (unchecked bursts)
+Sub-agents inherit the same validators, reminders, and deny-list, so the guardrails on every commit hold regardless of which agent wrote the diff. When a Bottle's bursts are running cleanly, open a fresh worktree and run an independent Bottle in parallel.
 
-**CONTINUE** if the agent asked to continue, there are unchecked bursts, or the last chat shows unfinished work. **STOP** if work is complete or signals say so. The agent runs as long as the plan has work and commits stay clean.
+The plan is the parallelization signal, and sub-agents are the execution mechanism.
 
 ---
 

@@ -13,7 +13,6 @@ For a complete reference of all configuration files and options, see the [Config
 | SessionStart | Session begins | What context Claude receives |
 | PreToolUse | Before any tool | What actions are allowed |
 | UserPromptSubmit | User sends prompt | What reminders are injected |
-| Stop | Execution pauses | Whether to continue or stop |
 
 ---
 
@@ -92,33 +91,6 @@ For a complete reference of all configuration files and options, see the [Config
 
 **Script location:** Bundled within the plugin (`dist/bundle/scripts/user-prompt-submit.js`)
 
-### Stop Hook
-
-**Purpose:** Decide whether Claude should continue or stop after pausing.
-
-**When it fires:** When Claude's execution pauses (typically after completing a response).
-
-**What it does:**
-- Analyzes the current transcript
-- Determines if more work is needed
-- Can trigger auto-continue behavior
-
-**Default behavior:**
-- Checks auto-continue configuration in `.ketchup/state.json`
-- In "smart" mode: analyzes transcript for continuation signals
-- In "non-stop" mode: always continues until max iterations
-- In "off" mode: never auto-continues
-
-**Example use cases:**
-- Keep Claude working until all tests pass
-- Continue until a feature is complete
-- Stop when hitting error limits
-- Pause for user review at milestones
-
-**Script location:** Bundled within the plugin (`dist/bundle/scripts/auto-continue.js`)
-
----
-
 ## Protect Files with Deny-List
 
 Define what the AI cannot touch.
@@ -188,12 +160,6 @@ Control runtime hook behavior via `.ketchup/state.json`.
 ```bash
 cat > .ketchup/state.json << 'EOF'
 {
-  "autoContinue": {
-    "mode": "smart",
-    "maxIterations": 10,
-    "iteration": 0,
-    "skipModes": ["plan"]
-  },
   "validateCommit": {
     "mode": "strict"
   },
@@ -213,14 +179,6 @@ cat > .ketchup/state.json << 'EOF'
 }
 EOF
 ```
-
-### Auto-continue modes
-
-| Mode | Behavior |
-|------|----------|
-| `smart` | Analyzes transcript for continuation signals |
-| `non-stop` | Always continues until maxIterations |
-| `off` | Never auto-continues |
 
 ### Validate-commit modes
 
@@ -281,9 +239,6 @@ node .ketchup/scripts/pre-tool-use.js '{"file_path":"/some/file.ts"}'
 
 # Test user-prompt-submit with sample input
 node .ketchup/scripts/user-prompt-submit.js "Write a function"
-
-# Test stop hook
-node .ketchup/scripts/auto-continue.js
 ```
 
 ---
@@ -351,11 +306,5 @@ Add to `.claude/settings.project.json`:
 { "result": "Modified prompt with reminders..." }
 ```
 
-**Stop:**
-```json
-{ "decision": "CONTINUE", "reason": "More work to do" }
-// or
-{ "decision": "STOP", "reason": "All tasks complete" }
-```
 
 
