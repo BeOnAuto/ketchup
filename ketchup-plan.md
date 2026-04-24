@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 62: SessionPicker renders on dark surface with subtle borders
 - [ ] Burst 63: SessionHeader adapts to dark theme and copy button becomes a pill
 - [ ] Burst 64: Timeline event variants (bubble, card, row) adapt to dark theme
 
@@ -115,3 +114,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 59: Vite dev proxy forwards `/ws` to Express for live events in dev mode
 - [x] Burst 60: Viewer App shell renders on the Ketchup dark brand tokens
 - [x] Burst 61: App title renders with the Ketchup rainbow gradient
+- [x] Burst 62: SessionPicker renders cards on Ketchup dark surface tokens

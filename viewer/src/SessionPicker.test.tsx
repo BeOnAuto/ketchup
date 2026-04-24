@@ -49,4 +49,34 @@ describe('SessionPicker', () => {
       },
     ]);
   });
+
+  it('renders each session as a Ketchup dark-theme card with brand-token classes', async () => {
+    const summaries = [
+      {
+        sessionId: 'abc-123',
+        eventCount: 1,
+        firstTimestamp: '2026-04-20T10:00:00Z',
+        lastTimestamp: '2026-04-20T11:00:00Z',
+        summary: 'summary',
+      },
+    ];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ sessions: summaries }))),
+    );
+
+    render(<SessionPicker onSelect={() => {}} />);
+    const button = await screen.findByRole('button');
+
+    expect({
+      button: button.className,
+      label: button.querySelector('[data-testid="session-label"]')?.className,
+      meta: button.querySelector('[data-testid="session-meta"]')?.className,
+    }).toEqual({
+      button:
+        'w-full rounded-md border border-ketchup-divider bg-ketchup-surface px-3 py-2 text-left text-sm transition hover:bg-ketchup-bg-soft',
+      label: 'line-clamp-2 font-medium text-ketchup-text',
+      meta: 'mt-1 flex gap-2 text-xs text-ketchup-text-3',
+    });
+  });
 });
