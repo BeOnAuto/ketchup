@@ -28,11 +28,11 @@ features:
   - icon:
       src: /icon-janitor.png
     title: Persistent operating context
-    details: "Reminders inject your rules into Claude at the hook points you choose. 9+ ship by default, and you can add your own."
+    details: "Reminders inject 9+ rules at hook points you choose, and you can add your own."
   - icon:
       src: /icon-architect.png
     title: Structural file protection
-    details: "Ketchup blocks Claude from touching files you've forbidden, using hooks, so it doesn't ignore you as it's known to do."
+    details: "Claude's blocked from changing files you've forbidden, so it doesn't ignore you like it tends to."
   - icon:
       src: /icon-parallel.png
     title: Parallel by design
@@ -40,18 +40,18 @@ features:
   - icon:
       src: /icon-tcr.png
     title: Emergent design through TCR
-    details: "<code>test && commit || revert</code> forces Claude to rethink rather than keep patching a bad design."
+    details: "<code>test && commit || revert</code> forces Claude to rethink its design rather than keep patching a bad one."
   - icon:
       src: /icon-coverage.png
     title: Formal appeals
-    details: "If validators are too strict, Claude can appeal with `[appeal: reason]` and a separate LLM re-judges."
+    details: "If validators are being too strict, Claude can appeal and a separate LLM re-judges."
 ---
 
 ## The loop
 
 You observe an AI mistake, encode it as a rule, and AI can't repeat it.
 
-Ketchup makes that loop real with validators on every commit, reminders on every prompt, and deny-lists on every file. The codebase gets permanently safer as you keep working, not just temporarily cleaner.
+Ketchup makes that loop real with validators on every commit, reminders at the hook points you choose, and deny-lists for the files Claude shouldn't touch. The codebase gets permanently safer as you keep working, not just temporarily cleaner.
 
 ```
 /plugin install ketchup
