@@ -267,6 +267,29 @@ describe('Timeline', () => {
     );
   });
 
+  it('auto-scrolls to the bottom when new events arrive and the user is pinned to the bottom', () => {
+    const scrollTo = vi.fn();
+    window.scrollTo = scrollTo as typeof window.scrollTo;
+    Object.defineProperty(document.documentElement, 'scrollHeight', { configurable: true, value: 2000 });
+    Object.defineProperty(window, 'innerHeight', { configurable: true, value: 800, writable: true });
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: 1200, writable: true });
+
+    render(<Timeline sessionId="abc" />);
+    act(() =>
+      deliver([
+        {
+          type: 'PromptSubmitted',
+          timestamp: 't1',
+          sessionId: 'a',
+          prompt: 'hi',
+          source: {},
+        },
+      ]),
+    );
+
+    expect(scrollTo.mock.calls.at(-1)?.[0]).toEqual({ top: 2000, behavior: 'smooth' });
+  });
+
   it('renders a failed tool invocation with the full error text', async () => {
     const fullError = 'Error: file not found\n  at handler.ts:42\n  at processor.ts:118';
     const events: SessionEvent[] = [

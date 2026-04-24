@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useState } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 
 import { buildEventTree, type TreeNode } from './event-tree';
 
@@ -208,6 +208,7 @@ function EventNode({ node, depth }: { node: TreeNode; depth: number }) {
 
 export function Timeline({ sessionId }: { sessionId: string }) {
   const [events, setEvents] = useState<SessionEvent[]>([]);
+  const pinnedRef = useRef(true);
 
   useEffect(() => {
     setEvents([]);
@@ -219,6 +220,20 @@ export function Timeline({ sessionId }: { sessionId: string }) {
     };
     return () => ws.close();
   }, [sessionId]);
+
+  useEffect(() => {
+    const onScroll = () => {
+      pinnedRef.current = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 40;
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
+
+  useEffect(() => {
+    if (pinnedRef.current && events.length > 0) {
+      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+    }
+  }, [events]);
 
   const tree = buildEventTree(events.filter((event) => !(event.type === 'ThoughtRecorded' && event.thinking === '')));
 
