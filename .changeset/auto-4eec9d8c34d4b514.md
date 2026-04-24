@@ -1,5 +1,5 @@
 ---
-"claude-auto": patch
+"ketchup": patch
 ---
 
 - Renamed project data directory from .claude-auto to .ketchup as part of the ongoing rebrand

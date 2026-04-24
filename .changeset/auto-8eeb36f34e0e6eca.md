@@ -1,5 +1,5 @@
 ---
-"claude-auto": minor
+"ketchup": minor
 ---
 
 - Moved deny-list files from .claude/ into .ketchup/ so all project-local Ketchup config lives in one place

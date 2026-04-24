@@ -1,5 +1,5 @@
 ---
-"claude-auto": patch
+"ketchup": patch
 ---
 
 - Renamed the config skill from claude-auto-config to ketchup-config

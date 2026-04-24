@@ -1,5 +1,5 @@
 ---
-"claude-auto": patch
+"ketchup": patch
 ---
 
 - Updated architecture docs to reflect the current Guardrail Stack, replacing outdated Quality-Loop and Auto-Planner references

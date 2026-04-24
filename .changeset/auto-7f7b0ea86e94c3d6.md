@@ -1,5 +1,5 @@
 ---
-"claude-auto": patch
+"ketchup": patch
 ---
 
 - Added Operational Concerns page with honest disclosure of cost, latency, and false-positive rates

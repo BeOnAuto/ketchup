@@ -1,5 +1,5 @@
 ---
-"claude-auto": minor
+"ketchup": minor
 ---
 
 - Renamed the state file to `.ketchup/state.json` for a cleaner, brand-aligned name

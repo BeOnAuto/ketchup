@@ -1,5 +1,5 @@
 ---
-"claude-auto": patch
+"ketchup": patch
 ---
 
 - Streamlined the In the Stack page for quicker scanning while preserving the stack table and Auto-to-Ketchup bridge

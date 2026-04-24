@@ -1,5 +1,5 @@
 ---
-"claude-auto": patch
+"ketchup": patch
 ---
 
 - Updated hero and social preview images to feature the new "KETCHUP BY AUTO" wordmark
