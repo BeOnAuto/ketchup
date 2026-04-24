@@ -106,11 +106,11 @@ describe('SessionPicker', () => {
     const buttons = await screen.findAllByRole('button');
 
     expect({
-      alphaHasRing: buttons[0]?.className.includes('ring-2'),
-      betaHasRing: buttons[1]?.className.includes('ring-2'),
+      alphaHasInsetRing: buttons[0]?.className.includes('ring-2 ring-inset'),
+      betaHasInsetRing: buttons[1]?.className.includes('ring-2 ring-inset'),
     }).toEqual({
-      alphaHasRing: true,
-      betaHasRing: false,
+      alphaHasInsetRing: true,
+      betaHasInsetRing: false,
     });
   });
 });

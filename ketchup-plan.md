@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 75: Selected-session ring uses `ring-inset` so it doesn't get clipped by sidebar overflow
 - [ ] Burst 76: ScrollToBottomButton centers under the right-hand main pane instead of the full viewport
 - [ ] Burst 77: Clickable buttons/cards get `cursor-pointer` affordance
 
@@ -118,3 +117,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 72: Sidebar is sticky full-height and scrolls independently of the main pane
 - [x] Burst 73: Selected session is highlighted with a brand-colored ring in the picker
 - [x] Burst 74: `parsePromptSubmitted` surfaces queued_command attachments as prompt events
+- [x] Burst 75: Selected-session ring uses `ring-inset` so it is not clipped by sidebar overflow
