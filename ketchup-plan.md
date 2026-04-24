@@ -35,6 +35,8 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 78: Shell caps at 100vh; main pane scrolls internally; sidebar is always full viewport height
+- [ ] Burst 79: ScrollToBottomButton click is instant; Timeline auto-scroll is instant on initial load, smooth on increments
 
 ## DONE
 
