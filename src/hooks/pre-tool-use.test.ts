@@ -5,9 +5,9 @@ import * as path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import type { ResolvedPaths } from '../path-resolver.js';
-import { handlePreToolUse } from './pre-tool-use.js';
+import { commandTargetsProtectedPath, handlePreToolUse, isProtectedPath } from './pre-tool-use.js';
 
-const DEFAULT_AUTO_DIR = '.claude-auto';
+const DEFAULT_AUTO_DIR = '.ketchup';
 
 describe('pre-tool-use hook', () => {
   let tempDir: string;
@@ -26,6 +26,7 @@ describe('pre-tool-use hook', () => {
       autoDir,
       remindersDirs: [path.join(autoDir, 'reminders')],
       validatorsDirs: [path.join(autoDir, 'validators')],
+      protectedValidatorsDirs: [],
     };
     fs.mkdirSync(claudeDir, { recursive: true });
     fs.mkdirSync(autoDir, { recursive: true });
@@ -56,7 +57,7 @@ describe('pre-tool-use hook', () => {
   });
 
   it('blocks tool use when path matches deny pattern', async () => {
-    fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), '*.secret\n');
+    fs.writeFileSync(path.join(autoDir, 'deny-list.project.txt'), '*.secret\n');
     const toolInput = { file_path: '/project/config.secret' };
 
     const result = await handlePreToolUse(resolvedPaths, 'session-1', toolInput);
@@ -65,13 +66,13 @@ describe('pre-tool-use hook', () => {
       hookSpecificOutput: {
         hookEventName: 'PreToolUse',
         permissionDecision: 'deny',
-        permissionDecisionReason: 'Path /project/config.secret is denied by claude-auto deny-list',
+        permissionDecisionReason: 'Path /project/config.secret is denied by ketchup deny-list',
       },
     });
   });
 
   it('allows tool use when path does not match deny pattern', async () => {
-    fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), '*.secret\n');
+    fs.writeFileSync(path.join(autoDir, 'deny-list.project.txt'), '*.secret\n');
     const toolInput = { file_path: '/project/config.json' };
 
     const result = await handlePreToolUse(resolvedPaths, 'session-2', toolInput);
@@ -94,7 +95,7 @@ describe('pre-tool-use hook', () => {
   });
 
   it('logs to activity.log with session ID', async () => {
-    fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), '*.secret\n');
+    fs.writeFileSync(path.join(autoDir, 'deny-list.project.txt'), '*.secret\n');
     const toolInput = { file_path: '/project/config.secret' };
 
     await handlePreToolUse(resolvedPaths, 'my-session-id', toolInput);
@@ -106,14 +107,14 @@ describe('pre-tool-use hook', () => {
     expect(content).toContain('pre-tool-use:');
   });
 
-  it('logs deny-list check when DEBUG=claude-auto', async () => {
-    process.env.DEBUG = 'claude-auto';
-    fs.writeFileSync(path.join(claudeDir, 'deny-list.project.txt'), '*.secret\n');
+  it('logs deny-list check when DEBUG=ketchup', async () => {
+    process.env.DEBUG = 'ketchup';
+    fs.writeFileSync(path.join(autoDir, 'deny-list.project.txt'), '*.secret\n');
     const toolInput = { file_path: '/project/config.secret' };
 
     await handlePreToolUse(resolvedPaths, 'debug-session', toolInput);
 
-    const logPath = path.join(autoDir, 'logs', 'claude-auto', 'debug.log');
+    const logPath = path.join(autoDir, 'logs', 'ketchup', 'debug.log');
     expect(fs.existsSync(logPath)).toBe(true);
     const content = fs.readFileSync(logPath, 'utf8');
     expect(content).toContain('[pre-tool-use]');
@@ -148,7 +149,7 @@ enabled: true
 ---
 Validate this commit`,
     );
-    fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify({ validateCommit: { mode: 'off' } }));
+    fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify({ validateCommit: { mode: 'off' } }));
 
     const result = await handlePreToolUse(resolvedPaths, 'session-off', {
       command: 'git commit -m "test: skip validation"',
@@ -334,6 +335,97 @@ Validate this commit`,
     } finally {
       cwdSpy.mockRestore();
     }
+  });
+
+  it('denies Bash command targeting protected (plugin) validator files', async () => {
+    const pluginValidatorsDir = '/plugins/ketchup/validators';
+    const paths = { ...resolvedPaths, protectedValidatorsDirs: [pluginValidatorsDir] };
+    const validatorPath = path.join(pluginValidatorsDir, 'burst-atomicity.md');
+    const toolInput = { command: `rm ${validatorPath}` };
+
+    const result = await handlePreToolUse(paths, 'session-bash-protect', toolInput);
+
+    expect(result).toEqual({
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'deny',
+        permissionDecisionReason: `Validator files are immutable: ${validatorPath}`,
+      },
+    });
+  });
+
+  it('denies Edit/Write to protected (plugin) validator files', async () => {
+    const pluginValidatorsDir = '/plugins/ketchup/validators';
+    const paths = { ...resolvedPaths, protectedValidatorsDirs: [pluginValidatorsDir] };
+    const toolInput = { file_path: path.join(pluginValidatorsDir, 'burst-atomicity.md') };
+
+    const result = await handlePreToolUse(paths, 'session-protect', toolInput);
+
+    expect(result).toEqual({
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'deny',
+        permissionDecisionReason: `Validator files are immutable: ${toolInput.file_path}`,
+      },
+    });
+  });
+
+  it('allows Edit/Write to project-local validator files (not in protectedValidatorsDirs)', async () => {
+    const toolInput = { file_path: path.join(autoDir, 'validators', 'my-custom.md') };
+
+    const result = await handlePreToolUse(resolvedPaths, 'session-user-validator', toolInput);
+
+    expect(result).toEqual({
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'allow',
+      },
+    });
+  });
+
+  describe('isProtectedPath', () => {
+    it('returns true for file inside a validatorsDirs path', () => {
+      const validatorsDirs = ['/plugin/validators', '/project/.ketchup/validators'];
+
+      expect(isProtectedPath('/project/.ketchup/validators/burst-atomicity.md', validatorsDirs)).toBe(true);
+      expect(isProtectedPath('/plugin/validators/coverage-rules.md', validatorsDirs)).toBe(true);
+    });
+
+    it('returns false for file outside validatorsDirs', () => {
+      const validatorsDirs = ['/plugin/validators', '/project/.ketchup/validators'];
+
+      expect(isProtectedPath('/project/src/hooks/pre-tool-use.ts', validatorsDirs)).toBe(false);
+      expect(isProtectedPath('/project/.ketchup/reminders/tcr.md', validatorsDirs)).toBe(false);
+    });
+  });
+
+  describe('commandTargetsProtectedPath', () => {
+    it('returns matched path when command contains a validator path', () => {
+      const dirs = ['/project/.ketchup/validators'];
+
+      expect(commandTargetsProtectedPath('rm /project/.ketchup/validators/test.md', dirs)).toBe(
+        '/project/.ketchup/validators/test.md',
+      );
+    });
+
+    it('returns undefined when command does not contain a validator path', () => {
+      const dirs = ['/project/.ketchup/validators'];
+
+      expect(commandTargetsProtectedPath('rm /project/src/file.ts', dirs)).toBe(undefined);
+    });
+  });
+
+  it('allows Bash commands not targeting validator files', async () => {
+    const toolInput = { command: 'rm /project/src/file.ts' };
+
+    const result = await handlePreToolUse(resolvedPaths, 'session-bash-ok', toolInput);
+
+    expect(result).toEqual({
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'allow',
+      },
+    });
   });
 
   it('injects reminders matching PreToolUse hook and toolName', async () => {

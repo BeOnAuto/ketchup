@@ -1,6 +1,7 @@
 import * as fs from 'node:fs';
 
 import { activityLog } from '../activity-logger.js';
+import { BRAND } from '../brand.js';
 import {
   type Executor,
   getCommitContext,
@@ -14,6 +15,22 @@ import { createHookState } from '../hook-state.js';
 import type { ResolvedPaths } from '../path-resolver.js';
 import { loadReminders } from '../reminder-loader.js';
 import { loadValidators } from '../validator-loader.js';
+
+export function isProtectedPath(filePath: string, validatorsDirs: string[]): boolean {
+  return validatorsDirs.some((dir) => filePath.startsWith(`${dir}/`));
+}
+
+export function commandTargetsProtectedPath(command: string, validatorsDirs: string[]): string | undefined {
+  for (const dir of validatorsDirs) {
+    if (command.includes(`${dir}/`)) {
+      const idx = command.indexOf(`${dir}/`);
+      const rest = command.slice(idx);
+      const match = rest.match(/^(\S+)/);
+      if (match) return match[1];
+    }
+  }
+  return undefined;
+}
 
 type ToolInput = Record<string, unknown>;
 
@@ -54,8 +71,36 @@ export async function handlePreToolUse(
     return handleCommitValidation(paths, sessionId, command, options, gitCwd);
   }
 
-  const patterns = loadDenyPatterns(paths.claudeDir);
+  if (command) {
+    const targetedPath = commandTargetsProtectedPath(command, paths.protectedValidatorsDirs);
+    if (targetedPath) {
+      activityLog(paths.autoDir, sessionId, 'pre-tool-use', `blocked protected: ${targetedPath}`);
+      debugLog(paths.autoDir, 'pre-tool-use', `${targetedPath} blocked (immutable validator)`);
+      return {
+        hookSpecificOutput: {
+          hookEventName: 'PreToolUse',
+          permissionDecision: 'deny',
+          permissionDecisionReason: `Validator files are immutable: ${targetedPath}`,
+        },
+      };
+    }
+  }
+
   const filePath = toolInput.file_path as string;
+
+  if (filePath && isProtectedPath(filePath, paths.protectedValidatorsDirs)) {
+    activityLog(paths.autoDir, sessionId, 'pre-tool-use', `blocked protected: ${filePath}`);
+    debugLog(paths.autoDir, 'pre-tool-use', `${filePath} blocked (immutable validator)`);
+    return {
+      hookSpecificOutput: {
+        hookEventName: 'PreToolUse',
+        permissionDecision: 'deny',
+        permissionDecisionReason: `Validator files are immutable: ${filePath}`,
+      },
+    };
+  }
+
+  const patterns = loadDenyPatterns(paths.autoDir);
 
   if (filePath && isDenied(filePath, patterns)) {
     activityLog(paths.autoDir, sessionId, 'pre-tool-use', `blocked: ${filePath}`);
@@ -64,7 +109,7 @@ export async function handlePreToolUse(
       hookSpecificOutput: {
         hookEventName: 'PreToolUse',
         permissionDecision: 'deny',
-        permissionDecisionReason: `Path ${filePath} is denied by claude-auto deny-list`,
+        permissionDecisionReason: `Path ${filePath} is denied by ${BRAND.packageName} deny-list`,
       },
     };
   }

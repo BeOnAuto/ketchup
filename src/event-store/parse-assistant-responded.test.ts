@@ -19,7 +19,7 @@ describe('parseAssistantResponded', () => {
       uuid: '0361714b-df10-483d-bb7e-606cbdb9bf97',
       timestamp: '2026-03-24T13:21:22.802Z',
       sessionId: '1c62519e-23e0-4da5-b54f-a23c75943f1e',
-      cwd: '/Users/igor/Projects/xolvio/claude-auto',
+      cwd: '/Users/sam/Projects/xolvio/ketchup',
       version: '2.1.81',
       gitBranch: 'main',
       entrypoint: 'cli',

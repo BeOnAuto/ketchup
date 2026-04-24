@@ -19,31 +19,33 @@ describe('logPluginDiagnostics', () => {
   });
 
   it('does not write log file when autoDir does not exist', () => {
-    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/claude-auto');
+    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/ketchup');
     const nonExistentDir = path.join(tempDir, 'not-created');
 
     logPluginDiagnostics('SessionStart', {
       projectRoot: '/project',
       claudeDir: '/project/.claude',
       autoDir: nonExistentDir,
-      validatorsDirs: ['/plugins/claude-auto/validators'],
-      remindersDirs: ['/plugins/claude-auto/reminders'],
+      validatorsDirs: ['/plugins/ketchup/validators'],
+      remindersDirs: ['/plugins/ketchup/reminders'],
+      protectedValidatorsDirs: ['/plugins/ketchup/validators'],
     });
 
     expect(fs.existsSync(nonExistentDir)).toBe(false);
   });
 
   it('writes to file in plugin mode', () => {
-    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/claude-auto');
-    vi.stubEnv('CLAUDE_PLUGIN_DATA', '/data/claude-auto');
+    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/ketchup');
+    vi.stubEnv('CLAUDE_PLUGIN_DATA', '/data/ketchup');
     vi.spyOn(console, 'error').mockImplementation(() => {});
 
     logPluginDiagnostics('SessionStart', {
       projectRoot: '/project',
       claudeDir: '/project/.claude',
       autoDir: tempDir,
-      validatorsDirs: ['/plugins/claude-auto/validators'],
-      remindersDirs: ['/plugins/claude-auto/reminders'],
+      validatorsDirs: ['/plugins/ketchup/validators'],
+      remindersDirs: ['/plugins/ketchup/reminders'],
+      protectedValidatorsDirs: ['/plugins/ketchup/validators'],
     });
 
     const logFile = path.join(tempDir, 'logs', 'plugin-debug.log');
@@ -52,8 +54,8 @@ describe('logPluginDiagnostics', () => {
     expect(content).toContain('plugin mode');
   });
 
-  it('writes to file when CLAUDE_AUTO_DEBUG is set in legacy mode', () => {
-    vi.stubEnv('CLAUDE_AUTO_DEBUG', '1');
+  it('writes to file when KETCHUP_DEBUG is set in legacy mode', () => {
+    vi.stubEnv('KETCHUP_DEBUG', '1');
     delete process.env.CLAUDE_PLUGIN_ROOT;
     delete process.env.CLAUDE_PLUGIN_DATA;
     vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -62,8 +64,9 @@ describe('logPluginDiagnostics', () => {
       projectRoot: '/project',
       claudeDir: '/project/.claude',
       autoDir: tempDir,
-      validatorsDirs: ['/project/.claude-auto/validators'],
-      remindersDirs: ['/project/.claude-auto/reminders'],
+      validatorsDirs: ['/project/.ketchup/validators'],
+      remindersDirs: ['/project/.ketchup/reminders'],
+      protectedValidatorsDirs: [],
     });
 
     const logFile = path.join(tempDir, 'logs', 'plugin-debug.log');
@@ -71,44 +74,46 @@ describe('logPluginDiagnostics', () => {
     expect(content).toContain('legacy mode');
   });
 
-  it('writes to stderr only when CLAUDE_AUTO_DEBUG is set', () => {
-    vi.stubEnv('CLAUDE_AUTO_DEBUG', '1');
-    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/claude-auto');
-    vi.stubEnv('CLAUDE_PLUGIN_DATA', '/data/claude-auto');
+  it('writes to stderr only when KETCHUP_DEBUG is set', () => {
+    vi.stubEnv('KETCHUP_DEBUG', '1');
+    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/ketchup');
+    vi.stubEnv('CLAUDE_PLUGIN_DATA', '/data/ketchup');
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     logPluginDiagnostics('SessionStart', {
       projectRoot: '/project',
       claudeDir: '/project/.claude',
       autoDir: tempDir,
-      validatorsDirs: ['/plugins/claude-auto/validators'],
-      remindersDirs: ['/plugins/claude-auto/reminders'],
+      validatorsDirs: ['/plugins/ketchup/validators'],
+      remindersDirs: ['/plugins/ketchup/reminders'],
+      protectedValidatorsDirs: ['/plugins/ketchup/validators'],
     });
 
     expect(spy).toHaveBeenCalledOnce();
     spy.mockRestore();
   });
 
-  it('does not write to stderr in plugin mode without CLAUDE_AUTO_DEBUG', () => {
-    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/claude-auto');
-    vi.stubEnv('CLAUDE_PLUGIN_DATA', '/data/claude-auto');
-    delete process.env.CLAUDE_AUTO_DEBUG;
+  it('does not write to stderr in plugin mode without KETCHUP_DEBUG', () => {
+    vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/ketchup');
+    vi.stubEnv('CLAUDE_PLUGIN_DATA', '/data/ketchup');
+    delete process.env.KETCHUP_DEBUG;
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     logPluginDiagnostics('SessionStart', {
       projectRoot: '/project',
       claudeDir: '/project/.claude',
       autoDir: tempDir,
-      validatorsDirs: ['/plugins/claude-auto/validators'],
-      remindersDirs: ['/plugins/claude-auto/reminders'],
+      validatorsDirs: ['/plugins/ketchup/validators'],
+      remindersDirs: ['/plugins/ketchup/reminders'],
+      protectedValidatorsDirs: ['/plugins/ketchup/validators'],
     });
 
     expect(spy).not.toHaveBeenCalled();
     spy.mockRestore();
   });
 
-  it('does nothing in legacy mode without CLAUDE_AUTO_DEBUG', () => {
-    delete process.env.CLAUDE_AUTO_DEBUG;
+  it('does nothing in legacy mode without KETCHUP_DEBUG', () => {
+    delete process.env.KETCHUP_DEBUG;
     delete process.env.CLAUDE_PLUGIN_ROOT;
     delete process.env.CLAUDE_PLUGIN_DATA;
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -117,8 +122,9 @@ describe('logPluginDiagnostics', () => {
       projectRoot: '/project',
       claudeDir: '/project/.claude',
       autoDir: tempDir,
-      validatorsDirs: ['/project/.claude-auto/validators'],
-      remindersDirs: ['/project/.claude-auto/reminders'],
+      validatorsDirs: ['/project/.ketchup/validators'],
+      remindersDirs: ['/project/.ketchup/reminders'],
+      protectedValidatorsDirs: [],
     });
 
     expect(spy).not.toHaveBeenCalled();

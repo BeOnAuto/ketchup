@@ -3397,7 +3397,7 @@ var require_parse = __commonJS({
 var require_gray_matter = __commonJS({
   "node_modules/.pnpm/gray-matter@4.0.3/node_modules/gray-matter/index.js"(exports2, module2) {
     "use strict";
-    var fs9 = require("fs");
+    var fs10 = require("fs");
     var sections = require_section_matter();
     var defaults = require_defaults();
     var stringify = require_stringify();
@@ -3481,7 +3481,7 @@ var require_gray_matter = __commonJS({
       return stringify(file, data, options2);
     };
     matter2.read = function(filepath, options2) {
-      const str2 = fs9.readFileSync(filepath, "utf8");
+      const str2 = fs10.readFileSync(filepath, "utf8");
       const file = matter2(str2, options2);
       file.path = filepath;
       return file;
@@ -3510,7 +3510,7 @@ var require_gray_matter = __commonJS({
 });
 
 // scripts/session-start.ts
-var fs8 = __toESM(require("node:fs"));
+var fs9 = __toESM(require("node:fs"));
 
 // src/activity-logger.ts
 var import_node_fs = __toESM(require("node:fs"));
@@ -3628,15 +3628,31 @@ var fs6 = __toESM(require("node:fs"));
 // src/debug-logger.ts
 var import_node_fs2 = __toESM(require("node:fs"));
 var import_node_path2 = __toESM(require("node:path"));
+
+// src/brand.ts
+var BRAND = {
+  packageName: "ketchup",
+  displayName: "Ketchup",
+  attribution: "Ketchup, from Auto",
+  dataDir: ".ketchup",
+  stateFile: "state.json",
+  docsUrl: "https://ketchup.on.auto",
+  repoUrl: "https://github.com/BeOnAuto/ketchup",
+  leadTagline: "Turn every AI mistake into a rule AI can't repeat.",
+  subTagline: "Ketchup runs 20+ LLM-powered guardrails on every AI commit, so bad commits don't land.",
+  categoryLine: "LLM-powered guardrails for AI coding agents."
+};
+
+// src/debug-logger.ts
 function debugLog(autoDir, hookName, message) {
   if (!import_node_fs2.default.existsSync(autoDir)) {
     return;
   }
   const debug = process.env.DEBUG;
-  if (!debug || !debug.includes("claude-auto")) {
+  if (!debug || !debug.includes(BRAND.packageName)) {
     return;
   }
-  const logsDir = import_node_path2.default.join(autoDir, "logs", "claude-auto");
+  const logsDir = import_node_path2.default.join(autoDir, "logs", BRAND.packageName);
   if (!import_node_fs2.default.existsSync(logsDir)) {
     import_node_fs2.default.mkdirSync(logsDir, { recursive: true });
   }
@@ -3651,11 +3667,6 @@ function debugLog(autoDir, hookName, message) {
 var fs4 = __toESM(require("node:fs"));
 var path4 = __toESM(require("node:path"));
 var DEFAULT_HOOK_STATE = {
-  autoContinue: {
-    mode: "smart",
-    maxIterations: 0,
-    skipModes: ["plan"]
-  },
   validateCommit: {
     mode: "strict",
     batchCount: 3
@@ -3678,7 +3689,7 @@ var DEFAULT_HOOK_STATE = {
   }
 };
 function createHookState(autoDir) {
-  const stateFile = path4.join(autoDir, ".claude.hooks.json");
+  const stateFile = path4.join(autoDir, BRAND.stateFile);
   function read() {
     if (!fs4.existsSync(autoDir)) {
       return { ...DEFAULT_HOOK_STATE };
@@ -3692,7 +3703,6 @@ function createHookState(autoDir) {
     const content = fs4.readFileSync(stateFile, "utf-8");
     const partial = JSON.parse(content);
     return {
-      autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, ...partial.autoContinue },
       validateCommit: { ...DEFAULT_HOOK_STATE.validateCommit, ...partial.validateCommit },
       denyList: { ...DEFAULT_HOOK_STATE.denyList, ...partial.denyList },
       promptReminder: { ...DEFAULT_HOOK_STATE.promptReminder, ...partial.promptReminder },
@@ -3718,7 +3728,6 @@ function createHookState(autoDir) {
     const newState = {
       ...current,
       ...updates,
-      autoContinue: { ...current.autoContinue, ...updates.autoContinue },
       validateCommit: { ...current.validateCommit, ...updates.validateCommit },
       denyList: { ...current.denyList, ...updates.denyList },
       promptReminder: { ...current.promptReminder, ...updates.promptReminder },
@@ -3801,12 +3810,7 @@ function loadReminders(dirs, context, overrides) {
 }
 
 // src/welcome-message.ts
-var INIT_HINT_MESSAGE = `The claude-auto plugin is installed but not yet initialized in this project.
-
-When you first respond to the user, briefly mention:
-"\u{1F4A1} claude-auto is available but not active in this repo. \u2728 Run /claude-auto-init to enable \u2705 commit validation, \u{1F514} workflow reminders, and \u26A1 auto-continue."
-
-Keep it to one line, do not block the user's request, and do not repeat this in subsequent messages.`;
+var INIT_HINT_MESSAGE = `On your first reply, mention once (then proceed with the user's request): "Reminder: Use /${BRAND.packageName}:init to enable ${BRAND.docsUrl} in this folder"`;
 
 // src/hooks/session-start.ts
 async function handleSessionStart(paths, sessionId = "", agentType) {
@@ -3857,32 +3861,99 @@ async function handleSessionStart(paths, sessionId = "", agentType) {
   };
 }
 
-// src/path-resolver.ts
+// src/migrate.ts
+var fs7 = __toESM(require("node:fs"));
 var path6 = __toESM(require("node:path"));
-var AUTO_DIR = ".claude-auto";
+var LEGACY_DATA_DIR = ".claude-auto";
+var LEGACY_STATE_FILE = ".claude.hooks.json";
+var LEGACY_CLAUDE_DIR = ".claude";
+var DENY_LIST_FILES = ["deny-list.project.txt", "deny-list.local.txt"];
+function migrateLegacyDataDir(projectRoot) {
+  const legacy = path6.join(projectRoot, LEGACY_DATA_DIR);
+  const current = path6.join(projectRoot, BRAND.dataDir);
+  const legacyExists = fs7.existsSync(legacy);
+  const currentExists = fs7.existsSync(current);
+  if (legacyExists && currentExists) {
+    return { migrated: false, conflict: true };
+  }
+  if (legacyExists) {
+    fs7.renameSync(legacy, current);
+    return { migrated: true };
+  }
+  return { migrated: false };
+}
+function migrateLegacyStateFile(projectRoot) {
+  const dataDir = path6.join(projectRoot, BRAND.dataDir);
+  if (!fs7.existsSync(dataDir)) {
+    return { migrated: false };
+  }
+  const legacy = path6.join(dataDir, LEGACY_STATE_FILE);
+  const current = path6.join(dataDir, BRAND.stateFile);
+  const legacyExists = fs7.existsSync(legacy);
+  const currentExists = fs7.existsSync(current);
+  if (legacyExists && currentExists) {
+    return { migrated: false, conflict: true };
+  }
+  if (legacyExists) {
+    fs7.renameSync(legacy, current);
+    return { migrated: true };
+  }
+  return { migrated: false };
+}
+function migrateLegacyDenyList(projectRoot) {
+  const dataDir = path6.join(projectRoot, BRAND.dataDir);
+  const legacyDir = path6.join(projectRoot, LEGACY_CLAUDE_DIR);
+  if (!fs7.existsSync(dataDir) || !fs7.existsSync(legacyDir)) {
+    return { migrated: false };
+  }
+  let migratedAny = false;
+  let conflictedAny = false;
+  for (const file of DENY_LIST_FILES) {
+    const legacy = path6.join(legacyDir, file);
+    const current = path6.join(dataDir, file);
+    if (!fs7.existsSync(legacy)) {
+      continue;
+    }
+    if (fs7.existsSync(current)) {
+      conflictedAny = true;
+      continue;
+    }
+    fs7.renameSync(legacy, current);
+    migratedAny = true;
+  }
+  if (conflictedAny && !migratedAny) {
+    return { migrated: false, conflict: true };
+  }
+  return { migrated: migratedAny };
+}
+
+// src/path-resolver.ts
+var path7 = __toESM(require("node:path"));
 async function resolvePathsFromEnv(explicitPluginRoot) {
   const pluginRoot = explicitPluginRoot || process.env.CLAUDE_PLUGIN_ROOT;
   if (!pluginRoot) {
-    throw new Error("CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.");
+    throw new Error(`CLAUDE_PLUGIN_ROOT must be set. ${BRAND.displayName} requires plugin mode.`);
   }
   const projectRoot = process.cwd();
-  const claudeDir = path6.join(projectRoot, ".claude");
-  const autoDir = path6.join(projectRoot, AUTO_DIR);
+  const claudeDir = path7.join(projectRoot, ".claude");
+  const autoDir = path7.join(projectRoot, BRAND.dataDir);
+  const pluginValidatorsDir = path7.join(pluginRoot, "validators");
   return {
     projectRoot,
     claudeDir,
     autoDir,
-    remindersDirs: [path6.join(pluginRoot, "reminders"), path6.join(autoDir, "reminders")],
-    validatorsDirs: [path6.join(pluginRoot, "validators"), path6.join(autoDir, "validators")]
+    remindersDirs: [path7.join(pluginRoot, "reminders"), path7.join(autoDir, "reminders")],
+    validatorsDirs: [pluginValidatorsDir, path7.join(autoDir, "validators")],
+    protectedValidatorsDirs: [pluginValidatorsDir]
   };
 }
 
 // src/plugin-debug.ts
-var fs7 = __toESM(require("node:fs"));
-var path7 = __toESM(require("node:path"));
+var fs8 = __toESM(require("node:fs"));
+var path8 = __toESM(require("node:path"));
 function logPluginDiagnostics(hookName, paths) {
   const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
-  const isDebug = !!process.env.CLAUDE_AUTO_DEBUG;
+  const isDebug = !!process.env.KETCHUP_DEBUG;
   if (!isPluginMode && !isDebug) {
     return;
   }
@@ -3902,17 +3973,20 @@ function logPluginDiagnostics(hookName, paths) {
   if (isDebug) {
     console.error(message);
   }
-  if (fs7.existsSync(paths.autoDir)) {
-    const logsDir = path7.join(paths.autoDir, "logs");
-    fs7.mkdirSync(logsDir, { recursive: true });
-    fs7.appendFileSync(path7.join(logsDir, "plugin-debug.log"), message);
+  if (fs8.existsSync(paths.autoDir)) {
+    const logsDir = path8.join(paths.autoDir, "logs");
+    fs8.mkdirSync(logsDir, { recursive: true });
+    fs8.appendFileSync(path8.join(logsDir, "plugin-debug.log"), message);
   }
 }
 
 // scripts/session-start.ts
-var input = parseHookInput(fs8.readFileSync(0, "utf-8"));
+var input = parseHookInput(fs9.readFileSync(0, "utf-8"));
 var startTime = Date.now();
 (async () => {
+  migrateLegacyDataDir(process.cwd());
+  migrateLegacyStateFile(process.cwd());
+  migrateLegacyDenyList(process.cwd());
   const paths = await resolvePathsFromEnv();
   logPluginDiagnostics("SessionStart", paths);
   try {

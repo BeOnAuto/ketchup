@@ -1,6 +1,6 @@
 # Installation Guide
 
-Claude Auto is a plugin for Claude Code. There are two ways to install it.
+Ketchup is a plugin for Claude Code. There are two ways to install it.
 
 ---
 
@@ -8,7 +8,7 @@ Claude Auto is a plugin for Claude Code. There are two ways to install it.
 
 ```
 /plugin marketplace add BeOnAuto/auto-plugins
-/plugin install claude-auto
+/plugin install ketchup
 ```
 
 This installs the plugin and registers all hooks and skills automatically.
@@ -20,32 +20,32 @@ This installs the plugin and registers all hooks and skills automatically.
 For development or when working from a local clone:
 
 ```bash
-claude --plugin-dir /path/to/claude-auto
+claude --plugin-dir /path/to/ketchup
 ```
 
 ---
 
 ## Activating in a Project
 
-After installing the plugin, Claude will mention that claude-auto is available. To activate it:
+After installing the plugin, Claude will mention that Ketchup is available. To activate it:
 
 ```
-/claude-auto-init
+/ketchup:init
 ```
 
 This creates the following structure in your project:
 
 ```
 your-project/
-├── .claude-auto/
-│   ├── .claude.hooks.json  # Hook behavior state
+├── .ketchup/
+│   ├── state.json  # Hook behavior state
 │   ├── reminders/          # Custom context injection files (*.md)
 │   ├── validators/         # Custom commit validation rules (*.md)
 │   └── logs/
 │       └── activity.log    # Activity log
 ```
 
-You can add `.claude-auto` to `.gitignore` for personal use, or commit it for the whole team.
+You can add `.ketchup` to `.gitignore` for personal use, or commit it for the whole team.
 
 See the [Reminders Guide](/reminders-guide) and [Validators Guide](/validators-guide) for the complete list of built-in reminders and validators.
 
@@ -56,23 +56,23 @@ See the [Reminders Guide](/reminders-guide) and [Validators Guide](/validators-g
 After installing the plugin, use the config skill to check the current state:
 
 ```
-/claude-auto-config show
+/ketchup:config show
 ```
 
 ---
 
 ## Configuration
 
-All configuration is managed via the `/claude-auto-config` skill:
+All configuration is managed via the `/ketchup:config` skill:
 
 ```
-/claude-auto-config show          # View current configuration
-/claude-auto-config set <key> <value>  # Update a setting
-/claude-auto-config validators    # List active validators
-/claude-auto-config reminders     # List active reminders
+/ketchup:config show          # View current configuration
+/ketchup:config set <key> <value>  # Update a setting
+/ketchup:config validators    # List active validators
+/ketchup:config reminders     # List active reminders
 ```
 
-Configuration is stored in `.claude-auto/.claude.hooks.json`.
+Configuration is stored in `.ketchup/state.json`.
 
 ---
 
@@ -80,16 +80,16 @@ Configuration is stored in `.claude-auto/.claude.hooks.json`.
 
 ### Hooks not firing
 
-1. Verify the plugin is installed: check that Claude Code shows claude-auto in the active plugins
+1. Verify the plugin is installed: check that Claude Code shows ketchup in the active plugins
 2. Ensure you're in the project root when starting Claude
-3. Check logs in `.claude-auto/logs/` for errors
+3. Check logs in `.ketchup/logs/` for errors
 
 ### Permission denied
 
 On Unix systems, you might need to fix permissions:
 
 ```bash
-chmod +x .claude-auto/scripts/*.js
+chmod +x .ketchup/scripts/*.js
 ```
 
 ---
@@ -99,13 +99,13 @@ chmod +x .claude-auto/scripts/*.js
 Remove the plugin via Claude Code:
 
 ```
-/plugin uninstall claude-auto
+/plugin uninstall ketchup
 ```
 
 To clean up project files:
 
 ```bash
-rm -rf .claude-auto
+rm -rf .ketchup
 ```
 
 ---
@@ -126,7 +126,7 @@ After installation:
 1. [Configure your hooks](/hooks-guide) - Customize supervision rules
 2. [Add reminders](/configuration#reminder-frontmatter) - Inject your guidelines
 3. [Set up file protection](/hooks-guide#protect-files-with-deny-list) - Protect sensitive files
-4. [Enable auto-continue](/configuration#autocontinue) - Keep AI working
+4. [Plan for parallel sub-agents](/guardrail-engineering#_5-parallel-subagent-planning) - Run independent bursts in parallel
 
 ---
 
@@ -134,6 +134,6 @@ After installation:
 
 If you run into issues:
 
-1. Run `/claude-auto-config show` to check configuration state
-2. Check `.claude-auto/logs/` for detailed error messages
-3. Report persistent issues at [GitHub Issues](https://github.com/BeOnAuto/claude-auto/issues)
+1. Run `/ketchup:config show` to check configuration state
+2. Check `.ketchup/logs/` for detailed error messages
+3. Report persistent issues at [GitHub Issues](https://github.com/BeOnAuto/ketchup/issues)

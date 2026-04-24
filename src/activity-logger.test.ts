@@ -9,7 +9,7 @@ describe('activity-logger', () => {
   const originalEnv = process.env.KETCHUP_LOG;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-auto-activity-'));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ketchup-activity-'));
     delete process.env.KETCHUP_LOG;
   });
 
@@ -30,8 +30,8 @@ describe('activity-logger', () => {
     expect(fs.existsSync(nonExistentDir)).toBe(false);
   });
 
-  it('writes to .claude-auto/logs/activity.log', () => {
-    const autoDir = path.join(tempDir, '.claude-auto');
+  it('writes to .ketchup/logs/activity.log', () => {
+    const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
 
     activityLog(autoDir, 'session-123', 'test-hook', 'test message');
@@ -44,7 +44,7 @@ describe('activity-logger', () => {
   });
 
   it('formats log with short date+time and last 8 chars of session ID', () => {
-    const autoDir = path.join(tempDir, '.claude-auto');
+    const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
 
     activityLog(autoDir, 'abc12345-6789-defg', 'session-start', 'loaded reminders');
@@ -58,7 +58,7 @@ describe('activity-logger', () => {
   });
 
   it('appends multiple log entries', () => {
-    const autoDir = path.join(tempDir, '.claude-auto');
+    const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
 
     activityLog(autoDir, 'session-1', 'hook-a', 'message 1');
@@ -74,7 +74,7 @@ describe('activity-logger', () => {
 
   it('filters by KETCHUP_LOG env when set to specific hook', () => {
     process.env.KETCHUP_LOG = 'session-start';
-    const autoDir = path.join(tempDir, '.claude-auto');
+    const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
 
     activityLog(autoDir, 'session-1', 'session-start', 'started');
@@ -88,7 +88,7 @@ describe('activity-logger', () => {
 
   it('allows multiple comma-separated patterns in KETCHUP_LOG', () => {
     process.env.KETCHUP_LOG = 'session-start,block';
-    const autoDir = path.join(tempDir, '.claude-auto');
+    const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
 
     activityLog(autoDir, 'session-1', 'session-start', 'started');
@@ -103,7 +103,7 @@ describe('activity-logger', () => {
   });
 
   it('logs everything when KETCHUP_LOG is * or unset', () => {
-    const autoDir = path.join(tempDir, '.claude-auto');
+    const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
 
     activityLog(autoDir, 'session-1', 'session-start', 'started');
@@ -117,7 +117,7 @@ describe('activity-logger', () => {
 
   it('excludes patterns prefixed with -', () => {
     process.env.KETCHUP_LOG = '*,-allowed';
-    const autoDir = path.join(tempDir, '.claude-auto');
+    const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
 
     activityLog(autoDir, 'session-1', 'session-start', 'started');
@@ -133,7 +133,7 @@ describe('activity-logger', () => {
 
   it('combines includes and excludes', () => {
     process.env.KETCHUP_LOG = 'pre-tool-use,-allowed';
-    const autoDir = path.join(tempDir, '.claude-auto');
+    const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
 
     activityLog(autoDir, 'session-1', 'session-start', 'started');

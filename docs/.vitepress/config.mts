@@ -1,13 +1,14 @@
 import { defineConfig } from 'vitepress';
 
 const base = '/';
-const siteUrl = 'https://claude.on.auto';
+const siteUrl = 'https://ketchup.on.auto';
 
 export default defineConfig({
   base,
   lang: 'en-US',
-  title: 'Claude Auto',
-  description: 'Stop Babysitting. Start Parallelizing. Trust the system. Run 3-5 features in parallel. Ship 10+ per week.',
+  title: 'Ketchup',
+  description:
+    'Turn every AI mistake into a rule AI can\'t repeat. Ketchup runs 20+ LLM-powered guardrails on every AI commit, so bad commits don\'t land.',
   appearance: 'dark',
 
   themeConfig: {
@@ -25,15 +26,15 @@ export default defineConfig({
           { text: 'Hooks Guide', link: '/hooks-guide' },
           { text: 'Reminders Guide', link: '/reminders-guide' },
           { text: 'Validators Guide', link: '/validators-guide' },
-          { text: 'API Reference', link: '/api-reference' },
           { text: 'Architecture', link: '/architecture' },
         ],
       },
+      { text: 'Guardrail Engineering', link: '/guardrail-engineering' },
       { text: 'The Ketchup Technique', link: '/ketchup-technique' },
       { text: 'Origin Story', link: '/origin-story' },
       {
         text: 'GitHub',
-        link: 'https://github.com/BeOnAuto/claude-auto',
+        link: 'https://github.com/BeOnAuto/ketchup',
       },
     ],
 
@@ -49,6 +50,7 @@ export default defineConfig({
       {
         text: 'Methodology',
         items: [
+          { text: 'Guardrail Engineering', link: '/guardrail-engineering' },
           { text: 'The Ketchup Technique', link: '/ketchup-technique' },
           { text: 'Origin Story', link: '/origin-story' },
         ],
@@ -65,8 +67,8 @@ export default defineConfig({
         text: 'Reference',
         items: [
           { text: 'Configuration', link: '/configuration' },
-          { text: 'API Reference', link: '/api-reference' },
           { text: 'Architecture', link: '/architecture' },
+          { text: 'Operational Concerns', link: '/operational-concerns' },
         ],
       },
     ],
@@ -76,11 +78,11 @@ export default defineConfig({
     },
 
     editLink: {
-      pattern: 'https://github.com/BeOnAuto/claude-auto/edit/main/docs/:path',
+      pattern: 'https://github.com/BeOnAuto/ketchup/edit/main/docs/:path',
       text: 'Suggest changes to this page',
     },
 
-    socialLinks: [{ icon: 'github', link: 'https://github.com/BeOnAuto/claude-auto' }],
+    socialLinks: [{ icon: 'github', link: 'https://github.com/BeOnAuto/ketchup' }],
 
     footer: {
       message: 'Released under the MIT License.',
@@ -113,7 +115,7 @@ export default defineConfig({
       'meta',
       {
         property: 'og:title',
-        content: 'Claude Auto - Stop Babysitting. Start Parallelizing.',
+        content: 'Ketchup - Turn every AI mistake into a rule AI can\'t repeat.',
       },
     ],
     ['meta', { property: 'og:type', content: 'website' }],
@@ -122,7 +124,7 @@ export default defineConfig({
       {
         property: 'og:description',
         content:
-          'AI-assisted coding made you a babysitter. Claude Auto earns the trust to parallelize. Supervisor AI validates every commit. Auto-continue keeps going. Git worktrees multiply. 10+ features/week.',
+          'Ketchup runs 20+ LLM-powered guardrails on every AI commit, so bad commits don\'t land.',
       },
     ],
     [
@@ -145,16 +147,16 @@ export default defineConfig({
       'meta',
       {
         property: 'og:image:alt',
-        content: 'Claude Auto - Stop Babysitting. Start Parallelizing.',
+        content: 'Ketchup - Turn every AI mistake into a rule AI can\'t repeat.',
       },
     ],
-    ['meta', { property: 'og:site_name', content: 'Claude Auto' }],
+    ['meta', { property: 'og:site_name', content: 'Ketchup' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     [
       'meta',
       {
         name: 'twitter:title',
-        content: 'Claude Auto - Stop Babysitting. Start Parallelizing.',
+        content: 'Ketchup - Turn every AI mistake into a rule AI can\'t repeat.',
       },
     ],
     [
@@ -162,7 +164,7 @@ export default defineConfig({
       {
         name: 'twitter:description',
         content:
-          'AI-assisted coding made you a babysitter. Claude Auto earns the trust to parallelize. Supervisor AI validates commits. Auto-continue keeps going. Git worktrees multiply. 10+ features/week.',
+          'Ketchup runs 20+ LLM-powered guardrails on every AI commit, so bad commits don\'t land.',
       },
     ],
     [

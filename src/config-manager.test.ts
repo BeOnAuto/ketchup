@@ -26,8 +26,8 @@ describe('config-manager', () => {
   let paths: ResolvedPaths;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-auto-config-'));
-    autoDir = path.join(tempDir, '.claude-auto');
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ketchup-config-'));
+    autoDir = path.join(tempDir, '.ketchup');
     validatorsDir = path.join(tempDir, 'validators');
     remindersDir = path.join(tempDir, 'reminders');
     const projectRemindersDir = path.join(autoDir, 'reminders');
@@ -42,6 +42,7 @@ describe('config-manager', () => {
       autoDir,
       validatorsDirs: [validatorsDir],
       remindersDirs: [remindersDir, projectRemindersDir],
+      protectedValidatorsDirs: [],
     };
 
     fs.writeFileSync(
@@ -93,7 +94,7 @@ Low priority.`,
     it('returns state, validators, and reminders', () => {
       const result = showConfig(paths);
 
-      expect(result.state.autoContinue.mode).toBe('smart');
+      expect(result.state.validateCommit.mode).toBe('strict');
       expect(result.validators).toHaveLength(2);
       expect(result.reminders).toHaveLength(2);
     });
@@ -101,8 +102,8 @@ Low priority.`,
 
   describe('setConfigValue', () => {
     it('sets a nested config value', () => {
-      const state = setConfigValue(paths, 'autoContinue.mode', 'off');
-      expect(state.autoContinue.mode).toBe('off');
+      const state = setConfigValue(paths, 'validateCommit.mode', 'off');
+      expect(state.validateCommit.mode).toBe('off');
     });
 
     it('sets boolean values', () => {
@@ -116,14 +117,14 @@ Low priority.`,
     });
 
     it('persists changes to disk', () => {
-      setConfigValue(paths, 'autoContinue.mode', 'non-stop');
+      setConfigValue(paths, 'validateCommit.mode', 'warn');
       const reread = createHookState(autoDir).read();
-      expect(reread.autoContinue.mode).toBe('non-stop');
+      expect(reread.validateCommit.mode).toBe('warn');
     });
 
     it('sets JSON array values', () => {
-      const state = setConfigValue(paths, 'autoContinue.skipModes', '["plan","code"]');
-      expect(state.autoContinue.skipModes).toEqual(['plan', 'code']);
+      const state = setConfigValue(paths, 'denyList.extraPatterns', '["*.secret","/private/**"]');
+      expect(state.denyList.extraPatterns).toEqual(['*.secret', '/private/**']);
     });
 
     it('falls back to string for invalid JSON', () => {

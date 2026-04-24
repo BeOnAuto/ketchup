@@ -9,7 +9,7 @@ export function App() {
   return (
     <div className="flex min-h-screen gap-4 p-4 font-sans">
       <aside className="w-80 shrink-0 border-r border-slate-200 pr-4">
-        <h1 className="mb-4 text-xl font-semibold">Claude Auto Viewer</h1>
+        <h1 className="mb-4 text-xl font-semibold">Ketchup Viewer</h1>
         <SessionPicker onSelect={setSelected} />
       </aside>
       <main className="min-w-0 flex-1">

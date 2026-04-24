@@ -21,7 +21,7 @@ describe('parseToolInvocationSucceeded', () => {
       uuid: 'ab5412ed-7a32-41ef-8dc5-b134d42ce4e5',
       timestamp: '2026-03-24T13:21:33.018Z',
       sessionId: '1c62519e-23e0-4da5-b54f-a23c75943f1e',
-      cwd: '/Users/igor/Projects/xolvio/claude-auto',
+      cwd: '/Users/sam/Projects/xolvio/ketchup',
       version: '2.1.81',
       gitBranch: 'main',
       entrypoint: 'cli',

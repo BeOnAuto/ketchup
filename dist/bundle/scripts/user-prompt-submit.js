@@ -3628,15 +3628,31 @@ var fs6 = __toESM(require("node:fs"));
 // src/debug-logger.ts
 var import_node_fs2 = __toESM(require("node:fs"));
 var import_node_path2 = __toESM(require("node:path"));
+
+// src/brand.ts
+var BRAND = {
+  packageName: "ketchup",
+  displayName: "Ketchup",
+  attribution: "Ketchup, from Auto",
+  dataDir: ".ketchup",
+  stateFile: "state.json",
+  docsUrl: "https://ketchup.on.auto",
+  repoUrl: "https://github.com/BeOnAuto/ketchup",
+  leadTagline: "Turn every AI mistake into a rule AI can't repeat.",
+  subTagline: "Ketchup runs 20+ LLM-powered guardrails on every AI commit, so bad commits don't land.",
+  categoryLine: "LLM-powered guardrails for AI coding agents."
+};
+
+// src/debug-logger.ts
 function debugLog(autoDir, hookName, message) {
   if (!import_node_fs2.default.existsSync(autoDir)) {
     return;
   }
   const debug = process.env.DEBUG;
-  if (!debug || !debug.includes("claude-auto")) {
+  if (!debug || !debug.includes(BRAND.packageName)) {
     return;
   }
-  const logsDir = import_node_path2.default.join(autoDir, "logs", "claude-auto");
+  const logsDir = import_node_path2.default.join(autoDir, "logs", BRAND.packageName);
   if (!import_node_fs2.default.existsSync(logsDir)) {
     import_node_fs2.default.mkdirSync(logsDir, { recursive: true });
   }
@@ -3651,11 +3667,6 @@ function debugLog(autoDir, hookName, message) {
 var fs4 = __toESM(require("node:fs"));
 var path4 = __toESM(require("node:path"));
 var DEFAULT_HOOK_STATE = {
-  autoContinue: {
-    mode: "smart",
-    maxIterations: 0,
-    skipModes: ["plan"]
-  },
   validateCommit: {
     mode: "strict",
     batchCount: 3
@@ -3678,7 +3689,7 @@ var DEFAULT_HOOK_STATE = {
   }
 };
 function createHookState(autoDir) {
-  const stateFile = path4.join(autoDir, ".claude.hooks.json");
+  const stateFile = path4.join(autoDir, BRAND.stateFile);
   function read() {
     if (!fs4.existsSync(autoDir)) {
       return { ...DEFAULT_HOOK_STATE };
@@ -3692,7 +3703,6 @@ function createHookState(autoDir) {
     const content = fs4.readFileSync(stateFile, "utf-8");
     const partial = JSON.parse(content);
     return {
-      autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, ...partial.autoContinue },
       validateCommit: { ...DEFAULT_HOOK_STATE.validateCommit, ...partial.validateCommit },
       denyList: { ...DEFAULT_HOOK_STATE.denyList, ...partial.denyList },
       promptReminder: { ...DEFAULT_HOOK_STATE.promptReminder, ...partial.promptReminder },
@@ -3718,7 +3728,6 @@ function createHookState(autoDir) {
     const newState = {
       ...current,
       ...updates,
-      autoContinue: { ...current.autoContinue, ...updates.autoContinue },
       validateCommit: { ...current.validateCommit, ...updates.validateCommit },
       denyList: { ...current.denyList, ...updates.denyList },
       promptReminder: { ...current.promptReminder, ...updates.promptReminder },
@@ -3870,21 +3879,22 @@ async function handleUserPromptSubmit(paths, sessionId, prompt) {
 
 // src/path-resolver.ts
 var path6 = __toESM(require("node:path"));
-var AUTO_DIR = ".claude-auto";
 async function resolvePathsFromEnv(explicitPluginRoot) {
   const pluginRoot = explicitPluginRoot || process.env.CLAUDE_PLUGIN_ROOT;
   if (!pluginRoot) {
-    throw new Error("CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.");
+    throw new Error(`CLAUDE_PLUGIN_ROOT must be set. ${BRAND.displayName} requires plugin mode.`);
   }
   const projectRoot = process.cwd();
   const claudeDir = path6.join(projectRoot, ".claude");
-  const autoDir = path6.join(projectRoot, AUTO_DIR);
+  const autoDir = path6.join(projectRoot, BRAND.dataDir);
+  const pluginValidatorsDir = path6.join(pluginRoot, "validators");
   return {
     projectRoot,
     claudeDir,
     autoDir,
     remindersDirs: [path6.join(pluginRoot, "reminders"), path6.join(autoDir, "reminders")],
-    validatorsDirs: [path6.join(pluginRoot, "validators"), path6.join(autoDir, "validators")]
+    validatorsDirs: [pluginValidatorsDir, path6.join(autoDir, "validators")],
+    protectedValidatorsDirs: [pluginValidatorsDir]
   };
 }
 
@@ -3893,7 +3903,7 @@ var fs7 = __toESM(require("node:fs"));
 var path7 = __toESM(require("node:path"));
 function logPluginDiagnostics(hookName, paths) {
   const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
-  const isDebug = !!process.env.CLAUDE_AUTO_DEBUG;
+  const isDebug = !!process.env.KETCHUP_DEBUG;
   if (!isPluginMode && !isDebug) {
     return;
   }

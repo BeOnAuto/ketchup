@@ -4,9 +4,9 @@ when:
 priority: 100
 ---
 
-**MANDATORY WORKFLOW — every task, no exceptions:**
+**MANDATORY WORKFLOW, every task, no exceptions:**
 
-1. Create/update `ketchup-plan.md` (TODO/DONE sections) — commit before coding
+1. Create/update `ketchup-plan.md` (TODO/DONE sections) before coding — it is gitignored, do not commit it
 2. ONE failing test → MINIMAL passing code → TCR (`test && commit || revert`)
 3. 100% test coverage, no escape hatches
 4. One burst = one test = one behavior = one commit

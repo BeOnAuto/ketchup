@@ -17,7 +17,7 @@ describe('App', () => {
 
     render(<App />);
 
-    const shell = screen.getByRole('heading', { name: /claude auto viewer/i }).closest('div');
+    const shell = screen.getByRole('heading', { name: /ketchup viewer/i }).closest('div');
 
     expect({
       shellClasses: shell?.className,

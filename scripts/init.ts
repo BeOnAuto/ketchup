@@ -1,6 +1,6 @@
 #!/usr/bin/env npx tsx
 
-import { formatInitResult, initClaudeAuto } from '../src/init.js';
+import { formatInitResult, initKetchup } from '../src/init.js';
 
-const result = initClaudeAuto(process.cwd());
+const result = initKetchup(process.cwd());
 console.log(formatInitResult(result));

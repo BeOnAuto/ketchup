@@ -3519,12 +3519,23 @@ var path2 = __toESM(require("node:path"));
 // src/hook-state.ts
 var fs = __toESM(require("node:fs"));
 var path = __toESM(require("node:path"));
+
+// src/brand.ts
+var BRAND = {
+  packageName: "ketchup",
+  displayName: "Ketchup",
+  attribution: "Ketchup, from Auto",
+  dataDir: ".ketchup",
+  stateFile: "state.json",
+  docsUrl: "https://ketchup.on.auto",
+  repoUrl: "https://github.com/BeOnAuto/ketchup",
+  leadTagline: "Turn every AI mistake into a rule AI can't repeat.",
+  subTagline: "Ketchup runs 20+ LLM-powered guardrails on every AI commit, so bad commits don't land.",
+  categoryLine: "LLM-powered guardrails for AI coding agents."
+};
+
+// src/hook-state.ts
 var DEFAULT_HOOK_STATE = {
-  autoContinue: {
-    mode: "smart",
-    maxIterations: 0,
-    skipModes: ["plan"]
-  },
   validateCommit: {
     mode: "strict",
     batchCount: 3
@@ -3547,7 +3558,7 @@ var DEFAULT_HOOK_STATE = {
   }
 };
 function createHookState(autoDir) {
-  const stateFile = path.join(autoDir, ".claude.hooks.json");
+  const stateFile = path.join(autoDir, BRAND.stateFile);
   function read() {
     if (!fs.existsSync(autoDir)) {
       return { ...DEFAULT_HOOK_STATE };
@@ -3561,7 +3572,6 @@ function createHookState(autoDir) {
     const content = fs.readFileSync(stateFile, "utf-8");
     const partial = JSON.parse(content);
     return {
-      autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, ...partial.autoContinue },
       validateCommit: { ...DEFAULT_HOOK_STATE.validateCommit, ...partial.validateCommit },
       denyList: { ...DEFAULT_HOOK_STATE.denyList, ...partial.denyList },
       promptReminder: { ...DEFAULT_HOOK_STATE.promptReminder, ...partial.promptReminder },
@@ -3587,7 +3597,6 @@ function createHookState(autoDir) {
     const newState = {
       ...current,
       ...updates,
-      autoContinue: { ...current.autoContinue, ...updates.autoContinue },
       validateCommit: { ...current.validateCommit, ...updates.validateCommit },
       denyList: { ...current.denyList, ...updates.denyList },
       promptReminder: { ...current.promptReminder, ...updates.promptReminder },
@@ -3806,21 +3815,22 @@ ${formatYaml(val, indent + 1)}`;
 
 // src/path-resolver.ts
 var path3 = __toESM(require("node:path"));
-var AUTO_DIR = ".claude-auto";
 async function resolvePathsFromEnv(explicitPluginRoot) {
   const pluginRoot = explicitPluginRoot || process.env.CLAUDE_PLUGIN_ROOT;
   if (!pluginRoot) {
-    throw new Error("CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.");
+    throw new Error(`CLAUDE_PLUGIN_ROOT must be set. ${BRAND.displayName} requires plugin mode.`);
   }
   const projectRoot = process.cwd();
   const claudeDir = path3.join(projectRoot, ".claude");
-  const autoDir = path3.join(projectRoot, AUTO_DIR);
+  const autoDir = path3.join(projectRoot, BRAND.dataDir);
+  const pluginValidatorsDir = path3.join(pluginRoot, "validators");
   return {
     projectRoot,
     claudeDir,
     autoDir,
     remindersDirs: [path3.join(pluginRoot, "reminders"), path3.join(autoDir, "reminders")],
-    validatorsDirs: [path3.join(pluginRoot, "validators"), path3.join(autoDir, "validators")]
+    validatorsDirs: [pluginValidatorsDir, path3.join(autoDir, "validators")],
+    protectedValidatorsDirs: [pluginValidatorsDir]
   };
 }
 
@@ -3831,7 +3841,7 @@ function derivePluginRoot() {
 var args = process.argv.slice(2);
 var subcommand = args[0];
 function usage() {
-  return `Usage: /claude-auto-config <subcommand> [args]
+  return `Usage: /ketchup:config <subcommand> [args]
 
 Subcommands:
   show                              Show all current configuration
@@ -3846,14 +3856,11 @@ Subcommands:
   reminders priority <name> <n>     Override a reminder's priority
   reminders reset <name>            Remove override, restore default
   reminders add <name> [options]    Create a custom reminder
-    --hook <hook>                   Hook point (SessionStart|PreToolUse|UserPromptSubmit|Stop)
+    --hook <hook>                   Hook point (SessionStart|PreToolUse|UserPromptSubmit)
     --priority <n>                  Priority (higher = first)
     --content <text>                Reminder content
 
 Config keys:
-  autoContinue.mode                 smart | non-stop | off
-  autoContinue.maxIterations        number (0 = unlimited)
-  autoContinue.skipModes            JSON array (e.g., ["plan"])
   validateCommit.mode               strict | warn | off
   validateCommit.batchCount         number
   denyList.enabled                  true | false
@@ -3867,11 +3874,7 @@ Config keys:
 function formatState(result) {
   const { state } = result;
   const lines = ["## Current Configuration\n"];
-  lines.push("### Auto Continue");
-  lines.push(`  mode: ${state.autoContinue.mode}`);
-  lines.push(`  maxIterations: ${state.autoContinue.maxIterations}`);
-  lines.push(`  skipModes: ${JSON.stringify(state.autoContinue.skipModes)}`);
-  lines.push("\n### Commit Validation");
+  lines.push("### Commit Validation");
   lines.push(`  mode: ${state.validateCommit.mode}`);
   lines.push(`  batchCount: ${state.validateCommit.batchCount}`);
   lines.push("\n### Deny List");

@@ -10,7 +10,7 @@ describe('createEventStore', () => {
   let tempDir: string;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-auto-eventstore-'));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ketchup-eventstore-'));
   });
 
   afterEach(() => {

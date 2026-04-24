@@ -27,13 +27,22 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
 var fs = __toESM(require("node:fs"));
 var path = __toESM(require("node:path"));
 
+// src/brand.ts
+var BRAND = {
+  packageName: "ketchup",
+  displayName: "Ketchup",
+  attribution: "Ketchup, from Auto",
+  dataDir: ".ketchup",
+  stateFile: "state.json",
+  docsUrl: "https://ketchup.on.auto",
+  repoUrl: "https://github.com/BeOnAuto/ketchup",
+  leadTagline: "Turn every AI mistake into a rule AI can't repeat.",
+  subTagline: "Ketchup runs 20+ LLM-powered guardrails on every AI commit, so bad commits don't land.",
+  categoryLine: "LLM-powered guardrails for AI coding agents."
+};
+
 // src/hook-state.ts
 var DEFAULT_HOOK_STATE = {
-  autoContinue: {
-    mode: "smart",
-    maxIterations: 0,
-    skipModes: ["plan"]
-  },
   validateCommit: {
     mode: "strict",
     batchCount: 3
@@ -57,13 +66,13 @@ var DEFAULT_HOOK_STATE = {
 };
 
 // src/init.ts
-function initClaudeAuto(projectRoot) {
-  const autoDir = path.join(projectRoot, ".claude-auto");
+function initKetchup(projectRoot) {
+  const autoDir = path.join(projectRoot, BRAND.dataDir);
   if (fs.existsSync(autoDir)) {
     return { created: false, autoDir, gitignoreAdvice: checkGitignoreAdvice(projectRoot) };
   }
   fs.mkdirSync(autoDir, { recursive: true });
-  const stateFile = path.join(autoDir, ".claude.hooks.json");
+  const stateFile = path.join(autoDir, BRAND.stateFile);
   fs.writeFileSync(stateFile, `${JSON.stringify(DEFAULT_HOOK_STATE, null, 2)}
 `);
   return { created: true, autoDir, gitignoreAdvice: checkGitignoreAdvice(projectRoot) };
@@ -71,18 +80,20 @@ function initClaudeAuto(projectRoot) {
 function formatInitResult(result2) {
   const lines = [];
   if (result2.created) {
-    lines.push(`\u2705 Initialized claude-auto at ${result2.autoDir}`);
-    lines.push("\u{1F3AF} Default configuration written to .claude-auto/.claude.hooks.json");
+    lines.push(`\u2705 Initialized ${BRAND.displayName} at ${result2.autoDir}`);
+    lines.push(`\u{1F3AF} Default configuration written to ${BRAND.dataDir}/${BRAND.stateFile}`);
     if (result2.gitignoreAdvice) {
       lines.push("");
-      lines.push("\u{1F4CC} Note: .claude-auto is not in your .gitignore.");
+      lines.push(`\u{1F4CC} Note: ${BRAND.dataDir} is not in your .gitignore.`);
       lines.push("   If this is for personal use only, consider adding it:");
-      lines.push('     echo ".claude-auto" >> .gitignore');
+      lines.push(`     echo "${BRAND.dataDir}" >> .gitignore`);
     }
     lines.push("");
-    lines.push("\u{1F4A1} Defaults are active \u2014 run /claude-auto-config show anytime to review or customize.");
+    lines.push(
+      `On your next reply, mention once (then proceed with the user's request): "Reminder: Defaults are active. Run /${BRAND.packageName}:config show anytime to review or customize."`
+    );
   } else {
-    lines.push(`\u2705 claude-auto is already initialized at ${result2.autoDir}`);
+    lines.push(`\u2705 ${BRAND.displayName} is already initialized at ${result2.autoDir}`);
   }
   return lines.join("\n");
 }
@@ -93,9 +104,9 @@ function checkGitignoreAdvice(projectRoot) {
   }
   const content = fs.readFileSync(gitignorePath, "utf-8");
   const lines = content.split("\n").map((l) => l.trim());
-  return !lines.some((line) => line === ".claude-auto" || line === ".claude-auto/");
+  return !lines.some((line) => line === BRAND.dataDir || line === `${BRAND.dataDir}/`);
 }
 
 // scripts/init.ts
-var result = initClaudeAuto(process.cwd());
+var result = initKetchup(process.cwd());
 console.log(formatInitResult(result));

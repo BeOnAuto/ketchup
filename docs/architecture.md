@@ -1,10 +1,10 @@
 # Architecture
 
-Understanding how the Quality Loop works under the hood.
+How Ketchup works under the hood.
 
 ---
 
-## The Quality Loop Implementation
+## The Guardrail Stack
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -15,24 +15,23 @@ Understanding how the Quality Loop works under the hood.
                            │
                            ▼
 ┌─────────────────────────────────────────────────────────────┐
-│                    THE QUALITY STACK                         │
+│                    GUARDRAIL STACK                           │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
 │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-│  │ Auto-       │  │ Parallel    │  │ Supervisor  │         │
-│  │ Planning    │  │ Execution   │  │ Validation  │         │
+│  │ Reminders   │  │ Deny-list   │  │ Validators  │         │
 │  │             │  │             │  │             │         │
-│  │ ketchup-    │  │ Sub-agents  │  │ ACK / NACK  │         │
-│  │ plan.md     │  │ [depends:]  │  │ hooks       │         │
+│  │ Session +   │  │ Glob file   │  │ ACK / NACK  │         │
+│  │ per-prompt  │  │ protection  │  │ on commit   │         │
 │  └─────────────┘  └─────────────┘  └─────────────┘         │
 │                                                              │
 │        ┌─────────────┐        ┌─────────────┐              │
-│        │ Auto-       │        │ TCR         │              │
-│        │ Continue    │        │ Discipline  │              │
+│        │ Parallel    │        │ TCR         │              │
+│        │ subagents   │        │ gate        │              │
 │        │             │        │             │              │
-│        │ Stop hook   │        │ test &&     │              │
-│        │ checks plan │        │ commit ||   │              │
-│        │ for TODOs   │        │ revert      │              │
+│        │ plan deps   │        │ test &&     │              │
+│        │ drive Task  │        │ commit ||   │              │
+│        │ launches    │        │ revert      │              │
 │        └─────────────┘        └─────────────┘              │
 │                                                              │
 └──────────────────────────┬──────────────────────────────────┘
@@ -49,7 +48,7 @@ Understanding how the Quality Loop works under the hood.
 
 ## Design Philosophy
 
-claude-auto follows several key principles:
+ketchup follows several key principles:
 
 1. **Convention over Configuration**: Sensible defaults that just work
 2. **Plugin Architecture**: Runs as a Claude Code plugin with bundled hook scripts
@@ -68,10 +67,10 @@ claude-auto follows several key principles:
 │  ├── deny-list.project.txt ────► File protection patterns   │
 │  └── deny-list.local.txt ──────► Local protection patterns  │
 │                                                              │
-│  .claude-auto/                                               │
+│  .ketchup/                                               │
 │  ├── reminders/ ───────────────► Context injection files    │
 │  ├── validators/ ──────────────► Commit validation rules    │
-│  ├── .claude.hooks.json ───────► Hook behavior state        │
+│  ├── state.json ───────► Hook behavior state        │
 │  └── logs/                                                   │
 │      └── activity.log ─────────► Activity log               │
 │                                                              │
@@ -80,7 +79,7 @@ claude-auto follows several key principles:
                    Plugin loaded by Claude Code
                               │
 ┌─────────────────────────────────────────────────────────────┐
-│           claude-auto plugin                                 │
+│           ketchup plugin                                 │
 ├─────────────────────────────────────────────────────────────┤
 │  dist/bundle/scripts/       Bundled hook scripts             │
 │  reminders/                 Default reminders                │
@@ -192,39 +191,6 @@ User Submits Prompt
 └─────────────────────────────┘
 ```
 
-### Stop Hook
-
-```
-Claude Execution Pauses
-         │
-         ▼
-┌─────────────────────────────┐
-│  settings.json hooks config │
-│  Stop: [...]                │
-└──────────────┬──────────────┘
-               │
-               ▼
-┌─────────────────────────────┐
-│  scripts/auto-continue.ts   │
-│  Input: transcript & plan   │
-└──────────────┬──────────────┘
-               │
-               ▼
-┌─────────────────────────────┐
-│  handleStop()               │
-│  ├─► readKetchupPlan()      │
-│  ├─► countTodos()           │
-│  ├─► analyzeTranscript()    │
-│  └─► checkContinuation()    │
-└──────────────┬──────────────┘
-               │
-        ┌──────┴──────┐
-        │             │
-        ▼             ▼
-   { CONTINUE }   { STOP }
-   Resume work    End session
-```
-
 ### Validator Execution (PreToolUse for git commit)
 
 ```
@@ -246,7 +212,7 @@ Claude Attempts git commit
 ┌─────────────────────────────┐
 │  handleValidateCommit()     │
 │  ├─► loadValidators()       │
-│  │   └─► .claude-auto/validators│
+│  │   └─► .ketchup/validators│
 │  ├─► parseValidator() each  │
 │  ├─► filterEnabled()        │
 │  └─► sendToSupervisor()     │
@@ -254,7 +220,7 @@ Claude Attempts git commit
                │
                ▼
 ┌─────────────────────────────┐
-│  Supervisor AI evaluates    │
+│  Validators evaluates    │
 │  each validator rule        │
 └──────────────┬──────────────┘
                │
@@ -357,7 +323,7 @@ transcript.jsonl
 ### Plugin Structure
 
 ```
-claude-auto/
+ketchup/
 ├── src/
 │   ├── index.ts            Barrel export (public API)
 │   ├── path-resolver.ts    Path resolution from environment
@@ -375,7 +341,6 @@ claude-auto/
 │       ├── session-start.ts     SessionStart handler
 │       ├── pre-tool-use.ts      PreToolUse handler
 │       ├── user-prompt-submit.ts  UserPromptSubmit handler
-│       ├── auto-continue.ts     Stop hook / auto-continue
 │       └── validate-commit.ts   Commit validation
 │
 ├── scripts/                 Source scripts (bundled to dist/bundle/scripts/)
@@ -401,12 +366,12 @@ your-project/
 │   ├── deny-list.project.txt     Project deny patterns
 │   └── deny-list.local.txt       Local deny patterns
 │
-├── .claude-auto/
+├── .ketchup/
 │   ├── reminders/
 │   │   └── *.md                  Context injection reminders
 │   ├── validators/
 │   │   └── *.md                  Commit validation rules
-│   ├── .claude.hooks.json        Hook behavior state
+│   ├── state.json        Hook behavior state
 │   └── logs/
 │       └── activity.log          Activity log
 ```

@@ -6,82 +6,82 @@ import * as path from 'node:path';
 import { afterEach, beforeEach, describe, expect, it } from 'vitest';
 
 import { DEFAULT_HOOK_STATE } from './hook-state.js';
-import { formatInitResult, initClaudeAuto } from './init.js';
+import { formatInitResult, initKetchup } from './init.js';
 
-describe('initClaudeAuto', () => {
+describe('initKetchup', () => {
   let tempDir: string;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-auto-init-'));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ketchup-init-'));
   });
 
   afterEach(() => {
     fs.rmSync(tempDir, { recursive: true, force: true });
   });
 
-  it('creates .claude-auto directory with default state', () => {
-    const result = initClaudeAuto(tempDir);
-    const autoDir = path.join(tempDir, '.claude-auto');
+  it('creates .ketchup directory with default state', () => {
+    const result = initKetchup(tempDir);
+    const autoDir = path.join(tempDir, '.ketchup');
 
     expect(result).toEqual({ created: true, autoDir, gitignoreAdvice: true });
 
-    const stateFile = path.join(autoDir, '.claude.hooks.json');
+    const stateFile = path.join(autoDir, 'state.json');
     expect(JSON.parse(fs.readFileSync(stateFile, 'utf-8'))).toEqual(DEFAULT_HOOK_STATE);
   });
 
   it('returns created false when already initialized and preserves existing state', () => {
-    const autoDir = path.join(tempDir, '.claude-auto');
+    const autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
     const existingState = { autoContinue: { mode: 'off' } };
-    fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify(existingState));
+    fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify(existingState));
 
-    const result = initClaudeAuto(tempDir);
+    const result = initKetchup(tempDir);
 
     expect(result).toEqual({ created: false, autoDir, gitignoreAdvice: true });
-    expect(JSON.parse(fs.readFileSync(path.join(autoDir, '.claude.hooks.json'), 'utf-8'))).toEqual(existingState);
+    expect(JSON.parse(fs.readFileSync(path.join(autoDir, 'state.json'), 'utf-8'))).toEqual(existingState);
   });
 
-  it('returns gitignoreAdvice true when .claude-auto not in .gitignore', () => {
+  it('returns gitignoreAdvice true when .ketchup not in .gitignore', () => {
     fs.writeFileSync(path.join(tempDir, '.gitignore'), 'node_modules\n');
 
-    const result = initClaudeAuto(tempDir);
+    const result = initKetchup(tempDir);
 
     expect(result).toEqual({
       created: true,
-      autoDir: path.join(tempDir, '.claude-auto'),
+      autoDir: path.join(tempDir, '.ketchup'),
       gitignoreAdvice: true,
     });
   });
 
-  it('returns gitignoreAdvice false when .claude-auto is in .gitignore', () => {
-    fs.writeFileSync(path.join(tempDir, '.gitignore'), 'node_modules\n.claude-auto\n');
+  it('returns gitignoreAdvice false when .ketchup is in .gitignore', () => {
+    fs.writeFileSync(path.join(tempDir, '.gitignore'), 'node_modules\n.ketchup\n');
 
-    const result = initClaudeAuto(tempDir);
+    const result = initKetchup(tempDir);
 
     expect(result).toEqual({
       created: true,
-      autoDir: path.join(tempDir, '.claude-auto'),
+      autoDir: path.join(tempDir, '.ketchup'),
       gitignoreAdvice: false,
     });
   });
 });
 
 describe('formatInitResult', () => {
-  it('formats newly created result with emojis, gitignore advice, and non-interrupting config hint', () => {
-    const output = formatInitResult({ created: true, autoDir: '/project/.claude-auto', gitignoreAdvice: true });
+  it('formats newly created result with directive-wrapped config reminder', () => {
+    const output = formatInitResult({ created: true, autoDir: '/project/.ketchup', gitignoreAdvice: true });
 
-    expect(output).toContain('Initialized claude-auto at /project/.claude-auto');
+    expect(output).toContain('Initialized Ketchup at /project/.ketchup');
     expect(output).toContain('.gitignore');
-    expect(output).toContain('/claude-auto-config');
-    expect(output).toMatch(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u);
+    expect(output).toContain('On your next reply, mention once');
+    expect(output).toContain('Reminder: Defaults are active. Run /ketchup:config show');
     expect(output).not.toMatch(/ask the user/i);
   });
 
   it('formats already initialized result without config prompt', () => {
-    const output = formatInitResult({ created: false, autoDir: '/project/.claude-auto', gitignoreAdvice: false });
+    const output = formatInitResult({ created: false, autoDir: '/project/.ketchup', gitignoreAdvice: false });
 
     expect(output).toContain('already initialized');
-    expect(output).not.toContain('/claude-auto-config');
+    expect(output).not.toContain('/ketchup:config');
   });
 });
 
@@ -89,18 +89,18 @@ describe('scripts/init.ts', () => {
   let tempDir: string;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-auto-script-init-'));
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ketchup-script-init-'));
   });
 
   afterEach(() => {
     fs.rmSync(tempDir, { recursive: true, force: true });
   });
 
-  it('creates .claude-auto and prints initialization message', () => {
+  it('creates .ketchup and prints initialization message', () => {
     const scriptPath = path.resolve(__dirname, '..', 'scripts', 'init.ts');
     const output = execSync(`npx tsx ${scriptPath}`, { cwd: tempDir, encoding: 'utf-8' });
 
-    expect(output).toContain('Initialized claude-auto');
-    expect(fs.existsSync(path.join(tempDir, '.claude-auto', '.claude.hooks.json'))).toBe(true);
+    expect(output).toContain('Initialized Ketchup');
+    expect(fs.existsSync(path.join(tempDir, '.ketchup', 'state.json'))).toBe(true);
   });
 });

@@ -1,5 +1,116 @@
 # claude-ketchup
 
+## 0.21.0
+
+### Minor Changes
+
+- b2cf282: - Allowed users to author their own validators in project-local `.claude-auto/validators/` while keeping the plugin's bundled validators protected from modification
+- b2cf282: - Migrated to plugin-only mode with native Claude Code plugin support via the BeOnAuto/auto-plugins marketplace, removing the legacy npx CLI installation
+  - Added a new config skill with runtime overrides for validators and reminders, plus first-setup guidance on initial plugin use
+  - Added support for user-defined custom validators and reminders with documentation in the README
+  - Fixed commit validation to respect the validateCommit.mode off setting, and resolved plugin path handling when only CLAUDE_PLUGIN_ROOT is set
+  - Updated all documentation and install instructions for plugin-only mode
+
+### Patch Changes
+
+- b2cf282: - Clarified that plugin-bundled validators and reminders are loaded from the plugin root directory
+- b2cf282: - Users can now freely create, edit, and delete their own validators in .claude-auto/validators/
+  - Plugin's bundled validators remain protected from modification
+- b2cf282: - Planned documentation fix for plugin-bundled validator path
+- b2cf282: - Updated ketchup plan to reflect progress on completed bursts
+- b2cf282: - Updated internal ketchup plan to mark burst 3 as complete
+
+## 0.20.0
+
+### Minor Changes
+
+- 742659a: - Migrated to plugin-only mode with native Claude Code plugin support via BeOnAuto/auto-plugins marketplace
+  - Removed legacy npx installation, CLI system, and associated commands (install, doctor, repair, status, reminders, tui)
+  - Added runtime config management with overrides and first-setup guidance via new /claude-auto:config skill
+  - Fixed commit validation to respect validateCommit.mode off setting
+  - Fixed plugin path resolution for skills context when only CLAUDE_PLUGIN_ROOT is set
+
+### Patch Changes
+
+- 742659a: - Planned removal of npm publishing from release workflow
+- 742659a: - Fixed release workflow to skip marketplace.json during version bumps
+- 742659a: - Updated internal planning documentation to reflect completed work
+- 742659a: - Removed legacy npm publish step from the release pipeline
+  - Rewired downstream release gates to trigger from the version step
+- 742659a: - Updated internal planning notes to reflect completed work
+- 742659a: - Fixed CI version-bump loop to skip marketplace.json, preventing unintended modifications during releases
+
+## 0.19.0
+
+### Minor Changes
+
+- bca0adb: - Added protection to block shell commands that attempt to modify or delete validator files
+- fbdf54d: - Added `/claude-auto init` skill that sets up claude-auto in a project with a guided initialization flow
+  - Included esbuild bundling configuration for the new init skill entry point
+- bca0adb: - Protected validator files from unauthorized modifications by blocking Edit and Write operations
+  - Blocked Bash commands that target validator files to prevent bypassing protections
+  - Added path detection to identify protected validator files across the hook system
+- fbdf54d: - Loggers become silent no-ops when the auto directory does not exist, preventing errors in unconfigured environments
+- fbdf54d: - Switched to plugin-only mode, removing the legacy npx/CLI installation system entirely
+  - Added plugin marketplace support for easier installation via Claude Code's plugin system
+  - Added runtime configuration skill for managing validators and reminders with overrides
+  - Fixed path resolution and commit validation settings when running as a plugin
+  - Rewrote all documentation for the new plugin-only workflow
+- bca0adb: - Added protection for validator files by blocking direct edits and writes through the pre-tool-use hook
+- fbdf54d: - Refreshed init output with emojis for better readability
+  - Removed interrupt directive from init messaging
+- fbdf54d: - Added `initClaudeAuto` function that sets up the `.claude-auto` directory with default configuration
+  - Automatically detects and updates `.gitignore` to exclude generated files
+- fbdf54d: - Pre-tool-use and auto-continue hooks now return early when the auto directory is missing, avoiding errors in unconfigured projects
+- bca0adb: - Added path protection utility for detecting validator files, enabling hooks to identify and safeguard validator-related paths
+- fbdf54d: - Simplified initial setup by removing the first-setup-required flag
+  - Hook state now returns sensible defaults when the auto directory doesn't exist yet, preventing errors on fresh installations
+- fbdf54d: - Added a prompt after initialization that asks users if they want to review or customize their configuration
+- bca0adb: - Switched to plugin-only mode, removing the legacy npx/CLI installation system entirely
+  - Added plugin marketplace support for easier installation via BeOnAuto/auto-plugins
+  - Added runtime configuration skill for managing validators and reminders with overrides
+  - Fixed commit validation ignoring the "off" mode setting
+  - Updated all documentation for plugin-only workflow
+- fbdf54d: - Added emojis to the initialization hint message for better visibility
+- fbdf54d: - Added human-readable formatting for init command output
+- fbdf54d: - Replaced blocking first-setup flow with a non-blocking hint message shown on session start when the project is not yet initialized
+  - Hooks now silently return early in uninitialized repos instead of interrupting the user
+- fbdf54d: - Write and update operations now silently skip when the auto directory is missing, preventing errors in unconfigured projects
+- fa2129f: - Migrated to plugin-only mode with native Claude Code plugin support via BeOnAuto/auto-plugins marketplace
+  - Removed legacy npx installation, CLI system, and associated commands (install, doctor, repair, status, reminders, tui)
+  - Added runtime config management with overrides and first-setup guidance via new /claude-auto:config skill
+  - Fixed commit validation to respect validateCommit.mode off setting
+  - Fixed plugin path resolution for skills context when only CLAUDE_PLUGIN_ROOT is set
+
+### Patch Changes
+
+- fbdf54d: - Removed unused firstSetupRequired field from hook state, simplifying the configuration interface
+- fbdf54d: - Planned upcoming work to wrap the init hint message as a directive
+- fbdf54d: - Simplified the initialization hint message to a plain one-line reminder for clearer, less intrusive guidance
+- fbdf54d: - Planned upcoming fix for skill-name handling
+- fbdf54d: - Fixed init hint message not appearing in sessions by ensuring Claude surfaces it to the user
+- fbdf54d: - Updated internal planning documentation to reflect completed work
+- fbdf54d: - Renamed skills to use consistent `/claude-auto-*` naming pattern (claude-auto-init and claude-auto-config)
+- fbdf54d: - Updated internal ketchup plan to reflect completed burst 7.4
+- fbdf54d: - Planned simplification of the session-start init hint message
+- fa2129f: - Fixed release workflow to skip marketplace.json during version bumps
+- fbdf54d: - Improved hook state initialization to avoid creating unnecessary directories
+- fbdf54d: - Marked burst 7.1 as complete in the ketchup plan
+- fbdf54d: - Updated internal planning notes to reflect completed work
+- fbdf54d: - Fixed incorrect skill name in initialization hint so users see the correct `/claude-auto-init` command
+- fbdf54d: - Changed the initialization hint message to be a directive, so Claude now actively mentions the hint to the user in its first response instead of silently absorbing it
+- fa2129f: - Updated internal planning documentation to reflect completed work
+- fbdf54d: - Updated all documentation to reflect the new opt-in activation model and renamed skills
+  - Renamed `/claude-auto:config` to `/claude-auto-config` across all docs
+  - Added references to `/claude-auto-init` for opt-in repository activation
+  - Updated installation and getting-started guides to reflect the new plugin workflow
+- fbdf54d: - Planned upcoming improvement to wrap the init configuration tip in a directive for better visibility
+- fbdf54d: - Fixed init config tip so Claude reliably surfaces it to users
+- fbdf54d: - Updated ketchup plan to reflect completed bursts
+- fbdf54d: - Planned non-interrupting init message burst
+- fa2129f: - Fixed CI version-bump loop to skip marketplace.json, preventing unintended modifications during releases
+- fbdf54d: - Planned emoji-decorated styling for the initialization hint message
+
 ## 0.18.0
 
 ### Minor Changes

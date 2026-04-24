@@ -15,7 +15,7 @@ describe('parseFileModified', () => {
           {
             tool_use_id: 'toolu_015RuxUYBsBeMpWv3n7cqbtT',
             type: 'tool_result',
-            content: 'File created successfully at: /Users/igor/Projects/xolvio/claude-auto/src/plan-progress.test.ts',
+            content: 'File created successfully at: /Users/sam/Projects/xolvio/ketchup/src/plan-progress.test.ts',
           },
         ],
       },
@@ -23,13 +23,13 @@ describe('parseFileModified', () => {
       timestamp: '2026-03-24T16:29:17.160Z',
       toolUseResult: {
         type: 'create',
-        filePath: '/Users/igor/Projects/xolvio/claude-auto/src/plan-progress.test.ts',
+        filePath: '/Users/sam/Projects/xolvio/ketchup/src/plan-progress.test.ts',
         content: '...',
         structuredPatch: [],
         originalFile: null,
       },
       sessionId: '1c62519e-23e0-4da5-b54f-a23c75943f1e',
-      cwd: '/Users/igor/Projects/xolvio/claude-auto',
+      cwd: '/Users/sam/Projects/xolvio/ketchup',
       version: '2.1.81',
       gitBranch: 'claude-plugin-cleanup',
       entrypoint: 'cli',
@@ -39,7 +39,7 @@ describe('parseFileModified', () => {
       {
         type: 'FileModified',
         sessionId: '1c62519e-23e0-4da5-b54f-a23c75943f1e',
-        filePath: '/Users/igor/Projects/xolvio/claude-auto/src/plan-progress.test.ts',
+        filePath: '/Users/sam/Projects/xolvio/ketchup/src/plan-progress.test.ts',
         operation: 'create',
         timestamp: '2026-03-24T16:29:17.160Z',
         source: {

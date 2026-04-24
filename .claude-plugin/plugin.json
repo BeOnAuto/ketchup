@@ -1,7 +1,7 @@
 {
-  "name": "claude-auto",
-  "version": "0.18.0",
-  "description": "Husky-style hooks and skills management for Claude Code",
+  "name": "ketchup",
+  "version": "0.21.0",
+  "description": "LLM-powered guardrails for Claude Code. Turn every AI mistake into a rule AI can't repeat.",
   "author": {
     "name": "Sam Hatoum"
   }

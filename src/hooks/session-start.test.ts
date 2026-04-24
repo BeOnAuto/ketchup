@@ -8,7 +8,7 @@ import { DEFAULT_HOOK_STATE } from '../hook-state.js';
 import type { ResolvedPaths } from '../path-resolver.js';
 import { INIT_HINT_MESSAGE } from '../welcome-message.js';
 
-const DEFAULT_AUTO_DIR = '.claude-auto';
+const DEFAULT_AUTO_DIR = '.ketchup';
 
 import { handleSessionStart } from './session-start.js';
 
@@ -29,10 +29,11 @@ describe('session-start hook', () => {
       autoDir,
       remindersDirs: [path.join(autoDir, 'reminders')],
       validatorsDirs: [path.join(autoDir, 'validators')],
+      protectedValidatorsDirs: [],
     };
     fs.mkdirSync(claudeDir, { recursive: true });
     fs.mkdirSync(autoDir, { recursive: true });
-    fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify(DEFAULT_HOOK_STATE));
+    fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify(DEFAULT_HOOK_STATE));
     fs.writeFileSync(path.join(tempDir, 'package.json'), '{}');
   });
 
@@ -102,8 +103,8 @@ Content.`,
     expect(content).toContain('session-start:');
   });
 
-  it('logs reminders loaded when DEBUG=claude-auto', async () => {
-    process.env.DEBUG = 'claude-auto';
+  it('logs reminders loaded when DEBUG=ketchup', async () => {
+    process.env.DEBUG = 'ketchup';
     const remindersDir = path.join(autoDir, 'reminders');
     fs.mkdirSync(remindersDir, { recursive: true });
     fs.writeFileSync(
@@ -128,7 +129,7 @@ Reminder B content.`,
 
     await handleSessionStart(resolvedPaths, 'debug-session');
 
-    const logPath = path.join(autoDir, 'logs', 'claude-auto', 'debug.log');
+    const logPath = path.join(autoDir, 'logs', 'ketchup', 'debug.log');
     expect(fs.existsSync(logPath)).toBe(true);
     const content = fs.readFileSync(logPath, 'utf8');
     expect(content).toContain('[session-start]');
@@ -152,7 +153,7 @@ Test content.`,
     const result = await handleSessionStart(resolvedPaths, 'normal-session');
 
     expect(result.hookSpecificOutput.additionalContext).toBe('Test content.');
-    expect(result.hookSpecificOutput.additionalContext).not.toContain('Welcome to Claude Auto');
+    expect(result.hookSpecificOutput.additionalContext).not.toContain('Welcome to Ketchup');
   });
 
   it('skips reminders for validator subagent sessions', async () => {

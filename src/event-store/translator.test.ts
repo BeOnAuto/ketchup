@@ -15,7 +15,7 @@ describe('parseSessionStarted', () => {
       uuid: 'd18b3b7d-cf88-42e3-9cd4-8c23220c3b3a',
       timestamp: '2026-03-24T13:04:50.596Z',
       sessionId: '1c62519e-23e0-4da5-b54f-a23c75943f1e',
-      cwd: '/Users/igor/Projects/xolvio/claude-auto',
+      cwd: '/Users/sam/Projects/xolvio/ketchup',
       gitBranch: 'main',
       version: '2.1.81',
       entrypoint: 'cli',
@@ -25,7 +25,7 @@ describe('parseSessionStarted', () => {
       {
         type: 'SessionStarted',
         sessionId: '1c62519e-23e0-4da5-b54f-a23c75943f1e',
-        cwd: '/Users/igor/Projects/xolvio/claude-auto',
+        cwd: '/Users/sam/Projects/xolvio/ketchup',
         gitBranch: 'main',
         version: '2.1.81',
         entrypoint: 'cli',

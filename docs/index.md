@@ -2,92 +2,93 @@
 layout: home
 
 hero:
-  name: Claude Auto
-  text: Stop Babysitting. Start Parallelizing.
-  tagline: Trust the system. Ship 10+ features a week across 3-5 parallel worktrees.
+  name: Ketchup
+  text: Turn every AI mistake into a rule AI can't repeat.
+  tagline: Ketchup runs 20+ LLM-powered guardrails on every AI commit, so bad commits don't land.
   image:
-    src: /hero.png
-    alt: Claude Auto - Stop Babysitting. Start Parallelizing.
+    light: /hero-light.png
+    dark: /hero-dark.png
+    alt: Ketchup - LLM-powered guardrails for AI coding agents.
   actions:
     - theme: brand
       text: Get Started
       link: /getting-started
     - theme: alt
-      text: The Ketchup Technique
-      link: /ketchup-technique
+      text: Guardrail Engineering
+      link: /guardrail-engineering
     - theme: alt
       text: View on GitHub
-      link: https://github.com/BeOnAuto/claude-auto
+      link: https://github.com/BeOnAuto/ketchup
 
 features:
   - icon:
+      src: /icon-supervisor.png
+    title: LLM-powered commit gate
+    details: "An impartial AI validates Claude's commits. 20+ validators ship by default, and you can add your own."
+  - icon:
       src: /icon-janitor.png
-    title: "The Problem: AI Babysitter"
-    details: Every AI session demands your full attention. Watching, nudging, correcting. You can't shift focus.
+    title: Persistent operating context
+    details: "Reminders inject 9+ rules at hook points you choose, and you can add your own."
   - icon:
       src: /icon-architect.png
-    title: "The Solution: Parallel Execution"
-    details: Trust the system. Let it run. Open another worktree. Run 3-5 features in parallel.
-  - icon:
-      src: /icon-tcr.png
-    title: TCR Discipline
-    details: "<code>test && commit || revert</code>. Bad code auto-reverts. Problems can't ship."
-  - icon:
-      src: /icon-supervisor.png
-    title: Supervisor AI
-    details: An impartial AI validates every commit against your criteria. It reviews so you don't have to.
+    title: Structural file protection
+    details: "Claude's blocked from changing files you've forbidden, so it doesn't ignore you like it tends to."
   - icon:
       src: /icon-parallel.png
-    title: Auto-Continue
-    details: Keeps going until the plan is done. Check back on clean commits.
+    title: Parallel by design
+    details: "Plans express dependency chains, so independent bursts run in parallel sub-agents."
+  - icon:
+      src: /icon-tcr.png
+    title: Emergent design through TCR
+    details: "<code>test && commit || revert</code> forces Claude to rethink its design rather than keep patching a bad one."
   - icon:
       src: /icon-coverage.png
-    title: 100% Coverage
-    details: Enforced by construction. Quality is guaranteed.
+    title: Formal appeals
+    details: "If validators are being too strict, Claude can appeal and a separate LLM re-judges."
 ---
 
-## The Quality Loop: Why You Can Let It Run
+## The loop
 
-The [Ketchup Technique](/ketchup-technique) provides the planning methodology. The Quality Loop is the system that executes it.
+You observe an AI mistake, encode it as a rule, and AI can't repeat it.
 
-You can only parallelize if you trust the execution. The Quality Loop earns that trust:
+Ketchup makes that loop real with validators on every commit, reminders at the hook points you choose, and deny-lists for the files Claude shouldn't touch. The codebase gets permanently safer as you keep working, not just temporarily cleaner.
 
-| Component          | What It Does                                 | Result                          |
-| ------------------ | -------------------------------------------- | ------------------------------- |
-| **Auto-Planner**   | Generates plan from your requirements        | No need to specify every detail |
-| **Supervisor AI**  | Validates every commit against your criteria | Automated review                |
-| **TCR Discipline** | Test && Commit \|\| Revert                   | Bad code auto-reverts           |
-| **Auto-Continue**  | Keeps going until the plan is done           | You check back, not babysit     |
+```
+/plugin install ketchup
+```
 
-The system is trustworthy. That's what lets you direct instead of babysit.
+Ketchup is an open-source guardrail engine for Claude Code, from the team at [Auto](https://on.auto).
 
----
-
-## Git Worktrees: The Multiplier
-
-Git worktrees let you have multiple working directories from the same repo. Each on a different branch. Each isolated.
-
-Combine with Claude Auto:
-
-| Worktree            | Feature               | Status                   |
-| ------------------- | --------------------- | ------------------------ |
-| `feature-auth`      | Authentication system | Claude Auto executing... |
-| `feature-payments`  | Payment integration   | Claude Auto executing... |
-| `feature-dashboard` | Admin dashboard       | Claude Auto executing... |
-
-Three features running simultaneously. All quality-validated.
-
-| Approach                    | Features/Week |
-| --------------------------- | ------------- |
-| Manual coding               | 1             |
-| AI-assisted (babysitting)   | 1-2           |
-| **Claude Auto + Worktrees** | **10+**       |
-
-The bottleneck becomes defining requirements, not executing them.
+> Today: Claude Code only. If your agent exposes hooks or an equivalent integration surface, [open an issue](https://github.com/BeOnAuto/ketchup/issues).
 
 ---
 
-## Three Steps
+## What ships
+
+**20+ validators** ship by default: `burst-atomicity`, `new-code-requires-tests`, `testing-weak-assertions`, `no-dangerous-git`, `coverage-rules`, `dead-code`, `tcr-workflow`, and more. [Full list →](/validators-guide)
+
+**9+ reminders** that keep the discipline loaded: core workflow, extreme ownership, IDE diagnostics, rethink-after-revert, test-title-matches-spec, and more. [Full list →](/reminders-guide)
+
+Every rule is runtime-configurable. Disable what you don't need. Reorder what you do. Add your own in `.ketchup/validators/` and `.ketchup/reminders/`. No forking.
+
+---
+
+## Why LLM guardrails
+
+Static tools catch syntax. Tests catch regressions. Neither catches _semantic_ failures:
+
+- A test that asserts nothing meaningful (`expect(result).toBeDefined()`)
+- A commit that bundles three unrelated concerns
+- A "fix" that rationalizes a shortcut
+- A new data-access pattern that contradicts an architectural rule you wrote three months ago
+
+Semantic failures need semantic understanding, which is why Ketchup runs a separate Claude subagent against every commit, with no investment in shipping, no attachment to the diff, and no reason to rationalize. Just the rules, read from your validator files, returning ACK or NACK.
+
+Cost, latency, false-positive rate, and what happens when the subagent hallucinates: see [Operational Concerns](/operational-concerns).
+
+---
+
+## Three steps
 
 ### 1. Install
 
@@ -95,21 +96,23 @@ From within a Claude Code session:
 
 ```
 /plugin marketplace add BeOnAuto/auto-plugins
-/plugin install claude-auto
+/plugin install ketchup
 ```
 
-That's it! The plugin sets up everything you need.
+### 2. Initialize
 
-### 2. Define
+```
+/ketchup:init
+```
 
-Feed your PRD, Architecture.md, or requirements. Claude Auto auto-generates the plan with Bottles, Bursts, and Dependencies. Review and approve.
+This creates `.ketchup/` with default configuration, seeded with the 20+ validators and 9+ reminders.
 
-### 3. Release
+### 3. Work
 
-Start execution and shift your focus. The Supervisor validates every commit. Auto-continue keeps it going. Check back to review outcomes.
-
-### 4. Multiply
-
-Open another git worktree. Start another Claude Auto instance. Run 3-5 features in parallel. Ship 10+ per week.
+Write a test, let AI implement it, then commit. Validators read the diff and reject the commit with a reason if anything is off. When you spot a new failure pattern, encode it as a validator in `.ketchup/validators/`, and the next AI agent can't repeat it.
 
 **[Get Started →](/getting-started)**
+
+---
+
+<sub>From the team building [Auto](https://on.auto), a spec-driven development platform. [How Ketchup fits in the stack →](/in-the-stack)</sub>

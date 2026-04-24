@@ -11,8 +11,8 @@ describe('hook-state', () => {
   let autoDir: string;
 
   beforeEach(() => {
-    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'claude-auto-hookstate-'));
-    autoDir = path.join(tempDir, '.claude-auto');
+    tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'ketchup-hookstate-'));
+    autoDir = path.join(tempDir, '.ketchup');
     fs.mkdirSync(autoDir, { recursive: true });
   });
 
@@ -50,7 +50,6 @@ describe('hook-state', () => {
       const hookState = createHookState(autoDir);
       const state = hookState.read();
 
-      expect(state.autoContinue.mode).toBe('smart');
       expect(state.validateCommit.mode).toBe('strict');
       expect(state.denyList.enabled).toBe(true);
       expect(state.promptReminder.enabled).toBe(true);
@@ -58,37 +57,35 @@ describe('hook-state', () => {
 
     it('reads existing state file', () => {
       const existingState: HookState = {
-        autoContinue: { mode: 'non-stop', maxIterations: 5, skipModes: ['plan'] },
         validateCommit: { mode: 'warn' },
         denyList: { enabled: false },
         promptReminder: { enabled: false },
         subagentHooks: { validateCommitOnExplore: false, validateCommitOnWork: true, validateCommitOnUnknown: true },
         overrides: { validators: {}, reminders: {} },
       };
-      fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify(existingState));
+      fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify(existingState));
 
       const hookState = createHookState(autoDir);
       const state = hookState.read();
 
-      expect(state.autoContinue.mode).toBe('non-stop');
       expect(state.validateCommit.mode).toBe('warn');
+      expect(state.denyList.enabled).toBe(false);
     });
 
     it('merges partial state with defaults', () => {
-      const partialState = { autoContinue: { mode: 'off' } };
-      fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify(partialState));
+      const partialState = { validateCommit: { mode: 'off' } };
+      fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify(partialState));
 
       const hookState = createHookState(autoDir);
       const state = hookState.read();
 
-      expect(state.autoContinue.mode).toBe('off');
-      expect(state.validateCommit.mode).toBe('strict');
+      expect(state.validateCommit.mode).toBe('off');
       expect(state.denyList.enabled).toBe(true);
     });
 
     it('merges batchCount from partial state file', () => {
       const partialState = { validateCommit: { mode: 'strict', batchCount: 5 } };
-      fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify(partialState));
+      fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify(partialState));
 
       const hookState = createHookState(autoDir);
       const state = hookState.read();
@@ -96,7 +93,7 @@ describe('hook-state', () => {
       expect(state.validateCommit).toEqual({ mode: 'strict', batchCount: 5 });
     });
 
-    it('reads legacy files with volatile fields without breaking', () => {
+    it('reads legacy files with extra fields without breaking', () => {
       const legacyState = {
         autoContinue: { mode: 'smart', maxIterations: 0, iteration: 3, skipModes: ['plan'] },
         validateCommit: { mode: 'strict' },
@@ -106,13 +103,13 @@ describe('hook-state', () => {
         updatedAt: '2026-01-01T00:00:00Z',
         updatedBy: 'legacy',
       };
-      fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify(legacyState));
+      fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify(legacyState));
 
       const hookState = createHookState(autoDir);
       const state = hookState.read();
 
-      expect(state.autoContinue.mode).toBe('smart');
       expect(state.validateCommit.mode).toBe('strict');
+      expect(state.denyList.enabled).toBe(true);
     });
   });
 
@@ -121,34 +118,34 @@ describe('hook-state', () => {
       const nonExistentDir = path.join(tempDir, 'not-created');
       const hookState = createHookState(nonExistentDir);
 
-      hookState.write({ ...DEFAULT_HOOK_STATE, autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, mode: 'off' } });
+      hookState.write({ ...DEFAULT_HOOK_STATE, validateCommit: { mode: 'off' } });
 
       expect(fs.existsSync(nonExistentDir)).toBe(false);
     });
 
-    it('writes state to .claude-auto/.claude.hooks.json', () => {
+    it('writes state to .ketchup/state.json', () => {
       const hookState = createHookState(autoDir);
       const newState: HookState = {
         ...DEFAULT_HOOK_STATE,
-        autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, mode: 'non-stop' },
+        validateCommit: { mode: 'off' },
       };
 
       hookState.write(newState);
 
-      const content = JSON.parse(fs.readFileSync(path.join(autoDir, '.claude.hooks.json'), 'utf-8'));
-      expect(content.autoContinue.mode).toBe('non-stop');
+      const content = JSON.parse(fs.readFileSync(path.join(autoDir, 'state.json'), 'utf-8'));
+      expect(content.validateCommit.mode).toBe('off');
     });
 
-    it('does not add volatile fields to written file', () => {
+    it('does not preserve unknown fields when writing default state', () => {
       const hookState = createHookState(autoDir);
       const state = hookState.read();
 
       hookState.write(state);
 
-      const content = JSON.parse(fs.readFileSync(path.join(autoDir, '.claude.hooks.json'), 'utf-8'));
+      const content = JSON.parse(fs.readFileSync(path.join(autoDir, 'state.json'), 'utf-8'));
       expect(content.updatedAt).toBeUndefined();
       expect(content.updatedBy).toBeUndefined();
-      expect(content.autoContinue.iteration).toBeUndefined();
+      expect(content.autoContinue).toBeUndefined();
     });
   });
 
@@ -157,7 +154,7 @@ describe('hook-state', () => {
       const nonExistentDir = path.join(tempDir, 'not-created');
       const hookState = createHookState(nonExistentDir);
 
-      const result = hookState.update({ autoContinue: { mode: 'off', skipModes: [], maxIterations: 0 } });
+      const result = hookState.update({ validateCommit: { mode: 'off' } });
 
       expect(result).toEqual(DEFAULT_HOOK_STATE);
       expect(fs.existsSync(nonExistentDir)).toBe(false);
@@ -170,7 +167,7 @@ describe('hook-state', () => {
 
       const state = hookState.read();
       expect(state.validateCommit.mode).toBe('off');
-      expect(state.autoContinue.mode).toBe('smart');
+      expect(state.denyList.enabled).toBe(true);
     });
 
     it('updates overrides via update method', () => {
@@ -192,7 +189,6 @@ describe('hook-state', () => {
   describe('DEFAULT_HOOK_STATE', () => {
     it('has expected default values', () => {
       expect(DEFAULT_HOOK_STATE).toEqual({
-        autoContinue: { mode: 'smart', maxIterations: 0, skipModes: ['plan'] },
         validateCommit: { mode: 'strict', batchCount: 3 },
         denyList: { enabled: true, extraPatterns: [] },
         promptReminder: { enabled: true },
@@ -219,7 +215,7 @@ describe('hook-state', () => {
           validateCommitOnUnknown: false,
         },
       };
-      fs.writeFileSync(path.join(autoDir, '.claude.hooks.json'), JSON.stringify(existingState));
+      fs.writeFileSync(path.join(autoDir, 'state.json'), JSON.stringify(existingState));
 
       const hookState = createHookState(autoDir);
       const state = hookState.read();

@@ -22,15 +22,12 @@ docs/.vitepress/cache
 .idea/
 
 # Local install artifacts
-.claude-auto/scripts/
-.claude-auto/validators/
-.claude-auto/reminders/
+.ketchup/scripts/
+.ketchup/validators/
+.ketchup/reminders/
 
 # Temp files
 .changeset-prompt-*.txt
-
-# Event store artifacts
-events.db
-events.db-journal
-events.db-wal
-events.db-shm
+# Ketchup plans
+ketchup-plan.md
+.ketchup/

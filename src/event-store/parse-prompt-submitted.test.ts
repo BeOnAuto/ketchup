@@ -18,7 +18,7 @@ describe('parsePromptSubmitted', () => {
       permissionMode: 'default',
       userType: 'external',
       entrypoint: 'cli',
-      cwd: '/Users/igor/Projects/xolvio/claude-auto',
+      cwd: '/Users/sam/Projects/xolvio/ketchup',
       sessionId: '1c62519e-23e0-4da5-b54f-a23c75943f1e',
       version: '2.1.81',
       gitBranch: 'main',

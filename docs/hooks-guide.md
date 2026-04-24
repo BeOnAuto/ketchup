@@ -13,7 +13,6 @@ For a complete reference of all configuration files and options, see the [Config
 | SessionStart | Session begins | What context Claude receives |
 | PreToolUse | Before any tool | What actions are allowed |
 | UserPromptSubmit | User sends prompt | What reminders are injected |
-| Stop | Execution pauses | Whether to continue or stop |
 
 ---
 
@@ -31,7 +30,7 @@ For a complete reference of all configuration files and options, see the [Config
 - Sets up the working context for the entire session
 
 **Default behavior:**
-- Loads reminders from `.claude-auto/reminders/` with `when.hook: SessionStart`
+- Loads reminders from `.ketchup/reminders/` with `when.hook: SessionStart`
 - Prioritizes reminders based on their priority value (higher = earlier)
 - Filters reminders based on state conditions if specified
 
@@ -92,33 +91,6 @@ For a complete reference of all configuration files and options, see the [Config
 
 **Script location:** Bundled within the plugin (`dist/bundle/scripts/user-prompt-submit.js`)
 
-### Stop Hook
-
-**Purpose:** Decide whether Claude should continue or stop after pausing.
-
-**When it fires:** When Claude's execution pauses (typically after completing a response).
-
-**What it does:**
-- Analyzes the current transcript
-- Determines if more work is needed
-- Can trigger auto-continue behavior
-
-**Default behavior:**
-- Checks auto-continue configuration in `.claude-auto/.claude.hooks.json`
-- In "smart" mode: analyzes transcript for continuation signals
-- In "non-stop" mode: always continues until max iterations
-- In "off" mode: never auto-continues
-
-**Example use cases:**
-- Keep Claude working until all tests pass
-- Continue until a feature is complete
-- Stop when hitting error limits
-- Pause for user review at milestones
-
-**Script location:** Bundled within the plugin (`dist/bundle/scripts/auto-continue.js`)
-
----
-
 ## Protect Files with Deny-List
 
 Define what the AI cannot touch.
@@ -133,7 +105,7 @@ With deny-list: sensitive files are untouchable.
 ### Create project-wide patterns
 
 ```bash
-cat > .claude/deny-list.project.txt << 'EOF'
+cat > .ketchup/deny-list.project.txt << 'EOF'
 # Comments start with #
 
 # Secrets
@@ -157,7 +129,7 @@ EOF
 For patterns you don't want to commit:
 
 ```bash
-cat > .claude/deny-list.local.txt << 'EOF'
+cat > .ketchup/deny-list.local.txt << 'EOF'
 # Personal files
 TODO.md
 notes/**
@@ -181,19 +153,13 @@ Uses [micromatch](https://github.com/micromatch/micromatch) glob patterns:
 
 ## Configure Hook State
 
-Control runtime hook behavior via `.claude-auto/.claude.hooks.json`.
+Control runtime hook behavior via `.ketchup/state.json`.
 
 ### Create the state file
 
 ```bash
-cat > .claude-auto/.claude.hooks.json << 'EOF'
+cat > .ketchup/state.json << 'EOF'
 {
-  "autoContinue": {
-    "mode": "smart",
-    "maxIterations": 10,
-    "iteration": 0,
-    "skipModes": ["plan"]
-  },
   "validateCommit": {
     "mode": "strict"
   },
@@ -213,14 +179,6 @@ cat > .claude-auto/.claude.hooks.json << 'EOF'
 }
 EOF
 ```
-
-### Auto-continue modes
-
-| Mode | Behavior |
-|------|----------|
-| `smart` | Analyzes transcript for continuation signals |
-| `non-stop` | Always continues until maxIterations |
-| `off` | Never auto-continues |
 
 ### Validate-commit modes
 
@@ -255,17 +213,17 @@ Control which subagent types trigger validation:
 ### Enable debug logging
 
 ```bash
-DEBUG=claude-auto* claude
+DEBUG=ketchup* claude
 ```
 
-Logs are written to `.claude-auto/logs/debug.log`.
+Logs are written to `.ketchup/logs/debug.log`.
 
 ### View hook logs
 
-Session logs are in `.claude-auto/logs/`:
+Session logs are in `.ketchup/logs/`:
 
 ```bash
-tail -f .claude-auto/logs/*.log
+tail -f .ketchup/logs/*.log
 ```
 
 ### Check hook execution
@@ -274,16 +232,13 @@ Each hook outputs JSON. Test manually from your project root:
 
 ```bash
 # Test session-start
-node .claude-auto/scripts/session-start.js
+node .ketchup/scripts/session-start.js
 
 # Test pre-tool-use with sample input
-node .claude-auto/scripts/pre-tool-use.js '{"file_path":"/some/file.ts"}'
+node .ketchup/scripts/pre-tool-use.js '{"file_path":"/some/file.ts"}'
 
 # Test user-prompt-submit with sample input
-node .claude-auto/scripts/user-prompt-submit.js "Write a function"
-
-# Test stop hook
-node .claude-auto/scripts/auto-continue.js
+node .ketchup/scripts/user-prompt-submit.js "Write a function"
 ```
 
 ---
@@ -293,7 +248,7 @@ node .claude-auto/scripts/auto-continue.js
 ### Create the script
 
 ```bash
-cat > .claude-auto/scripts/my-custom-hook.js << 'EOF'
+cat > .ketchup/scripts/my-custom-hook.js << 'EOF'
 #!/usr/bin/env node
 
 const input = JSON.parse(process.argv[2] || '{}');
@@ -307,7 +262,7 @@ const result = {
 console.log(JSON.stringify(result));
 EOF
 
-chmod +x .claude-auto/scripts/my-custom-hook.js
+chmod +x .ketchup/scripts/my-custom-hook.js
 ```
 
 ### Register in settings
@@ -323,7 +278,7 @@ Add to `.claude/settings.project.json`:
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude-auto/scripts/my-custom-hook.js"
+            "command": "node .ketchup/scripts/my-custom-hook.js"
           }
         ]
       }
@@ -351,11 +306,5 @@ Add to `.claude/settings.project.json`:
 { "result": "Modified prompt with reminders..." }
 ```
 
-**Stop:**
-```json
-{ "decision": "CONTINUE", "reason": "More work to do" }
-// or
-{ "decision": "STOP", "reason": "All tasks complete" }
-```
 
 

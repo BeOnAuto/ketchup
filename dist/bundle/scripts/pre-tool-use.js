@@ -6569,6 +6569,20 @@ function writeHookLog(autoDir, entry) {
 // src/hooks/pre-tool-use.ts
 var fs8 = __toESM(require("node:fs"));
 
+// src/brand.ts
+var BRAND = {
+  packageName: "ketchup",
+  displayName: "Ketchup",
+  attribution: "Ketchup, from Auto",
+  dataDir: ".ketchup",
+  stateFile: "state.json",
+  docsUrl: "https://ketchup.on.auto",
+  repoUrl: "https://github.com/BeOnAuto/ketchup",
+  leadTagline: "Turn every AI mistake into a rule AI can't repeat.",
+  subTagline: "Ketchup runs 20+ LLM-powered guardrails on every AI commit, so bad commits don't land.",
+  categoryLine: "LLM-powered guardrails for AI coding agents."
+};
+
 // src/debug-logger.ts
 var import_node_fs2 = __toESM(require("node:fs"));
 var import_node_path2 = __toESM(require("node:path"));
@@ -6577,10 +6591,10 @@ function debugLog(autoDir, hookName, message) {
     return;
   }
   const debug = process.env.DEBUG;
-  if (!debug || !debug.includes("claude-auto")) {
+  if (!debug || !debug.includes(BRAND.packageName)) {
     return;
   }
-  const logsDir = import_node_path2.default.join(autoDir, "logs", "claude-auto");
+  const logsDir = import_node_path2.default.join(autoDir, "logs", BRAND.packageName);
   if (!import_node_fs2.default.existsSync(logsDir)) {
     import_node_fs2.default.mkdirSync(logsDir, { recursive: true });
   }
@@ -6615,11 +6629,6 @@ function isDenied(filePath, patterns) {
 var fs5 = __toESM(require("node:fs"));
 var path5 = __toESM(require("node:path"));
 var DEFAULT_HOOK_STATE = {
-  autoContinue: {
-    mode: "smart",
-    maxIterations: 0,
-    skipModes: ["plan"]
-  },
   validateCommit: {
     mode: "strict",
     batchCount: 3
@@ -6642,7 +6651,7 @@ var DEFAULT_HOOK_STATE = {
   }
 };
 function createHookState(autoDir) {
-  const stateFile = path5.join(autoDir, ".claude.hooks.json");
+  const stateFile = path5.join(autoDir, BRAND.stateFile);
   function read() {
     if (!fs5.existsSync(autoDir)) {
       return { ...DEFAULT_HOOK_STATE };
@@ -6656,7 +6665,6 @@ function createHookState(autoDir) {
     const content = fs5.readFileSync(stateFile, "utf-8");
     const partial = JSON.parse(content);
     return {
-      autoContinue: { ...DEFAULT_HOOK_STATE.autoContinue, ...partial.autoContinue },
       validateCommit: { ...DEFAULT_HOOK_STATE.validateCommit, ...partial.validateCommit },
       denyList: { ...DEFAULT_HOOK_STATE.denyList, ...partial.denyList },
       promptReminder: { ...DEFAULT_HOOK_STATE.promptReminder, ...partial.promptReminder },
@@ -6682,7 +6690,6 @@ function createHookState(autoDir) {
     const newState = {
       ...current,
       ...updates,
-      autoContinue: { ...current.autoContinue, ...updates.autoContinue },
       validateCommit: { ...current.validateCommit, ...updates.validateCommit },
       denyList: { ...current.denyList, ...updates.denyList },
       promptReminder: { ...current.promptReminder, ...updates.promptReminder },
@@ -6801,6 +6808,20 @@ function loadValidators(dirs, overrides) {
 }
 
 // src/hooks/pre-tool-use.ts
+function isProtectedPath(filePath, validatorsDirs) {
+  return validatorsDirs.some((dir) => filePath.startsWith(`${dir}/`));
+}
+function commandTargetsProtectedPath(command, validatorsDirs) {
+  for (const dir of validatorsDirs) {
+    if (command.includes(`${dir}/`)) {
+      const idx = command.indexOf(`${dir}/`);
+      const rest = command.slice(idx);
+      const match = rest.match(/^(\S+)/);
+      if (match) return match[1];
+    }
+  }
+  return void 0;
+}
 async function handlePreToolUse(paths, sessionId, toolInput, options2 = {}) {
   if (!fs8.existsSync(paths.autoDir)) {
     return {
@@ -6815,8 +6836,33 @@ async function handlePreToolUse(paths, sessionId, toolInput, options2 = {}) {
     const gitCwd = options2.cwd ?? process.cwd();
     return handleCommitValidation(paths, sessionId, command, options2, gitCwd);
   }
-  const patterns = loadDenyPatterns(paths.claudeDir);
+  if (command) {
+    const targetedPath = commandTargetsProtectedPath(command, paths.protectedValidatorsDirs);
+    if (targetedPath) {
+      activityLog(paths.autoDir, sessionId, "pre-tool-use", `blocked protected: ${targetedPath}`);
+      debugLog(paths.autoDir, "pre-tool-use", `${targetedPath} blocked (immutable validator)`);
+      return {
+        hookSpecificOutput: {
+          hookEventName: "PreToolUse",
+          permissionDecision: "deny",
+          permissionDecisionReason: `Validator files are immutable: ${targetedPath}`
+        }
+      };
+    }
+  }
   const filePath = toolInput.file_path;
+  if (filePath && isProtectedPath(filePath, paths.protectedValidatorsDirs)) {
+    activityLog(paths.autoDir, sessionId, "pre-tool-use", `blocked protected: ${filePath}`);
+    debugLog(paths.autoDir, "pre-tool-use", `${filePath} blocked (immutable validator)`);
+    return {
+      hookSpecificOutput: {
+        hookEventName: "PreToolUse",
+        permissionDecision: "deny",
+        permissionDecisionReason: `Validator files are immutable: ${filePath}`
+      }
+    };
+  }
+  const patterns = loadDenyPatterns(paths.autoDir);
   if (filePath && isDenied(filePath, patterns)) {
     activityLog(paths.autoDir, sessionId, "pre-tool-use", `blocked: ${filePath}`);
     debugLog(paths.autoDir, "pre-tool-use", `${filePath} blocked by deny-list`);
@@ -6824,7 +6870,7 @@ async function handlePreToolUse(paths, sessionId, toolInput, options2 = {}) {
       hookSpecificOutput: {
         hookEventName: "PreToolUse",
         permissionDecision: "deny",
-        permissionDecisionReason: `Path ${filePath} is denied by claude-auto deny-list`
+        permissionDecisionReason: `Path ${filePath} is denied by ${BRAND.packageName} deny-list`
       }
     };
   }
@@ -6906,21 +6952,22 @@ async function handleCommitValidation(paths, sessionId, command, options2, gitCw
 
 // src/path-resolver.ts
 var path8 = __toESM(require("node:path"));
-var AUTO_DIR = ".claude-auto";
 async function resolvePathsFromEnv(explicitPluginRoot) {
   const pluginRoot = explicitPluginRoot || process.env.CLAUDE_PLUGIN_ROOT;
   if (!pluginRoot) {
-    throw new Error("CLAUDE_PLUGIN_ROOT must be set. Claude Auto requires plugin mode.");
+    throw new Error(`CLAUDE_PLUGIN_ROOT must be set. ${BRAND.displayName} requires plugin mode.`);
   }
   const projectRoot = process.cwd();
   const claudeDir = path8.join(projectRoot, ".claude");
-  const autoDir = path8.join(projectRoot, AUTO_DIR);
+  const autoDir = path8.join(projectRoot, BRAND.dataDir);
+  const pluginValidatorsDir = path8.join(pluginRoot, "validators");
   return {
     projectRoot,
     claudeDir,
     autoDir,
     remindersDirs: [path8.join(pluginRoot, "reminders"), path8.join(autoDir, "reminders")],
-    validatorsDirs: [path8.join(pluginRoot, "validators"), path8.join(autoDir, "validators")]
+    validatorsDirs: [pluginValidatorsDir, path8.join(autoDir, "validators")],
+    protectedValidatorsDirs: [pluginValidatorsDir]
   };
 }
 
@@ -6929,7 +6976,7 @@ var fs9 = __toESM(require("node:fs"));
 var path9 = __toESM(require("node:path"));
 function logPluginDiagnostics(hookName, paths) {
   const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
-  const isDebug = !!process.env.CLAUDE_AUTO_DEBUG;
+  const isDebug = !!process.env.KETCHUP_DEBUG;
   if (!isPluginMode && !isDebug) {
     return;
   }

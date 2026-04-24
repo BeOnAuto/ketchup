@@ -32,17 +32,6 @@
           }
         ]
       }
-    ],
-    "Stop": [
-      {
-        "matcher": "",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "node \"${CLAUDE_PLUGIN_ROOT}/dist/bundle/scripts/auto-continue.js\""
-          }
-        ]
-      }
     ]
   }
 }
