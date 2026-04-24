@@ -24,12 +24,12 @@ export function SessionPicker({ onSelect }: { onSelect: (session: SessionSummary
           <button
             type="button"
             onClick={() => onSelect(session)}
-            className="w-full rounded-md border border-ketchup-divider bg-ketchup-surface px-3 py-2 text-left text-sm transition hover:bg-ketchup-bg-soft"
+            className="w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-left text-sm shadow-sm transition hover:bg-slate-50 dark:border-ketchup-divider dark:bg-ketchup-surface dark:shadow-none dark:hover:bg-ketchup-bg-soft"
           >
-            <div data-testid="session-label" className="line-clamp-2 font-medium text-ketchup-text">
+            <div data-testid="session-label" className="line-clamp-2 font-medium text-slate-800 dark:text-ketchup-text">
               {session.summary || `${session.sessionId.slice(0, 8)}…`}
             </div>
-            <div data-testid="session-meta" className="mt-1 flex gap-2 text-xs text-ketchup-text-3">
+            <div data-testid="session-meta" className="mt-1 flex gap-2 text-xs text-slate-500 dark:text-ketchup-text-3">
               <span>{session.eventCount} events</span>
               <span>·</span>
               <span>{new Date(session.lastTimestamp).toLocaleString()}</span>

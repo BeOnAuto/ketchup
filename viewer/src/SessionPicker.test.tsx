@@ -74,9 +74,9 @@ describe('SessionPicker', () => {
       meta: button.querySelector('[data-testid="session-meta"]')?.className,
     }).toEqual({
       button:
-        'w-full rounded-md border border-ketchup-divider bg-ketchup-surface px-3 py-2 text-left text-sm transition hover:bg-ketchup-bg-soft',
-      label: 'line-clamp-2 font-medium text-ketchup-text',
-      meta: 'mt-1 flex gap-2 text-xs text-ketchup-text-3',
+        'w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-left text-sm shadow-sm transition hover:bg-slate-50 dark:border-ketchup-divider dark:bg-ketchup-surface dark:shadow-none dark:hover:bg-ketchup-bg-soft',
+      label: 'line-clamp-2 font-medium text-slate-800 dark:text-ketchup-text',
+      meta: 'mt-1 flex gap-2 text-xs text-slate-500 dark:text-ketchup-text-3',
     });
   });
 });
