@@ -1,5 +1,139 @@
 # claude-ketchup
 
+## 0.22.0
+
+### Minor Changes
+
+- fd4f635: - Added automatic migration from the legacy `.claude-auto` directory to the new `.ketchup` directory on first plugin load after the rebrand
+  - Migration is safe and idempotent: skips when already migrated, and avoids overwriting if both directories exist
+- fdb2169: - Moved deny-list files from .claude/ into .ketchup/ so all project-local Ketchup config lives in one place
+  - Added automatic migration that relocates existing deny-list files on first session start, with no manual steps required
+- 752d66e: - Added centralized brand constants module to enable one-file rebrands
+  - Prepared groundwork for the Ketchup rebrand across package name, data directory, and documentation URLs
+- fb4b30c: - Automatically migrate projects from the legacy `.claude-auto` directory to `.ketchup` on first plugin load, so existing setups upgrade seamlessly without manual intervention
+- 0e5128c: - Renamed the state file to `.ketchup/state.json` for a cleaner, brand-aligned name
+  - Added automatic migration that renames the legacy state file in place on first session start, so existing setups upgrade seamlessly
+
+### Patch Changes
+
+- 3d751ae: - Updated marketplace dispatch workflow to reference the renamed ketchup plugin
+  - Refreshed tail-logs script header to reflect the Ketchup brand
+- 3d63e34: - Rewrote the parallelization reminder to guide planning in dependency-aware bursts before launching work
+  - Shifted guidance toward dispatching independent bursts as sub-agents that commit their own work, with validators and deny-list protection applied to each
+- 7b8f1da: - Updated architecture docs to reflect the current Guardrail Stack, replacing outdated Quality-Loop and Auto-Planner references
+  - Refreshed the Getting Started guide with accurate component descriptions and added TCR gate coverage
+  - Rewrote the project overview to frame Ketchup around guardrails and impartial subagent validation
+- 9d57818: - Refreshed hero image for a cleaner landing page look
+  - Clarified getting started guide to better explain Ketchup's features
+- 0711726: - Replaced Auto-Continue feature with parallel subagent planning driven by ketchup-plan.md dependency notation
+  - Removed Stop hook documentation, auto-continue state config, and AUTO_AUTO_CONTINUE environment variable
+  - Updated homepage, README, architecture diagrams, and getting-started guide to reflect the new parallel sub-agent workflow
+  - Simplified hook reference tables and quick reference by dropping obsolete Stop hook entries
+- 211458f: - Rewrote homepage feature cards with descriptive category names and natural-prose bodies
+  - Updated documented counts to 20+ validators and 9+ reminders across README, brand, VitePress meta, and OG description
+  - Refreshed operational-concerns, validators-guide, origin-story, and CLAUDE.md to match the new framing
+- 96535a7: - Renamed internal initialization function from initClaudeAuto to initKetchup for consistency with the Ketchup rebrand
+  - Updated init hint to point at the new /ketchup:config slash command
+  - Replaced hard-coded '.claude-auto' path strings with centralized BRAND constants
+- 92e47fc: - Rewrote homepage feature cards for clearer, more accurate messaging
+  - Clarified that reminders fire at user-chosen hook points, not every prompt
+  - Reframed deny-list description to lead with its value over implementation detail
+  - Renamed sections to emphasize smart parallel planning and emergent design through TCR
+  - Corrected formal appeals framing to reflect that appeals target the LLM, not the human
+- fb0b235: - Replaced em dashes with colons in guardrail-engineering and ketchup-technique pages for clearer bullet-list separators
+  - Updated origin-story wording from "higher-leverage" to "higher-value" for more natural phrasing
+- da7ba63: - Rewrote the Ketchup Technique documentation to focus on the planning methodology: Bursts, Bottles, ketchup-plan.md, and the TCR cycle
+  - Added a cross-link section explaining how the Ketchup Technique relates to Guardrail Engineering
+  - Standardized on Validators terminology throughout the documentation
+  - Removed outdated claims and framing that no longer match what ships in code
+- b668538: - Rebranded to Ketchup (npm package ketchup) with updated installation instructions
+  - Added `/ketchup:init` activation step for opting in per repository
+  - Migrated project config directory from `.claude-auto/` to `.ketchup/` automatically on first session
+- 0490a1f: - Added See-it-work validator with a NACK transcript demo to show what commit rejection looks like in practice
+  - Included a 30-second axios validator example for writing your own guardrails
+- acd20b0: - Smoothed choppy sentence fragments across documentation for better readability
+  - Rewrote key passages in origin story, homepage, and README for improved flow
+  - Tightened prose in guardrail engineering, ketchup technique, and stack sections
+- fb04d1c: - Renamed project data directory from .claude-auto to .ketchup as part of the ongoing rebrand
+  - Centralized the data directory name through a single brand constant so future renames stay consistent
+- 7ebebb3: - Updated test suite to reference the new .ketchup data directory name for consistency with the recent rename
+  - Renamed temp directory prefixes from claude-auto-_ to ketchup-_ across fixture helpers
+- 48fed8d: - **core**: update project references from CLAUDE_AUTO to KETCHUP and add state configuration
+- 2513480: - Renamed slash commands to /ketchup-config and /ketchup-init for consistency with the Ketchup brand
+- e077864: - Rebranded documentation site to Ketchup with new site URL at ketchup.on.auto
+  - Updated GitHub links and edit references to the BeOnAuto/ketchup repository
+  - Refreshed Open Graph and Twitter preview metadata for social sharing
+  - Renamed "Supervisor AI" to "Validators" throughout to align with voice guidelines
+  - Added "In the Stack" navigation and sidebar entries for the upcoming bridge page
+- a93e2e4: - Removed the redundant Claude Auto Core Reminder, since validators already enforce the same rules at commit time and the per-prompt reminder continues to surface the workflow
+- 9c41ba7: - Renamed npm package and plugin to ketchup
+  - Updated repository URL to BeOnAuto/ketchup
+  - Added keywords for ketchup, TCR, quality-loop, and parallel-agents
+- 0781c39: - Renamed product from Claude Auto to Ketchup across all documentation
+  - Updated package name to ketchup and domain to ketchup.on.auto
+  - Renamed data directory from .claude-auto to .ketchup
+  - Renamed Supervisor AI component to Validators for consistency
+- b60600f: - Added Operational Concerns page with honest disclosure of cost, latency, and false-positive rates
+  - Linked the new page from the homepage and added it to the docs sidebar Reference section
+- 7e627fc: - Replaced hero imagery with new KETCHUP wordmark variants for light and dark themes
+  - Updated OG preview image to match the new branding
+  - Removed outdated CLAUDE-AUTO hero artwork
+- f20ddb1: - Rebranded package identity from "claude-auto" to "ketchup" across user-facing messages, init command, and documentation URL
+  - Updated display name to "Ketchup" in error messages and deny-list reasons
+  - Relocated debug logs to .ketchup/logs/ketchup/ directory
+  - Changed debug namespace from claude-auto to ketchup
+- e0b88fb: - **core**: rename CLAUDE_AUTO_DEBUG env var to KETCHUP_DEBUG
+- d234876: - Reframed origin story from babysitter to guardrail engineer, emphasizing encoded negative knowledge over worktree multiplication
+  - Removed Quality Loop table referencing the non-existent Auto-Planner
+  - Removed Before/After marketing comparison table
+  - Preserved XP/TDD/TCR lineage, Kent Beck anecdote, and Bottles/Bursts naming history
+  - Preserved the revert-as-information insight
+- 02719aa: - Renamed the config skill from claude-auto-config to ketchup-config
+  - Updated skill description and frontmatter to match the Ketchup brand voice
+- 024f13f: - Clarified documentation to accurately describe when reminders fire at user-chosen hook points rather than on every prompt
+- 6036e39: - Rewrote the homepage in the new Ketchup brand voice with updated lead paragraph
+  - Added light/dark hero image variants that switch automatically
+  - Introduced an "In the Stack" section linking to a dedicated page
+  - Updated install commands to use /plugin install ketchup
+  - Renamed Supervisor AI to Validators to align with voice guidelines
+- 21af383: - Refreshed documentation voice by removing em dashes across CLAUDE.md, four docs pages, and two reminders
+  - Replaced AI-flavored vocabulary ("leverage", "value compounds") with clearer alternatives in brand docs
+- 4ccdef3: - Added "In the Stack" page explaining how Ketchup fits alongside Auto
+  - Linked the new page from the README, homepage, and documentation navigation
+- 98ee864: - Renamed the config skill from claude-auto-config to ketchup-config
+  - Rewrote the skill description for the Ketchup brand voice
+- 5579f53: - Rewrote README in Ketchup voice with new brand-doc structure, including lead paragraph and Why section
+  - Added "In the Stack" bridge paragraph and Roadmap section for clearer scope expectations
+  - Updated install commands to use /plugin install ketchup and switched data directory paths to .ketchup/
+  - Documented automatic migration from .claude-auto for existing users
+- 724c72e: - Trimmed the Origin Story by roughly 40% while preserving the XP/TCR lineage, Beck reference, and per-failure validator examples
+  - Reframed the Ketchup Technique intro around failure modes (Bottles/Bursts) and demoted etymology to a sidebar
+  - Moved "In the Stack" out of the top nav and Introduction sidebar, linking it instead from a small footer below the homepage Get Started CTA
+- 99a66f8: - Rewrote homepage around guardrail-engineering message with new hero and subheading
+  - Replaced babysitter and worktree-multiplier framing with a feature grid of five shipping mechanisms plus Appeals
+  - Added a "Why LLM guardrails" section aimed at experienced developers
+- d44b5bb: - Fixed conflicting guidance that told agents to commit the local plan file, which is gitignored and meant to stay on your machine
+- 5929c95: - Tightened homepage and README copy for clarity
+  - Added explicit "Today: Claude Code only" note near install command to resolve scope ambiguity
+  - Aligned Vitepress site description and OG meta with updated copy
+- b95b93f: - Streamlined the In the Stack page for quicker scanning while preserving the stack table and Auto-to-Ketchup bridge
+  - Added Guardrail Engineering to the top navigation and Methodology sidebar for easier discovery
+  - Updated site description and social preview metadata to reflect the new tagline
+- b46dbb6: - Updated hero and social preview images to feature the new "KETCHUP BY AUTO" wordmark
+  - Refreshed both light and dark hero variants for consistent brand attribution
+- 0cef0e7: - Renamed init skill from claude-auto-init to ketchup-init to align with the Ketchup brand
+  - Updated skill description to reflect the new Ketchup branding
+- 5333b89: - Updated README headline to "Turn every AI mistake into a rule AI cant repeat."
+  - Added new subtitle highlighting 15+ guardrails on every AI commit
+  - Rewrote the Why section around the semantic-vs-static failure distinction
+  - Shrunk the in-the-stack section to align with the homepage docs
+- c594ca4: - Added a new Guardrail Engineering page explaining the mechanism behind Ketchup
+  - Documented the observe, encode, cant-repeat loop and how five mechanisms map to shipping features
+  - Included a semantic vs static comparison table and details on the appeals escape hatch
+- fd6a6aa: - Updated brand tagline and category copy constants to match the current homepage and OG metadata
+  - Retired the old "Stop Babysitting / Start Parallelizing" messaging from internal copy sources
+- ce12cd1: - Updated core configuration to include ketchup plan files
+
 ## 0.21.0
 
 ### Minor Changes
