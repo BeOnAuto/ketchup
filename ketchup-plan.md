@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 70: Viewer shows a floating round chevron "scroll to bottom" button when there's content below the fold
 
 
 
@@ -117,3 +116,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 67: SessionPicker uses light defaults with dark overrides
 - [x] Burst 68: SessionHeader uses light defaults with dark overrides
 - [x] Burst 69: Timeline bubbles keep light palette and flip to dark-gray/near-white in dark mode
+- [x] Burst 70: Floating round chevron "scroll to bottom" button appears when content is below the fold

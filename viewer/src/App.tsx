@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { ScrollToBottomButton } from './ScrollToBottomButton';
 import { SessionHeader } from './SessionHeader';
 import { SessionPicker, type SessionSummary } from './SessionPicker';
 import { ThemeToggle } from './ThemeToggle';
@@ -32,6 +33,7 @@ export function App() {
           <p className="text-slate-500 dark:text-ketchup-text-3">Pick a session.</p>
         )}
       </main>
+      <ScrollToBottomButton />
     </div>
   );
 }
