@@ -136,7 +136,7 @@ describe('Timeline', () => {
     }).toEqual({
       initiallyOpen: false,
       bodyText: thinking,
-      bodyClasses: 'mt-2 whitespace-pre-wrap text-ketchup-text-2 italic',
+      bodyClasses: 'mt-2 whitespace-pre-wrap text-slate-600 italic dark:text-ketchup-text-2',
     });
   });
 
@@ -263,7 +263,7 @@ describe('Timeline', () => {
     act(() => deliver(events));
 
     expect(screen.getByTestId('tool-card').className).toEqual(
-      'rounded-md border border-ketchup-divider bg-ketchup-surface px-3 py-2',
+      'rounded-md border border-slate-200 bg-white px-3 py-2 shadow-sm dark:border-ketchup-divider dark:bg-ketchup-surface dark:shadow-none',
     );
   });
 

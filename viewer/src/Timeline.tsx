@@ -58,7 +58,7 @@ function EventBody({ event, toggle }: { event: SessionEvent; toggle?: ReactNode 
   if (event.type === 'PromptSubmitted') {
     return (
       <div data-testid="prompt-bubble" className="flex justify-end">
-        <div className="max-w-[85%] whitespace-pre-wrap rounded-lg bg-ketchup-brand px-4 py-2 text-white">
+        <div className="max-w-[85%] whitespace-pre-wrap rounded-lg bg-blue-500 px-4 py-2 text-white">
           {event.prompt}
         </div>
       </div>
@@ -67,7 +67,7 @@ function EventBody({ event, toggle }: { event: SessionEvent; toggle?: ReactNode 
   if (event.type === 'AssistantResponded') {
     return (
       <div data-testid="response-bubble" className="flex justify-start">
-        <div className="max-w-[85%] whitespace-pre-wrap rounded-lg bg-ketchup-surface px-4 py-2 text-ketchup-text">
+        <div className="max-w-[85%] whitespace-pre-wrap rounded-lg bg-slate-100 px-4 py-2 text-slate-900 dark:bg-slate-700 dark:text-slate-50">
           {event.text}
         </div>
       </div>
@@ -77,22 +77,25 @@ function EventBody({ event, toggle }: { event: SessionEvent; toggle?: ReactNode 
     return (
       <details
         data-testid="thought-card"
-        className="rounded-md border border-ketchup-divider bg-ketchup-bg-soft px-3 py-2 text-sm"
+        className="rounded-md border border-slate-200 bg-slate-50 px-3 py-2 text-sm dark:border-ketchup-divider dark:bg-ketchup-bg-soft"
       >
-        <summary className="cursor-pointer text-ketchup-text-3">💭 Thought</summary>
-        <div className="mt-2 whitespace-pre-wrap text-ketchup-text-2 italic">{event.thinking}</div>
+        <summary className="cursor-pointer text-slate-500 dark:text-ketchup-text-3">💭 Thought</summary>
+        <div className="mt-2 whitespace-pre-wrap text-slate-600 italic dark:text-ketchup-text-2">{event.thinking}</div>
       </details>
     );
   }
   if (event.type === 'ToolInvoked') {
     return (
-      <div data-testid="tool-card" className="rounded-md border border-ketchup-divider bg-ketchup-surface px-3 py-2">
+      <div
+        data-testid="tool-card"
+        className="rounded-md border border-slate-200 bg-white px-3 py-2 shadow-sm dark:border-ketchup-divider dark:bg-ketchup-surface dark:shadow-none"
+      >
         <div className="flex min-w-0 items-center gap-2">
           {toggle}
-          <span className="shrink-0 rounded bg-ketchup-bg-soft px-2 py-0.5 font-mono text-xs text-ketchup-text-2">
+          <span className="shrink-0 rounded bg-slate-100 px-2 py-0.5 font-mono text-xs text-slate-700 dark:bg-ketchup-bg-soft dark:text-ketchup-text-2">
             {event.toolName}
           </span>
-          <span className="min-w-0 flex-1 truncate font-mono text-xs text-ketchup-text-3">
+          <span className="min-w-0 flex-1 truncate font-mono text-xs text-slate-500 dark:text-ketchup-text-3">
             {formatToolInput(event.input)}
           </span>
         </div>
@@ -101,24 +104,36 @@ function EventBody({ event, toggle }: { event: SessionEvent; toggle?: ReactNode 
   }
   if (event.type === 'ToolInvocationSucceeded') {
     return (
-      <div data-testid="tool-result" className="rounded-md border border-emerald-500/30 bg-emerald-500/10 px-3 py-2">
-        <div className="mb-1 text-xs text-emerald-300">✓ succeeded</div>
-        <pre className="font-mono text-xs whitespace-pre-wrap break-words text-ketchup-text-2">{event.content}</pre>
+      <div
+        data-testid="tool-result"
+        className="rounded-md border border-emerald-200 bg-emerald-50 px-3 py-2 dark:border-emerald-500/30 dark:bg-emerald-500/10"
+      >
+        <div className="mb-1 text-xs text-emerald-700 dark:text-emerald-300">✓ succeeded</div>
+        <pre className="font-mono text-xs whitespace-pre-wrap break-words text-slate-700 dark:text-ketchup-text-2">
+          {event.content}
+        </pre>
       </div>
     );
   }
   if (event.type === 'ToolInvocationFailed') {
     return (
-      <div data-testid="tool-result-failed" className="rounded-md border border-rose-500/30 bg-rose-500/10 px-3 py-2">
-        <div className="mb-1 text-xs text-rose-300">✗ failed</div>
-        <pre className="font-mono text-xs whitespace-pre-wrap break-words text-ketchup-text-2">{event.error}</pre>
+      <div
+        data-testid="tool-result-failed"
+        className="rounded-md border border-rose-200 bg-rose-50 px-3 py-2 dark:border-rose-500/30 dark:bg-rose-500/10"
+      >
+        <div className="mb-1 text-xs text-rose-700 dark:text-rose-300">✗ failed</div>
+        <pre className="font-mono text-xs whitespace-pre-wrap break-words text-slate-700 dark:text-ketchup-text-2">
+          {event.error}
+        </pre>
       </div>
     );
   }
   if (event.type === 'HookExecuted') {
     return (
-      <div data-testid="hook-row" className="flex items-center gap-2 text-xs text-ketchup-text-3">
-        <span className="rounded bg-amber-500/15 px-1.5 py-0.5 text-amber-300">hook</span>
+      <div data-testid="hook-row" className="flex items-center gap-2 text-xs text-slate-500 dark:text-ketchup-text-3">
+        <span className="rounded bg-amber-100 px-1.5 py-0.5 text-amber-700 dark:bg-amber-500/15 dark:text-amber-300">
+          hook
+        </span>
         <span>
           {event.hookEvent}:{event.hookName}
         </span>
@@ -127,8 +142,10 @@ function EventBody({ event, toggle }: { event: SessionEvent; toggle?: ReactNode 
   }
   if (event.type === 'FileModified') {
     return (
-      <div data-testid="file-row" className="flex items-center gap-2 text-xs text-ketchup-text-3">
-        <span className="rounded bg-purple-500/15 px-1.5 py-0.5 text-purple-300">file</span>
+      <div data-testid="file-row" className="flex items-center gap-2 text-xs text-slate-500 dark:text-ketchup-text-3">
+        <span className="rounded bg-purple-100 px-1.5 py-0.5 text-purple-700 dark:bg-purple-500/15 dark:text-purple-300">
+          file
+        </span>
         <span>
           {event.operation} {event.filePath}
         </span>
@@ -139,7 +156,7 @@ function EventBody({ event, toggle }: { event: SessionEvent; toggle?: ReactNode 
     return (
       <div
         data-testid="session-divider"
-        className="my-2 border-t border-ketchup-divider pt-2 text-xs text-ketchup-text-3"
+        className="my-2 border-t border-slate-200 pt-2 text-xs text-slate-500 dark:border-ketchup-divider dark:text-ketchup-text-3"
       >
         Session started — {event.cwd} @ {event.gitBranch}
       </div>
@@ -149,7 +166,7 @@ function EventBody({ event, toggle }: { event: SessionEvent; toggle?: ReactNode 
     return (
       <div
         data-testid="session-divider"
-        className="my-2 border-t border-ketchup-divider pt-2 text-xs text-ketchup-text-3"
+        className="my-2 border-t border-slate-200 pt-2 text-xs text-slate-500 dark:border-ketchup-divider dark:text-ketchup-text-3"
       >
         Session ended
       </div>
@@ -170,7 +187,7 @@ function EventNode({ node, depth }: { node: TreeNode; depth: number }) {
       type="button"
       onClick={() => setExpanded((value) => !value)}
       aria-label={expanded ? 'collapse' : 'expand'}
-      className="text-ketchup-text-3 hover:text-ketchup-text"
+      className="text-slate-400 hover:text-slate-700 dark:text-ketchup-text-3 dark:hover:text-ketchup-text"
     >
       {expanded ? '▾' : '▸'}
     </button>
@@ -179,7 +196,7 @@ function EventNode({ node, depth }: { node: TreeNode; depth: number }) {
     <li data-level={depth} className="list-none">
       <EventBody event={node.event} toggle={toggle} />
       {hasChildren && expanded && (
-        <ul className="ml-4 mt-2 space-y-2 border-l border-ketchup-divider pl-4">
+        <ul className="ml-4 mt-2 space-y-2 border-l border-slate-200 pl-4 dark:border-ketchup-divider">
           {node.children.map((child, index) => (
             <EventNode key={`${child.event.type}-${index}-${child.event.timestamp}`} node={child} depth={depth + 1} />
           ))}

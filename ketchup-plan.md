@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 69: Timeline variants keep light bubbles and flip response bubble to dark-gray/near-white in dark mode
 
 
 
@@ -118,3 +117,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 66: App shell uses light defaults and dark overrides via Tailwind `dark:` variants
 - [x] Burst 67: SessionPicker uses light defaults with dark overrides
 - [x] Burst 68: SessionHeader uses light defaults with dark overrides
+- [x] Burst 69: Timeline bubbles keep light palette and flip to dark-gray/near-white in dark mode
