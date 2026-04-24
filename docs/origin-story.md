@@ -30,7 +30,7 @@ My attention didn't disappear; it moved from supervising keystrokes to engineeri
 
 ## Now
 
-17 validators and 10 reminders ship by default, encoded from the failure patterns I hit on the on.auto team. Most projects will add their own architectural constraints as they discover failure patterns specific to their system.
+20+ validators and 9+ reminders ship by default, encoded from the failure patterns I hit on the on.auto team. Most projects will add their own architectural constraints as they discover failure patterns specific to their system.
 
 See [Guardrail Engineering](/guardrail-engineering) for the mechanism and [the Ketchup Technique](/ketchup-technique) for the planning rhythm that feeds clean work into it.
 

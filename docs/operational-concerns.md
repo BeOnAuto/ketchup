@@ -13,9 +13,9 @@ Ketchup runs every commit through a separate Claude subagent. The subagent is in
 **What determines the per-commit cost:**
 
 - **Batch size** (default 3): validators are batched 3 per CLI call to amortize prompt overhead. Lower batch = more calls per commit = more tokens spent on prompt prefix.
-- **Number of enabled validators** (17 by default): each batch of 3 is a separate CLI invocation, so a project with 17 enabled validators issues 6 calls per commit.
+- **Number of enabled validators** ( 20+ by default): each batch of 3 is a separate CLI invocation, so a project with 20+ enabled validators issues 6 calls per commit.
 - **Diff size**: the staged diff is the largest variable input. A 500-line diff costs noticeably more than a 50-line one. (This is one reason the `burst-atomicity` validator exists: it keeps diffs evaluable.)
-- **Validator prompt length**: the 17 defaults are short (median ~30 lines). Custom validators can be longer.
+- **Validator prompt length**: the 20+ defaults are short (median ~30 lines). Custom validators can be longer.
 
 **What we'll publish:** p50 / p95 latency per commit, median tokens per commit at default settings, and observed false-positive rate from our own usage. We're collecting these numbers from a month of dogfooding on the on.auto monorepo and will post them here.
 
@@ -25,7 +25,7 @@ Ketchup runs every commit through a separate Claude subagent. The subagent is in
 
 ## What's the latency on a commit?
 
-The PreToolUse hook blocks `git commit` until every batch returns ACK or NACK. With the default 17 validators batched 3-per-call, that's 6 sequential CLI invocations against `claude`.
+The PreToolUse hook blocks `git commit` until every batch returns ACK or NACK. With the default 20+ validators batched 3-per-call, that's 6 sequential CLI invocations against `claude`.
 
 Each call is bounded by Claude's response time on a short structured-output prompt. In practice this is a few seconds per call, so a clean commit at default settings takes on the order of seconds (not minutes). We'll publish the actual p50/p95 once dogfooding measurements are stable.
 

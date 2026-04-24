@@ -40,7 +40,7 @@ Semantic failures need semantic understanding. Ketchup runs a separate Claude su
 
 A validator is a Markdown file with YAML frontmatter and an LLM prompt. On `git commit`, Ketchup loads all enabled validators, batches them 3 per CLI call, passes the staged diff plus file list plus commit message to each, and waits for ACK or NACK. NACK blocks the commit with the validator's reason; ACK lets it through.
 
-Ships with 17: `burst-atomicity`, `new-code-requires-tests`, `testing-weak-assertions`, `testing-no-state-peeking`, `testing-structure`, `testing-stubs-over-mocks`, `no-comments`, `dead-code`, `no-dangerous-git`, `coverage-rules`, `hygiene`, `type-organization`, `backwards-compat`, `tcr-workflow`, `ketchup-plan-format`, `infra-commit-format`, `appeal-system`.
+Ships with 20+: `burst-atomicity`, `new-code-requires-tests`, `testing-weak-assertions`, `testing-no-state-peeking`, `testing-structure`, `testing-stubs-over-mocks`, `testing-no-mock-assertions`, `testing-no-test-only-production-methods`, `no-comments`, `dead-code`, `no-dangerous-git`, `coverage-rules`, `hygiene`, `type-organization`, `backwards-compat`, `tcr-workflow`, `ketchup-plan-format`, `infra-commit-format`, `commit-message-no-speculation`, `appeal-system`.
 
 Add yours in `.ketchup/validators/`. [Full guide →](/validators-guide)
 

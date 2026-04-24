@@ -6,7 +6,7 @@ Complete guide to using validators to enforce commit quality and project standar
 
 ## See it work
 
-A validator is a Markdown file with YAML frontmatter and an LLM prompt. Here's the entire content of `testing-weak-assertions`, one of the 17 that ship by default:
+A validator is a Markdown file with YAML frontmatter and an LLM prompt. Here's the entire content of `testing-weak-assertions`, one of the 20+ that ship by default:
 
 ```markdown
 ---
@@ -196,7 +196,7 @@ This comprehensive view allows validators to enforce context-aware quality stand
 
 ## Built-in Validators
 
-Ketchup includes 17 pre-configured validators:
+Ketchup includes 20+ pre-configured validators:
 
 ### Commit Quality
 

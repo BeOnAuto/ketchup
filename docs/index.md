@@ -4,7 +4,7 @@ layout: home
 hero:
   name: Ketchup
   text: Turn every AI mistake into a rule AI can't repeat.
-  tagline: Ketchup runs 15+ LLM-powered guardrails on every AI commit, so bad commits don't land.
+  tagline: Ketchup runs 20+ LLM-powered guardrails on every AI commit, so bad commits don't land.
   image:
     light: /hero-light.png
     dark: /hero-dark.png
@@ -23,28 +23,28 @@ hero:
 features:
   - icon:
       src: /icon-supervisor.png
-    title: Validators
-    details: "LLM-powered commit gate: an impartial AI reads every diff against your rules and returns ACK or NACK. 17 ship by default, and you add your own."
+    title: LLM-powered commit gate
+    details: "An impartial AI validates Claude's commits. 20+ validators ship by default, and you can add your own."
   - icon:
       src: /icon-janitor.png
-    title: Reminders
-    details: "Your operating context, re-injected every session and every prompt. AI's amnesia can't erode the rules."
+    title: Persistent operating context
+    details: "Your rules re-injected into Claude at session start and on every prompt. 9+ reminders ship by default, and you can add your own."
   - icon:
       src: /icon-architect.png
-    title: Deny-list
-    details: "Glob-pattern protection for the files AI must never touch, enforced structurally rather than asked for politely."
+    title: Structural file protection
+    details: "Files Claude must never touch, blocked by the PreToolUse hook before any edit lands. List your patterns in `.ketchup/deny-list.project.txt`."
   - icon:
       src: /icon-parallel.png
-    title: Parallel subagent planning
-    details: "`ketchup-plan.md` carries dependency notation on every burst, so independent bursts launch in parallel sub-agents and the work composes."
+    title: Parallel sub-agent execution
+    details: "Annotate each burst's dependencies in `ketchup-plan.md`, and independent bursts launch as parallel Task sub-agents."
   - icon:
       src: /icon-tcr.png
     title: TCR gate
-    details: "<code>test && commit || revert</code> at the commit boundary, so red commits don't land and the rhythm holds."
+    details: "<code>test && commit || revert</code> enforced on every commit, so red commits don't land."
   - icon:
       src: /icon-coverage.png
-    title: Appeals
-    details: "Rigid rules don't trap legitimate edge cases. Mark a commit `[appeal: reason]` and a separate validator re-evaluates."
+    title: Formal appeals
+    details: "Disagree with a NACK? Add `[appeal: reason]` to the commit, and a separate validator re-judges with your reason in context."
 ---
 
 ## The loop
@@ -65,9 +65,9 @@ Ketchup is an open-source guardrail engine for Claude Code, from the team at [Au
 
 ## What ships
 
-**17 validators** ship by default: `burst-atomicity`, `new-code-requires-tests`, `testing-weak-assertions`, `no-dangerous-git`, `coverage-rules`, `dead-code`, `tcr-workflow`, and more. [Full list →](/validators-guide)
+**20+ validators** ship by default: `burst-atomicity`, `new-code-requires-tests`, `testing-weak-assertions`, `no-dangerous-git`, `coverage-rules`, `dead-code`, `tcr-workflow`, and more. [Full list →](/validators-guide)
 
-**10 reminders** that keep the discipline loaded: core workflow, extreme ownership, IDE diagnostics, rethink-after-revert, test-title-matches-spec, and more. [Full list →](/reminders-guide)
+**9+ reminders** that keep the discipline loaded: core workflow, extreme ownership, IDE diagnostics, rethink-after-revert, test-title-matches-spec, and more. [Full list →](/reminders-guide)
 
 Every rule is runtime-configurable. Disable what you don't need. Reorder what you do. Add your own in `.ketchup/validators/` and `.ketchup/reminders/`. No forking.
 
@@ -105,7 +105,7 @@ From within a Claude Code session:
 /ketchup:init
 ```
 
-This creates `.ketchup/` with default configuration, seeded with the 17 validators and 10 reminders.
+This creates `.ketchup/` with default configuration, seeded with the 20+ validators and 9+ reminders.
 
 ### 3. Work
 

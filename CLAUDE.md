@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What This Is
 
-Ketchup (npm: `ketchup`) runs LLM-powered guardrails on every AI commit for Claude Code. It validates commits with an impartial LLM subagent, injects reminders to keep operating context loaded across sessions, manages deny-lists for structural file protection, and enforces TCR discipline. 17 validators and 10 reminders ship by default; all are runtime-configurable. Brand: Ketchup. Package: ketchup.
+Ketchup (npm: `ketchup`) runs LLM-powered guardrails on every AI commit for Claude Code. It validates commits with an impartial LLM subagent, injects reminders to keep operating context loaded across sessions, manages deny-lists for structural file protection, and enforces TCR discipline. 20+ validators and 9+ reminders ship by default; all are runtime-configurable. Brand: Ketchup. Package: ketchup.
 
 ## Commands
 

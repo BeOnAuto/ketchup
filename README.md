@@ -2,7 +2,7 @@
 
 **Turn every AI mistake into a rule AI can't repeat.**
 
-Ketchup runs 15+ LLM-powered guardrails on every AI commit, so bad commits don't land.
+Ketchup runs 20+ LLM-powered guardrails on every AI commit, so bad commits don't land.
 
 [![Build](https://img.shields.io/github/actions/workflow/status/BeOnAuto/ketchup/ci.yml?style=flat-square)](https://github.com/BeOnAuto/ketchup/actions) [![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE) [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue?style=flat-square)]()
 
@@ -251,7 +251,7 @@ DEBUG=ketchup claude --plugin-dir /path/to/ketchup
 └── plugin.json           # Plugin manifest (name, version, description)
 hooks/
 └── hooks.json            # Plugin hook definitions (SessionStart, PreToolUse, etc.)
-validators/               # Default commit validators (17 rules)
+validators/               # Default commit validators
 reminders/                # Default context-injection reminders (10 files)
 agents/                   # Sub-agent definitions (validator agent)
 src/
