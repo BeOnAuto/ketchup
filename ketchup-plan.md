@@ -35,6 +35,8 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 83: Viewer picks the first free port starting at the requested default so multiple repos can run side-by-side
+- [ ] Burst 84: Viewer auto-exits after 30 minutes with no active WebSocket connections
 
 ## DONE
 
