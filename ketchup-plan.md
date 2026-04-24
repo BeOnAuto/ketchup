@@ -35,6 +35,7 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 86: Skill frontmatter names get `ketchup-` prefix so commands are `/ketchup-view` etc.
 
 ## DONE
 
