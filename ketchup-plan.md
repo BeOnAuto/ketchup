@@ -35,6 +35,7 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 82: Add `/ketchup:view-stop` skill that kills the running events viewer
 
 ## DONE
 
