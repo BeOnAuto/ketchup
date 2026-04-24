@@ -35,8 +35,7 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-
-
+- [ ] Burst 74: `parsePromptSubmitted` also surfaces `queued_command` attachment lines as prompts
 
 
 
