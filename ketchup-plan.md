@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 82: Add `/ketchup:view-stop` skill that kills the running events viewer
 
 ## DONE
 
@@ -123,3 +122,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 79: Chevron click is instant; Timeline auto-scroll is instant on first load, smooth after
 - [x] Burst 80: Viewer server exposes `/api/project` with the configured project name
 - [x] Burst 81: Sidebar shows the repository name above the Ketchup Viewer title
+- [x] Burst 82: `/ketchup:view-stop` skill kills the running events viewer via pkill
