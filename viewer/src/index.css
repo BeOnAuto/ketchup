@@ -20,3 +20,10 @@ body {
   background-color: var(--color-ketchup-bg);
   color: var(--color-ketchup-text);
 }
+
+.ketchup-brand-gradient {
+  background: linear-gradient(135deg, #ec3f4a 0%, #ff8a1d 30%, #5ec72d 60%, #42c3f7 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}

@@ -28,6 +28,19 @@ describe('App', () => {
     });
   });
 
+  it('renders the viewer title with the Ketchup rainbow gradient class', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ sessions: [] }))),
+    );
+
+    render(<App />);
+
+    expect(screen.getByRole('heading', { name: /ketchup viewer/i }).className).toEqual(
+      'mb-4 ketchup-brand-gradient text-xl font-semibold',
+    );
+  });
+
   it('constrains the main content area with min-w-0 so long content does not push the page wide', async () => {
     vi.stubGlobal(
       'fetch',
