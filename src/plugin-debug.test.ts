@@ -54,8 +54,8 @@ describe('logPluginDiagnostics', () => {
     expect(content).toContain('plugin mode');
   });
 
-  it('writes to file when CLAUDE_AUTO_DEBUG is set in legacy mode', () => {
-    vi.stubEnv('CLAUDE_AUTO_DEBUG', '1');
+  it('writes to file when KETCHUP_DEBUG is set in legacy mode', () => {
+    vi.stubEnv('KETCHUP_DEBUG', '1');
     delete process.env.CLAUDE_PLUGIN_ROOT;
     delete process.env.CLAUDE_PLUGIN_DATA;
     vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -74,8 +74,8 @@ describe('logPluginDiagnostics', () => {
     expect(content).toContain('legacy mode');
   });
 
-  it('writes to stderr only when CLAUDE_AUTO_DEBUG is set', () => {
-    vi.stubEnv('CLAUDE_AUTO_DEBUG', '1');
+  it('writes to stderr only when KETCHUP_DEBUG is set', () => {
+    vi.stubEnv('KETCHUP_DEBUG', '1');
     vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/ketchup');
     vi.stubEnv('CLAUDE_PLUGIN_DATA', '/data/ketchup');
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
@@ -93,10 +93,10 @@ describe('logPluginDiagnostics', () => {
     spy.mockRestore();
   });
 
-  it('does not write to stderr in plugin mode without CLAUDE_AUTO_DEBUG', () => {
+  it('does not write to stderr in plugin mode without KETCHUP_DEBUG', () => {
     vi.stubEnv('CLAUDE_PLUGIN_ROOT', '/plugins/ketchup');
     vi.stubEnv('CLAUDE_PLUGIN_DATA', '/data/ketchup');
-    delete process.env.CLAUDE_AUTO_DEBUG;
+    delete process.env.KETCHUP_DEBUG;
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});
 
     logPluginDiagnostics('SessionStart', {
@@ -112,8 +112,8 @@ describe('logPluginDiagnostics', () => {
     spy.mockRestore();
   });
 
-  it('does nothing in legacy mode without CLAUDE_AUTO_DEBUG', () => {
-    delete process.env.CLAUDE_AUTO_DEBUG;
+  it('does nothing in legacy mode without KETCHUP_DEBUG', () => {
+    delete process.env.KETCHUP_DEBUG;
     delete process.env.CLAUDE_PLUGIN_ROOT;
     delete process.env.CLAUDE_PLUGIN_DATA;
     const spy = vi.spyOn(console, 'error').mockImplementation(() => {});

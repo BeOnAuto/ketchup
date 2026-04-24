@@ -6974,7 +6974,7 @@ var fs9 = __toESM(require("node:fs"));
 var path9 = __toESM(require("node:path"));
 function logPluginDiagnostics(hookName, paths) {
   const isPluginMode = !!process.env.CLAUDE_PLUGIN_ROOT;
-  const isDebug = !!process.env.CLAUDE_AUTO_DEBUG;
+  const isDebug = !!process.env.KETCHUP_DEBUG;
   if (!isPluginMode && !isDebug) {
     return;
   }
