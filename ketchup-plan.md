@@ -35,8 +35,11 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-
-
+- [ ] Burst 60: Viewer defines Ketchup brand theme tokens and defaults to dark mode
+- [ ] Burst 61: App shell adopts dark tokens with rainbow-gradient title
+- [ ] Burst 62: SessionPicker renders on dark surface with subtle borders
+- [ ] Burst 63: SessionHeader adapts to dark theme and copy button becomes a pill
+- [ ] Burst 64: Timeline event variants (bubble, card, row) adapt to dark theme
 
 
 
