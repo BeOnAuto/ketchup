@@ -43,10 +43,12 @@ describe('ScrollToBottomButton', () => {
       initialRendered: !!initialButton,
       hiddenAtBottom: !afterScrollButton,
       scrolledTo: scrollTo.mock.calls[0]?.[0],
+      positionedUnderMainPane: initialButton?.className.includes('left-[calc(50%+10.5rem)]'),
     }).toEqual({
       initialRendered: true,
       hiddenAtBottom: true,
       scrolledTo: { top: 2000, behavior: 'smooth' },
+      positionedUnderMainPane: true,
     });
   });
 });
