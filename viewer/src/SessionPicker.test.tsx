@@ -79,4 +79,38 @@ describe('SessionPicker', () => {
       meta: 'mt-1 flex gap-2 text-xs text-slate-500 dark:text-ketchup-text-3',
     });
   });
+
+  it('highlights the selected session with a ring matching the Ketchup brand', async () => {
+    const summaries = [
+      {
+        sessionId: 'alpha',
+        eventCount: 1,
+        firstTimestamp: 't',
+        lastTimestamp: 't',
+        summary: 'first',
+      },
+      {
+        sessionId: 'beta',
+        eventCount: 1,
+        firstTimestamp: 't',
+        lastTimestamp: 't',
+        summary: 'second',
+      },
+    ];
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async () => new Response(JSON.stringify({ sessions: summaries }))),
+    );
+
+    render(<SessionPicker selectedId="alpha" onSelect={() => {}} />);
+    const buttons = await screen.findAllByRole('button');
+
+    expect({
+      alphaHasRing: buttons[0]?.className.includes('ring-2'),
+      betaHasRing: buttons[1]?.className.includes('ring-2'),
+    }).toEqual({
+      alphaHasRing: true,
+      betaHasRing: false,
+    });
+  });
 });

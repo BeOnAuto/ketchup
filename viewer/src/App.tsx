@@ -17,7 +17,7 @@ export function App() {
             <ThemeToggle />
           </span>
         </div>
-        <SessionPicker onSelect={setSelected} />
+        <SessionPicker onSelect={setSelected} selectedId={selected?.sessionId} />
       </aside>
       <main className="min-w-0 flex-1">
         {selected ? (
