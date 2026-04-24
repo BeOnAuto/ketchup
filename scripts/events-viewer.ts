@@ -7,6 +7,7 @@ import { sqliteConnection } from '@event-driven-io/emmett-sqlite';
 import { deriveProjectDir } from '../src/event-store/derive-project-dir.js';
 import { createEventWebSocket } from '../src/event-store/event-websocket.js';
 import { findAvailablePort } from '../src/event-store/find-available-port.js';
+import { createIdleWatchdog } from '../src/event-store/idle-watchdog.js';
 import { ingestProject } from '../src/event-store/ingest-project.js';
 import { ingestSession } from '../src/event-store/ingest-session.js';
 import { listSessions } from '../src/event-store/list-sessions.js';
@@ -40,6 +41,19 @@ async function main(): Promise<void> {
   const wsHandle = createEventWebSocket(server, {
     readSessionEvents: (id) => readSessionEvents(store, id),
   });
+
+  const idleTimeoutMinutes = Number(process.env.KETCHUP_VIEW_IDLE_MINUTES ?? 30);
+  const watchdog = createIdleWatchdog(idleTimeoutMinutes * 60 * 1000);
+  wsHandle.wss.on('connection', (socket) => {
+    watchdog.recordActivity(Date.now());
+    socket.on('close', () => watchdog.recordActivity(Date.now()));
+  });
+  setInterval(() => {
+    if (watchdog.shouldExit(wsHandle.wss.clients.size, Date.now())) {
+      console.log(`Idle for ${idleTimeoutMinutes}m with no clients, shutting down viewer`);
+      process.exit(0);
+    }
+  }, 60_000);
 
   const ingestOne = async (jsonlPath: string) => {
     const newEvents = await ingestSession(jsonlPath, store);

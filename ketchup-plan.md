@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 84: Viewer auto-exits after 30 minutes with no active WebSocket connections
 
 ## DONE
 
@@ -125,3 +124,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 81: Sidebar shows the repository name above the Ketchup Viewer title
 - [x] Burst 82: `/ketchup:view-stop` skill kills the running events viewer via pkill
 - [x] Burst 83: Viewer picks the first free port so multiple repos can run side-by-side
+- [x] Burst 84: Viewer auto-exits after idle timeout with no clients + README documents the viewer

@@ -28955,6 +28955,19 @@ function isPortFree(port) {
   });
 }
 
+// src/event-store/idle-watchdog.ts
+function createIdleWatchdog(idleTimeoutMs) {
+  let lastActivityAt = Date.now();
+  return {
+    recordActivity(now) {
+      lastActivityAt = now;
+    },
+    shouldExit(subscriberCount, now) {
+      return subscriberCount === 0 && now - lastActivityAt > idleTimeoutMs;
+    }
+  };
+}
+
 // src/event-store/ingest-project.ts
 var import_promises2 = require("node:fs/promises");
 var import_node_path = require("node:path");
@@ -29337,6 +29350,18 @@ async function main() {
   const wsHandle = createEventWebSocket(server, {
     readSessionEvents: (id) => readSessionEvents(store, id)
   });
+  const idleTimeoutMinutes = Number(process.env.KETCHUP_VIEW_IDLE_MINUTES ?? 30);
+  const watchdog = createIdleWatchdog(idleTimeoutMinutes * 60 * 1e3);
+  wsHandle.wss.on("connection", (socket) => {
+    watchdog.recordActivity(Date.now());
+    socket.on("close", () => watchdog.recordActivity(Date.now()));
+  });
+  setInterval(() => {
+    if (watchdog.shouldExit(wsHandle.wss.clients.size, Date.now())) {
+      console.log(`Idle for ${idleTimeoutMinutes}m with no clients, shutting down viewer`);
+      process.exit(0);
+    }
+  }, 6e4);
   const ingestOne = async (jsonlPath) => {
     const newEvents = await ingestSession(jsonlPath, store);
     if (newEvents.length > 0) {
