@@ -1,5 +1,5 @@
 ---
-"claude-auto": patch
+"ketchup": patch
 ---
 
 - Tightened homepage and README copy for clarity

@@ -1,5 +1,5 @@
 ---
-"claude-auto": minor
+"ketchup": minor
 ---
 
 - Added centralized brand constants module to enable one-file rebrands

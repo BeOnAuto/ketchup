@@ -1,5 +1,5 @@
 ---
-"claude-auto": patch
+"ketchup": patch
 ---
 
 - Rewrote the homepage in the new Ketchup brand voice with updated lead paragraph

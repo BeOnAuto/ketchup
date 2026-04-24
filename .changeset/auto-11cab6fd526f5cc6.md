@@ -1,5 +1,5 @@
 ---
-"claude-auto": patch
+"ketchup": patch
 ---
 
 - Renamed internal initialization function from initClaudeAuto to initKetchup for consistency with the Ketchup rebrand

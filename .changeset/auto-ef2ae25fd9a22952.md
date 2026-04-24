@@ -1,5 +1,5 @@
 ---
-"claude-auto": patch
+"ketchup": patch
 ---
 
 - Renamed init skill from claude-auto-init to ketchup-init to align with the Ketchup brand

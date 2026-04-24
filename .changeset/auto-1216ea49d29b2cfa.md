@@ -1,5 +1,5 @@
 ---
-"claude-auto": patch
+"ketchup": patch
 ---
 
 - Rewrote homepage feature cards for clearer, more accurate messaging
