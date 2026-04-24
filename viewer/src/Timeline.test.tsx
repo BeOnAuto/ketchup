@@ -136,7 +136,7 @@ describe('Timeline', () => {
     }).toEqual({
       initiallyOpen: false,
       bodyText: thinking,
-      bodyClasses: 'mt-2 whitespace-pre-wrap text-slate-600 italic',
+      bodyClasses: 'mt-2 whitespace-pre-wrap text-ketchup-text-2 italic',
     });
   });
 
@@ -244,6 +244,27 @@ describe('Timeline', () => {
       before: 0,
       after: `✓ succeeded${fullOutput}`,
     });
+  });
+
+  it('renders tool cards and tree branches with Ketchup dark theme classes', () => {
+    const events: SessionEvent[] = [
+      {
+        type: 'ToolInvoked',
+        timestamp: 't1',
+        sessionId: 'a',
+        toolName: 'Bash',
+        toolUseId: 'A',
+        input: {},
+        source: {},
+      },
+    ];
+
+    render(<Timeline sessionId="abc" />);
+    act(() => deliver(events));
+
+    expect(screen.getByTestId('tool-card').className).toEqual(
+      'rounded-md border border-ketchup-divider bg-ketchup-surface px-3 py-2',
+    );
   });
 
   it('renders a failed tool invocation with the full error text', async () => {

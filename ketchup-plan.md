@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 64: Timeline event variants (bubble, card, row) adapt to dark theme
 
 
 
@@ -115,3 +114,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 61: App title renders with the Ketchup rainbow gradient
 - [x] Burst 62: SessionPicker renders cards on Ketchup dark surface tokens
 - [x] Burst 63: SessionHeader adopts Ketchup dark tokens and pill-shaped copy button
+- [x] Burst 64: Timeline event variants adopt Ketchup dark theme tokens
