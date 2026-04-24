@@ -28,23 +28,23 @@ features:
   - icon:
       src: /icon-janitor.png
     title: Persistent operating context
-    details: "Your rules re-injected into Claude at session start and on every prompt. 9+ reminders ship by default, and you can add your own."
+    details: "Reminders inject your rules into Claude at the hook points you choose. 9+ ship by default, and you can add your own."
   - icon:
       src: /icon-architect.png
     title: Structural file protection
-    details: "Files Claude must never touch, blocked by the PreToolUse hook before any edit lands. List your patterns in `.ketchup/deny-list.project.txt`."
+    details: "Ketchup blocks Claude from touching files you've forbidden, using hooks, so it doesn't ignore you as it's known to do."
   - icon:
       src: /icon-parallel.png
-    title: Parallel sub-agent execution
-    details: "Annotate each burst's dependencies in `ketchup-plan.md`, and independent bursts launch as parallel Task sub-agents."
+    title: Parallel by design
+    details: "Plans express dependency chains, so independent bursts run in parallel sub-agents."
   - icon:
       src: /icon-tcr.png
-    title: TCR gate
-    details: "<code>test && commit || revert</code> enforced on every commit, so red commits don't land."
+    title: Emergent design through TCR
+    details: "<code>test && commit || revert</code> forces Claude to rethink rather than keep patching a bad design."
   - icon:
       src: /icon-coverage.png
     title: Formal appeals
-    details: "Disagree with a NACK? Add `[appeal: reason]` to the commit, and a separate validator re-judges with your reason in context."
+    details: "If validators are too strict, Claude can appeal with `[appeal: reason]` and a separate LLM re-judges."
 ---
 
 ## The loop
@@ -75,7 +75,7 @@ Every rule is runtime-configurable. Disable what you don't need. Reorder what yo
 
 ## Why LLM guardrails
 
-Static tools catch syntax. Tests catch regressions. Neither catches *semantic* failures:
+Static tools catch syntax. Tests catch regressions. Neither catches _semantic_ failures:
 
 - A test that asserts nothing meaningful (`expect(result).toBeDefined()`)
 - A commit that bundles three unrelated concerns
