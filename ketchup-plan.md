@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 77: Clickable buttons/cards get `cursor-pointer` affordance
 
 ## DONE
 
@@ -118,3 +117,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 74: `parsePromptSubmitted` surfaces queued_command attachments as prompt events
 - [x] Burst 75: Selected-session ring uses `ring-inset` so it is not clipped by sidebar overflow
 - [x] Burst 76: ScrollToBottomButton centers under the main pane using calc(50% + 10.5rem)
+- [x] Burst 77: Clickable buttons and cards get `cursor-pointer` affordance

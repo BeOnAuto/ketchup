@@ -187,7 +187,7 @@ function EventNode({ node, depth }: { node: TreeNode; depth: number }) {
       type="button"
       onClick={() => setExpanded((value) => !value)}
       aria-label={expanded ? 'collapse' : 'expand'}
-      className="text-slate-400 hover:text-slate-700 dark:text-ketchup-text-3 dark:hover:text-ketchup-text"
+      className="cursor-pointer text-slate-400 hover:text-slate-700 dark:text-ketchup-text-3 dark:hover:text-ketchup-text"
     >
       {expanded ? '▾' : '▸'}
     </button>

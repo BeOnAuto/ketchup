@@ -33,7 +33,7 @@ export function SessionPicker({
             type="button"
             onClick={() => onSelect(session)}
             className={cn(
-              'w-full rounded-md border border-slate-200 bg-white px-3 py-2 text-left text-sm shadow-sm transition hover:bg-slate-50 dark:border-ketchup-divider dark:bg-ketchup-surface dark:shadow-none dark:hover:bg-ketchup-bg-soft',
+              'w-full cursor-pointer rounded-md border border-slate-200 bg-white px-3 py-2 text-left text-sm shadow-sm transition hover:bg-slate-50 dark:border-ketchup-divider dark:bg-ketchup-surface dark:shadow-none dark:hover:bg-ketchup-bg-soft',
               session.sessionId === selectedId && 'ring-2 ring-inset ring-blue-500 dark:ring-ketchup-brand',
             )}
           >

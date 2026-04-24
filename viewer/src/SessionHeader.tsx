@@ -18,7 +18,7 @@ export function SessionHeader({
         <button
           type="button"
           onClick={() => onCopy(resumeCommand)}
-          className="ml-auto rounded-full border border-slate-200 px-3 py-0.5 text-xs text-slate-600 transition hover:bg-slate-50 dark:border-ketchup-divider dark:text-ketchup-text-2 dark:hover:bg-ketchup-bg-soft"
+          className="ml-auto cursor-pointer rounded-full border border-slate-200 px-3 py-0.5 text-xs text-slate-600 transition hover:bg-slate-50 dark:border-ketchup-divider dark:text-ketchup-text-2 dark:hover:bg-ketchup-bg-soft"
         >
           copy resume command
         </button>
