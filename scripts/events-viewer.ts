@@ -1,6 +1,6 @@
 #!/usr/bin/env npx tsx
 
-import { resolve } from 'node:path';
+import { basename, resolve } from 'node:path';
 
 import { sqliteConnection } from '@event-driven-io/emmett-sqlite';
 
@@ -32,6 +32,7 @@ async function main(): Promise<void> {
     listSessions: () => listSessions(connection),
     readSessionEvents: (id) => readSessionEvents(store, id),
     staticDir,
+    projectName: basename(process.cwd()),
   });
   const server = await startViewerServer(app, port);
   const wsHandle = createEventWebSocket(server, {

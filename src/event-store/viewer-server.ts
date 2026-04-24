@@ -7,6 +7,7 @@ export interface ViewerDeps {
   listSessions: () => Promise<SessionSummary[]>;
   readSessionEvents: (sessionId: string) => Promise<SessionEvent[]>;
   staticDir?: string;
+  projectName?: string;
 }
 
 export function createViewerApp(deps: ViewerDeps): Express {
@@ -20,6 +21,10 @@ export function createViewerApp(deps: ViewerDeps): Express {
   app.get('/api/sessions/:id/events', async (req, res) => {
     const events = await deps.readSessionEvents(req.params.id);
     res.json({ events });
+  });
+
+  app.get('/api/project', (_req, res) => {
+    res.json({ name: deps.projectName ?? '' });
   });
 
   if (deps.staticDir) {

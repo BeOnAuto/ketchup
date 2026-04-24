@@ -22666,7 +22666,7 @@ var require_view = __commonJS({
     var path = require("node:path");
     var fs = require("node:fs");
     var dirname = path.dirname;
-    var basename = path.basename;
+    var basename2 = path.basename;
     var extname = path.extname;
     var join3 = path.join;
     var resolve3 = path.resolve;
@@ -22705,7 +22705,7 @@ var require_view = __commonJS({
         var root = roots[i];
         var loc = resolve3(root, name);
         var dir = dirname(loc);
-        var file = basename(loc);
+        var file = basename2(loc);
         path2 = this.resolve(dir, file);
       }
       return path2;
@@ -22735,7 +22735,7 @@ var require_view = __commonJS({
       if (stat && stat.isFile()) {
         return path2;
       }
-      path2 = join3(dir, basename(file, ext), "index" + ext);
+      path2 = join3(dir, basename2(file, ext), "index" + ext);
       stat = tryStat(path2);
       if (stat && stat.isFile()) {
         return path2;
@@ -26066,9 +26066,9 @@ var require_content_disposition = __commonJS({
       if (typeof fallback === "string" && NON_LATIN1_REGEXP.test(fallback)) {
         throw new TypeError("fallback must be ISO-8859-1 string");
       }
-      var name = basename(filename);
+      var name = basename2(filename);
       var isQuotedString = TEXT_REGEXP.test(name);
-      var fallbackName = typeof fallback !== "string" ? fallback && getlatin1(name) : basename(fallback);
+      var fallbackName = typeof fallback !== "string" ? fallback && getlatin1(name) : basename2(fallback);
       var hasFallback = typeof fallbackName === "string" && fallbackName !== name;
       if (hasFallback || !isQuotedString || hasHexEscape(name)) {
         params["filename*"] = name;
@@ -26188,7 +26188,7 @@ var require_content_disposition = __commonJS({
       this.type = type;
       this.parameters = parameters;
     }
-    function basename(path) {
+    function basename2(path) {
       const normalized = path.replaceAll("\\", "/");
       let end = normalized.length;
       while (end > 0 && normalized[end - 1] === "/") {
@@ -29278,6 +29278,9 @@ function createViewerApp(deps) {
     const events = await deps.readSessionEvents(req.params.id);
     res.json({ events });
   });
+  app.get("/api/project", (_req, res) => {
+    res.json({ name: deps.projectName ?? "" });
+  });
   if (deps.staticDir) {
     app.use(import_express.default.static(deps.staticDir));
   }
@@ -29308,7 +29311,8 @@ async function main() {
   const app = createViewerApp({
     listSessions: () => listSessions(connection),
     readSessionEvents: (id) => readSessionEvents(store, id),
-    staticDir
+    staticDir,
+    projectName: (0, import_node_path4.basename)(process.cwd())
   });
   const server = await startViewerServer(app, port);
   const wsHandle = createEventWebSocket(server, {

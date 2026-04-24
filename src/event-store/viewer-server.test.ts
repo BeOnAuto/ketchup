@@ -73,6 +73,21 @@ describe('viewer server', () => {
     });
   });
 
+  it('GET /api/project returns the configured project name', async () => {
+    const app = createViewerApp({
+      listSessions: noopListSessions,
+      readSessionEvents: noopReadSessionEvents,
+      projectName: 'ketchup',
+    });
+
+    const response = await request(app).get('/api/project');
+
+    expect({ status: response.status, body: response.body }).toEqual({
+      status: 200,
+      body: { name: 'ketchup' },
+    });
+  });
+
   it('serves the SPA index.html from staticDir for root requests', async () => {
     const dir = mkdtempSync(join(tmpdir(), 'viewer-static-'));
     writeFileSync(join(dir, 'index.html'), '<html>spa</html>');
