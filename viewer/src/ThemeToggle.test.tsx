@@ -36,4 +36,13 @@ describe('ThemeToggle', () => {
       afterSecond: { hasDark: true, stored: 'dark' },
     });
   });
+
+  it('uses light defaults for border, text, and hover with dark-mode overrides', () => {
+    render(<ThemeToggle />);
+    const button = screen.getByRole('button', { name: /toggle theme/i });
+
+    expect(button.className).toEqual(
+      'cursor-pointer rounded-full border border-slate-200 px-2 py-0.5 text-xs text-slate-600 transition hover:bg-slate-50 dark:border-ketchup-divider dark:text-ketchup-text-2 dark:hover:bg-ketchup-bg-soft',
+    );
+  });
 });
