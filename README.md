@@ -56,7 +56,7 @@ Inside any Claude Code session:
 claude --plugin-dir /path/to/ketchup
 ```
 
-Claude Code sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` automatically. Run `/ketchup:init` inside a session to activate per-project configuration, validators, and logging.
+Claude Code sets `CLAUDE_PLUGIN_ROOT` and `CLAUDE_PLUGIN_DATA` automatically. Run `/ketchup-init` inside a session to activate per-project configuration, validators, and logging.
 
 ## Quick Start
 
@@ -72,7 +72,7 @@ claude --plugin-dir /path/to/ketchup
 After installation, Claude will mention that Ketchup is available. To activate it in a project:
 
 ```
-/ketchup:init
+/ketchup-init
 ```
 
 This creates `.ketchup/` with default configuration. You can add it to `.gitignore` for personal use, or commit it for the whole team.
@@ -92,8 +92,8 @@ If you're upgrading from `claude-auto`, your existing `.claude-auto/` directory 
 Ketchup ships with a local web UI that streams every Claude Code event from the current repository in real time — prompts, thoughts, tool invocations and their results, hook executions, file edits, and session boundaries — as a collapsible tree per session.
 
 ```
-/ketchup:view        # boot the viewer (auto-picks first free port from 4321 up)
-/ketchup:view-stop   # stop the viewer running for this repo
+/ketchup-view        # boot the viewer (auto-picks first free port from 4321 up)
+/ketchup-view-stop   # stop the viewer running for this repo
 ```
 
 Open the URL it prints (default `http://127.0.0.1:4321`) in your browser. Light/dark themes with a toggle in the sidebar (choice persisted), selected session highlighted, auto-scroll to bottom on new events when pinned.
@@ -107,11 +107,11 @@ Open the URL it prints (default `http://127.0.0.1:4321`) in your browser. Light/
 
 **Multiple repositories:**
 
-Running `/ketchup:view` in a second repo starts a second viewer on the next free port (4322, 4323, …). Each viewer watches its own repo's transcripts. They do not share state.
+Running `/ketchup-view` in a second repo starts a second viewer on the next free port (4322, 4323, …). Each viewer watches its own repo's transcripts. They do not share state.
 
 **Auto-stop:**
 
-The viewer exits on its own after 30 minutes with no connected clients — close all browser tabs and the process cleans itself up. Override with the `KETCHUP_VIEW_IDLE_MINUTES` env var. `/ketchup:view-stop` kills every running viewer immediately.
+The viewer exits on its own after 30 minutes with no connected clients — close all browser tabs and the process cleans itself up. Override with the `KETCHUP_VIEW_IDLE_MINUTES` env var. `/ketchup-view-stop` kills every running viewer immediately.
 
 ---
 
@@ -170,10 +170,10 @@ Higher `priority` = appears first. Project-local files are loaded alongside plug
 Toggle validators and reminders without editing files:
 
 ```bash
-/ketchup:config show
-/ketchup:config validators disable no-comments
-/ketchup:config reminders priority my-reminder 200
-/ketchup:config reminders add my-rule --hook UserPromptSubmit --priority 50 --content "Always use early returns"
+/ketchup-config show
+/ketchup-config validators disable no-comments
+/ketchup-config reminders priority my-reminder 200
+/ketchup-config reminders add my-rule --hook UserPromptSubmit --priority 50 --content "Always use early returns"
 ```
 
 ---

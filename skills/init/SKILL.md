@@ -1,5 +1,5 @@
 ---
-name: init
+name: ketchup-init
 description: Initialize Ketchup in the current repository
 user-invocable: true
 ---
