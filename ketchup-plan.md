@@ -35,8 +35,9 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-
-
+- [ ] Burst 71: Timeline auto-scrolls to bottom when new events arrive and user is already pinned to the bottom
+- [ ] Burst 72: Sidebar (session picker) is fixed in the viewport and scrolls independently
+- [ ] Burst 73: Selected session is highlighted in the session picker
 
 
 
