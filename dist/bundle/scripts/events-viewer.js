@@ -28997,18 +28997,26 @@ function parseHookExecuted(line) {
 // src/event-store/parse-prompt-submitted.ts
 function parsePromptSubmitted(line) {
   const envelope = JSON.parse(line);
-  if (envelope.type !== "user" || typeof envelope.message.content !== "string") {
-    return [];
-  }
+  const prompt = extractPrompt(envelope);
+  if (prompt === null) return [];
   return [
     {
       type: "PromptSubmitted",
       sessionId: envelope.sessionId,
-      prompt: envelope.message.content,
+      prompt,
       timestamp: envelope.timestamp,
       source: { line, uuid: envelope.uuid }
     }
   ];
+}
+function extractPrompt(envelope) {
+  if (envelope.type === "user" && typeof envelope.message?.content === "string") {
+    return envelope.message.content;
+  }
+  if (envelope.type === "attachment" && envelope.attachment?.type === "queued_command" && envelope.attachment.prompt) {
+    return envelope.attachment.prompt;
+  }
+  return null;
 }
 
 // src/event-store/parse-session-ended.ts
