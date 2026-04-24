@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 81: Sidebar shows the repository name above the Ketchup Viewer title
 
 ## DONE
 
@@ -122,3 +121,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 78: Shell caps at 100vh and main pane scrolls internally; sidebar stays full height
 - [x] Burst 79: Chevron click is instant; Timeline auto-scroll is instant on first load, smooth after
 - [x] Burst 80: Viewer server exposes `/api/project` with the configured project name
+- [x] Burst 81: Sidebar shows the repository name above the Ketchup Viewer title

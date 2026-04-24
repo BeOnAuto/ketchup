@@ -29,6 +29,25 @@ describe('App', () => {
     });
   });
 
+  it('renders the repository name above the Ketchup Viewer title in the sidebar', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(async (url: string) =>
+        url.endsWith('/api/project')
+          ? new Response(JSON.stringify({ name: 'ketchup' }))
+          : new Response(JSON.stringify({ sessions: [] })),
+      ),
+    );
+
+    render(<App />);
+    const repoName = await screen.findByTestId('repo-name');
+
+    expect({ text: repoName.textContent, classes: repoName.className }).toEqual({
+      text: 'ketchup',
+      classes: 'text-xs font-mono tracking-wide text-slate-500 uppercase dark:text-ketchup-text-3',
+    });
+  });
+
   it('renders the sidebar as a sticky full-height column that scrolls independently', async () => {
     vi.stubGlobal(
       'fetch',

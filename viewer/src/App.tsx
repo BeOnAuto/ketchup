@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import { ScrollToBottomButton } from './ScrollToBottomButton';
 import { SessionHeader } from './SessionHeader';
@@ -8,14 +8,32 @@ import { Timeline } from './Timeline';
 
 export function App() {
   const [selected, setSelected] = useState<SessionSummary | null>(null);
+  const [projectName, setProjectName] = useState<string>('');
+
+  useEffect(() => {
+    fetch('/api/project')
+      .then((response) => response.json())
+      .then((body: { name: string }) => setProjectName(body.name));
+  }, []);
+
   return (
     <div className="flex h-screen gap-4 overflow-hidden bg-white p-4 font-sans text-slate-900 dark:bg-ketchup-bg dark:text-ketchup-text">
       <aside className="flex h-full w-80 shrink-0 flex-col overflow-y-auto border-r border-slate-200 pr-4 dark:border-ketchup-divider">
-        <div className="mb-4 flex items-center gap-2">
-          <h1 className="ketchup-brand-gradient text-xl font-semibold">Ketchup Viewer</h1>
-          <span className="ml-auto">
-            <ThemeToggle />
-          </span>
+        <div className="mb-4">
+          {projectName && (
+            <div
+              data-testid="repo-name"
+              className="text-xs font-mono tracking-wide text-slate-500 uppercase dark:text-ketchup-text-3"
+            >
+              {projectName}
+            </div>
+          )}
+          <div className="mt-1 flex items-center gap-2">
+            <h1 className="ketchup-brand-gradient text-xl font-semibold">Ketchup Viewer</h1>
+            <span className="ml-auto">
+              <ThemeToggle />
+            </span>
+          </div>
         </div>
         <SessionPicker onSelect={setSelected} selectedId={selected?.sessionId} />
       </aside>
