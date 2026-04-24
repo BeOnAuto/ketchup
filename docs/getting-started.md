@@ -41,13 +41,13 @@ Claude will mention that Ketchup is available but not yet active.
 ## Step 2: Activate in Your Project
 
 ```
-/ketchup:init
+/ketchup-init
 ```
 
 This creates `.ketchup/` with default configuration. Then verify:
 
 ```
-/ketchup:config show
+/ketchup-config show
 ```
 
 Ketchup is now active with commit validation, reminders, deny-lists, and auto-continue.
@@ -174,5 +174,5 @@ See the [transformation story](/origin-story#the-transformation) for the complet
 Having issues? See the [Configuration Guide](/configuration#troubleshooting) for common problems and solutions, or run:
 
 ```
-/ketchup:config show
+/ketchup-config show
 ```

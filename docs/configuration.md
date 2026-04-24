@@ -113,13 +113,13 @@ Patterns use [micromatch](https://github.com/micromatch/micromatch) glob syntax.
 
 ## Managing Configuration
 
-Configuration is managed via the `/ketchup:config` skill from within a Claude Code session:
+Configuration is managed via the `/ketchup-config` skill from within a Claude Code session:
 
 ```
-/ketchup:config show          # View current configuration
-/ketchup:config set <key> <value>  # Update a setting
-/ketchup:config validators    # List active validators
-/ketchup:config reminders     # List active reminders
+/ketchup-config show          # View current configuration
+/ketchup-config set <key> <value>  # Update a setting
+/ketchup-config validators    # List active validators
+/ketchup-config reminders     # List active reminders
 ```
 
 ---

@@ -32,7 +32,7 @@ Each call is bounded by Claude's response time on a short structured-output prom
 **If latency matters more than thoroughness:**
 
 - Reduce `validateCommit.batchCount` in `.ketchup/state.json` (raise from 3 to 5 or 7 to fewer total calls)
-- Disable validators you don't need: `/ketchup:config validators disable <name>`
+- Disable validators you don't need: `/ketchup-config validators disable <name>`
 - Set `validateCommit.mode` to `warn` instead of `strict` (NACK becomes a warning, doesn't block)
 
 ---
@@ -43,7 +43,7 @@ It happens. The subagent occasionally returns a NACK for a reason that's wrong, 
 
 1. **The subagent can only return JSON** (`{"decision":"ACK"}` or `{"decision":"NACK","reason":"..."}`). Unparseable output is treated as ACK by default, so a malformed response doesn't block your commit.
 2. **The appeal system** is the bounded override. Add `[appeal: <reason>]` to the commit message and a separate `appeal-system` validator re-evaluates the NACK with your reason in context. Either the appeal is accepted and the commit proceeds, or it's rejected with the reason logged. Not a bypass; a formal re-evaluation that leaves a trail.
-3. **You can disable noisy validators** at runtime: `/ketchup:config validators disable testing-weak-assertions`. No fork, no rebuild.
+3. **You can disable noisy validators** at runtime: `/ketchup-config validators disable testing-weak-assertions`. No fork, no rebuild.
 
 In our own usage the appeal rate is low single-digit percent of NACKs. We'll publish the observed rate once dogfooding is stable.
 
@@ -89,7 +89,7 @@ Three ways:
 
 ```bash
 # Inside Claude Code
-/ketchup:config validators disable testing-weak-assertions
+/ketchup-config validators disable testing-weak-assertions
 ```
 
 ```bash
