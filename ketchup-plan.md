@@ -35,6 +35,8 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 80: Viewer server exposes `/api/project` with the derived repository name from the project dir
+- [ ] Burst 81: Sidebar shows the repository name above the Ketchup Viewer title
 
 ## DONE
 
