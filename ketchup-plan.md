@@ -35,8 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 78: Shell caps at 100vh; main pane scrolls internally; sidebar is always full viewport height
-- [ ] Burst 79: ScrollToBottomButton click is instant; Timeline auto-scroll is instant on initial load, smooth on increments
 
 ## DONE
 
@@ -120,3 +118,5 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 75: Selected-session ring uses `ring-inset` so it is not clipped by sidebar overflow
 - [x] Burst 76: ScrollToBottomButton centers under the main pane using calc(50% + 10.5rem)
 - [x] Burst 77: Clickable buttons and cards get `cursor-pointer` affordance
+- [x] Burst 78: Shell caps at 100vh and main pane scrolls internally; sidebar stays full height
+- [x] Burst 79: Chevron click is instant; Timeline auto-scroll is instant on first load, smooth after

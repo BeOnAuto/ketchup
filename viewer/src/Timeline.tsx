@@ -209,9 +209,11 @@ function EventNode({ node, depth }: { node: TreeNode; depth: number }) {
 export function Timeline({ sessionId }: { sessionId: string }) {
   const [events, setEvents] = useState<SessionEvent[]>([]);
   const pinnedRef = useRef(true);
+  const isFirstScrollRef = useRef(true);
 
   useEffect(() => {
     setEvents([]);
+    isFirstScrollRef.current = true;
     const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
     const ws = new WebSocket(`${protocol}//${window.location.host}/ws/sessions/${sessionId}/events`);
     ws.onmessage = (message) => {
@@ -222,16 +224,21 @@ export function Timeline({ sessionId }: { sessionId: string }) {
   }, [sessionId]);
 
   useEffect(() => {
+    const container = document.querySelector('main');
+    if (!container) return;
     const onScroll = () => {
-      pinnedRef.current = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 40;
+      pinnedRef.current = container.clientHeight + container.scrollTop >= container.scrollHeight - 40;
     };
-    window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    container.addEventListener('scroll', onScroll, { passive: true });
+    return () => container.removeEventListener('scroll', onScroll);
   }, []);
 
   useEffect(() => {
-    if (pinnedRef.current && events.length > 0) {
-      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' });
+    const container = document.querySelector('main');
+    if (pinnedRef.current && events.length > 0 && container) {
+      const behavior: ScrollBehavior = isFirstScrollRef.current ? 'instant' : 'smooth';
+      isFirstScrollRef.current = false;
+      container.scrollTo({ top: container.scrollHeight, behavior });
     }
   }, [events]);
 

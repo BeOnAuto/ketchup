@@ -24,7 +24,7 @@ describe('App', () => {
       placeholder: screen.getByText(/pick a session/i).textContent,
     }).toEqual({
       shellClasses:
-        'flex min-h-screen gap-4 bg-white p-4 font-sans text-slate-900 dark:bg-ketchup-bg dark:text-ketchup-text',
+        'flex h-screen gap-4 overflow-hidden bg-white p-4 font-sans text-slate-900 dark:bg-ketchup-bg dark:text-ketchup-text',
       placeholder: 'Pick a session.',
     });
   });
@@ -38,7 +38,7 @@ describe('App', () => {
     render(<App />);
 
     expect(screen.getByRole('complementary').className).toEqual(
-      'sticky top-0 flex h-screen w-80 shrink-0 flex-col overflow-y-auto border-r border-slate-200 pr-4 dark:border-ketchup-divider',
+      'flex h-full w-80 shrink-0 flex-col overflow-y-auto border-r border-slate-200 pr-4 dark:border-ketchup-divider',
     );
   });
 
@@ -63,7 +63,7 @@ describe('App', () => {
 
     render(<App />);
 
-    expect(screen.getByRole('main').className).toEqual('min-w-0 flex-1');
+    expect(screen.getByRole('main').className).toEqual('min-w-0 flex-1 overflow-y-auto');
   });
 
   it('shows a session header with id and summary after the user picks a session', async () => {

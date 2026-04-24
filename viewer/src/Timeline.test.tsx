@@ -24,10 +24,17 @@ function deliver(events: SessionEvent[]): void {
 beforeEach(() => {
   MockWebSocket.instances = [];
   vi.stubGlobal('WebSocket', MockWebSocket);
+  const main = document.createElement('main');
+  document.body.appendChild(main);
+  Object.defineProperty(main, 'scrollHeight', { configurable: true, value: 2000 });
+  Object.defineProperty(main, 'clientHeight', { configurable: true, value: 800 });
+  main.scrollTop = 1200;
+  main.scrollTo = vi.fn() as unknown as typeof main.scrollTo;
 });
 
 afterEach(() => {
   vi.unstubAllGlobals();
+  document.body.querySelector('main')?.remove();
 });
 
 describe('Timeline', () => {
@@ -267,12 +274,9 @@ describe('Timeline', () => {
     );
   });
 
-  it('auto-scrolls to the bottom when new events arrive and the user is pinned to the bottom', () => {
-    const scrollTo = vi.fn();
-    window.scrollTo = scrollTo as typeof window.scrollTo;
-    Object.defineProperty(document.documentElement, 'scrollHeight', { configurable: true, value: 2000 });
-    Object.defineProperty(window, 'innerHeight', { configurable: true, value: 800, writable: true });
-    Object.defineProperty(window, 'scrollY', { configurable: true, value: 1200, writable: true });
+  it('auto-scrolls the main pane instantly on initial load and smoothly on subsequent deliveries', () => {
+    const main = document.body.querySelector('main') as HTMLElement;
+    const scrollCalls = (main.scrollTo as unknown as { mock: { calls: Array<[ScrollToOptions]> } }).mock.calls;
 
     render(<Timeline sessionId="abc" />);
     act(() =>
@@ -286,8 +290,24 @@ describe('Timeline', () => {
         },
       ]),
     );
+    const firstBehavior = scrollCalls.at(-1)?.[0].behavior;
+    act(() =>
+      deliver([
+        {
+          type: 'AssistantResponded',
+          timestamp: 't2',
+          sessionId: 'a',
+          text: 'ok',
+          source: {},
+        },
+      ]),
+    );
+    const secondBehavior = scrollCalls.at(-1)?.[0].behavior;
 
-    expect(scrollTo.mock.calls.at(-1)?.[0]).toEqual({ top: 2000, behavior: 'smooth' });
+    expect({ firstBehavior, secondBehavior }).toEqual({
+      firstBehavior: 'instant',
+      secondBehavior: 'smooth',
+    });
   });
 
   it('renders a failed tool invocation with the full error text', async () => {
