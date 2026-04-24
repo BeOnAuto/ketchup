@@ -12,7 +12,7 @@ describe('parseHookExecuted', () => {
         type: 'hook_progress',
         hookEvent: 'SessionStart',
         hookName: 'SessionStart:startup',
-        command: 'node /Users/sam/Projects/xolvio/ketchup/.claude-auto/scripts/session-start.js',
+        command: 'node /Users/sam/Projects/xolvio/ketchup/.ketchup/scripts/session-start.js',
       },
       parentToolUseID: '36c8f04b-8af7-41cf-96d8-da3eba7e2485',
       toolUseID: '36c8f04b-8af7-41cf-96d8-da3eba7e2485',
@@ -31,7 +31,7 @@ describe('parseHookExecuted', () => {
         sessionId: '1c62519e-23e0-4da5-b54f-a23c75943f1e',
         hookEvent: 'SessionStart',
         hookName: 'SessionStart:startup',
-        command: 'node /Users/sam/Projects/xolvio/ketchup/.claude-auto/scripts/session-start.js',
+        command: 'node /Users/sam/Projects/xolvio/ketchup/.ketchup/scripts/session-start.js',
         timestamp: '2026-03-24T13:04:50.596Z',
         source: {
           line,

@@ -12,7 +12,7 @@ describe('parseSessionEnded', () => {
         type: 'hook_progress',
         hookEvent: 'Stop',
         hookName: 'Stop',
-        command: 'node /Users/sam/Projects/xolvio/ketchup/.claude-auto/scripts/auto-continue.js',
+        command: 'node /Users/sam/Projects/xolvio/ketchup/.ketchup/scripts/session-start.js',
       },
       parentToolUseID: '4ee71898-b062-4fd4-b8a6-46b995bf92e9',
       toolUseID: '4ee71898-b062-4fd4-b8a6-46b995bf92e9',
