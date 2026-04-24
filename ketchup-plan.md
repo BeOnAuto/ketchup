@@ -35,8 +35,11 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-
-
+- [ ] Burst 65: Viewer has a theme toggle that flips `dark` class on html and persists choice
+- [ ] Burst 66: App shell restores light defaults + dark overrides via Tailwind `dark:` variants
+- [ ] Burst 67: SessionPicker renders correctly in both light and dark modes
+- [ ] Burst 68: SessionHeader renders correctly in both light and dark modes
+- [ ] Burst 69: Timeline variants keep light bubbles and flip response bubble to dark-gray/near-white in dark mode
 
 
 
