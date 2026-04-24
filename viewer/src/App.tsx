@@ -7,7 +7,7 @@ import { Timeline } from './Timeline';
 export function App() {
   const [selected, setSelected] = useState<SessionSummary | null>(null);
   return (
-    <div className="flex min-h-screen gap-4 p-4 font-sans">
+    <div className="flex min-h-screen gap-4 bg-ketchup-bg p-4 font-sans text-ketchup-text">
       <aside className="w-80 shrink-0 border-r border-slate-200 pr-4">
         <h1 className="mb-4 text-xl font-semibold">Ketchup Viewer</h1>
         <SessionPicker onSelect={setSelected} />

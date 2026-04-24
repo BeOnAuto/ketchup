@@ -35,7 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 60: Viewer defines Ketchup brand theme tokens and defaults to dark mode
 - [ ] Burst 61: App shell adopts dark tokens with rainbow-gradient title
 - [ ] Burst 62: SessionPicker renders on dark surface with subtle borders
 - [ ] Burst 63: SessionHeader adapts to dark theme and copy button becomes a pill
@@ -115,3 +114,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 57: Timeline subscribes via WebSocket and drops the polling interval
 - [x] Burst 58: `watchProject` replaces the ingest setInterval with fs.watch-driven ingest
 - [x] Burst 59: Vite dev proxy forwards `/ws` to Express for live events in dev mode
+- [x] Burst 60: Viewer App shell renders on the Ketchup dark brand tokens
