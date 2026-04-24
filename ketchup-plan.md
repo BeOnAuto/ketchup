@@ -35,8 +35,7 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-
-
+- [ ] Burst 70: Viewer shows a floating round chevron "scroll to bottom" button when there's content below the fold
 
 
 
