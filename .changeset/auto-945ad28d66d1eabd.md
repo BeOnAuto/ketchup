@@ -1,5 +1,0 @@
----
-"ketchup": patch
----
-
-- Renamed slash commands to use the /ketchup: namespace (e.g. /ketchup:init), preventing conflicts with other plugins

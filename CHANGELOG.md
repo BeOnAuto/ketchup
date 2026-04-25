@@ -1,5 +1,11 @@
 # claude-ketchup
 
+## 0.22.1
+
+### Patch Changes
+
+- 8511599: - Renamed slash commands to use the /ketchup: namespace (e.g. /ketchup:init), preventing conflicts with other plugins
+
 ## 0.22.0
 
 ### Minor Changes
