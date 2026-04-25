@@ -1,5 +1,12 @@
 # claude-ketchup
 
+## 0.22.2
+
+### Patch Changes
+
+- e0b4014: - Restored the `ketchup-` prefix on skill names so commands invoke correctly as `/ketchup:init` and similar
+- e0b4014: - Restored slash command namespacing so skills are invoked as /ketchup:init, /ketchup:review, etc.
+
 ## 0.22.1
 
 ### Patch Changes
