@@ -458,7 +458,7 @@ Consider NACK only if performance is critical for this change.
 From within a Claude Code session:
 
 ```
-/ketchup-config validators
+/ketchup:config validators
 ```
 
 ### Temporarily Disable
