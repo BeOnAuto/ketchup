@@ -1,5 +1,5 @@
 ---
-name: ketchup-view-stop
+name: view-stop
 description: Stop the Ketchup events viewer
 user-invocable: true
 ---

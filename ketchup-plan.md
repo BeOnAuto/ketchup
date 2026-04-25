@@ -126,4 +126,4 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 83: Viewer picks the first free port so multiple repos can run side-by-side
 - [x] Burst 84: Viewer auto-exits after idle timeout with no clients + README documents the viewer
 - [x] Burst 85: ThemeToggle uses light defaults so hover is subtle slate-50 in light mode
-- [x] Burst 86: Skill frontmatter names prefixed with `ketchup-` so commands are `/ketchup-view` etc.
+- [x] Burst 86: Skill frontmatter names prefixed with `ketchup-` so commands are `/ketchup:view` etc.

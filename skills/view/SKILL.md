@@ -1,5 +1,5 @@
 ---
-name: ketchup-view
+name: view
 description: Open the Ketchup events viewer for the current project on http://127.0.0.1:4321
 user-invocable: true
 ---
