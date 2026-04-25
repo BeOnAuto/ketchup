@@ -70,7 +70,7 @@ Both are markdown files with YAML frontmatter. Validators gate commits (ACK/NACK
 
 ### Installation Model
 
-Ketchup runs as a Claude Code plugin. Install via `/plugin marketplace add BeOnAuto/auto-plugins` followed by `/plugin install ketchup`, or as a local plugin via `claude --plugin-dir /path/to/ketchup`. The plugin is opt-in per repository: hooks are inactive until the user runs `/ketchup-init`, which creates `.ketchup/` with default config. Without initialization, session-start shows a non-blocking hint. The plugin provides validators, reminders, and hook scripts. Projects can add local overrides in `.ketchup/`. Existing `.claude-auto/` directories from the legacy package name auto-rename to `.ketchup/` on first session-start (see `src/migrate.ts`).
+Ketchup runs as a Claude Code plugin. Install via `/plugin marketplace add BeOnAuto/auto-plugins` followed by `/plugin install ketchup`, or as a local plugin via `claude --plugin-dir /path/to/ketchup`. The plugin is opt-in per repository: hooks are inactive until the user runs `/ketchup:init`, which creates `.ketchup/` with default config. Without initialization, session-start shows a non-blocking hint. The plugin provides validators, reminders, and hook scripts. Projects can add local overrides in `.ketchup/`. Existing `.claude-auto/` directories from the legacy package name auto-rename to `.ketchup/` on first session-start (see `src/migrate.ts`).
 
 ## Coding Patterns
 

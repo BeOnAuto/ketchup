@@ -102,7 +102,7 @@ From within a Claude Code session:
 ### 2. Initialize
 
 ```
-/ketchup-init
+/ketchup:init
 ```
 
 This creates `.ketchup/` with default configuration, seeded with the 20+ validators and 9+ reminders.
