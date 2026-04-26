@@ -109,11 +109,43 @@
   font-size: 1.1em;
 }
 
+/* Hide the nav wordmark everywhere — the logo image is the brand */
+.VPNavBarTitle .title span {
+  display: none;
+}
+
+/* Mobile-only refinements (< 640px):
+   - Hide gradient .name (hero image already says "KETCHUP BY AUTO")
+   - Stack all CTAs full-width with consistent rhythm */
+@media (max-width: 639px) {
+  .VPHero .name {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .VPHero .actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .VPHero .actions .VPButton {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
 /* -------------------------------------------------------
    HERO — base (mobile-first, < 640px)
    ------------------------------------------------------- */
 .VPHero {
-  padding-bottom: 36px !important;
+  padding-bottom: 56px !important;
 }
 
 .VPHero .main {
@@ -128,33 +160,38 @@
 }
 
 .VPHero .text {
-  font-size: 32px !important;
+  font-size: 30px !important;
   line-height: 1.15 !important;
+  letter-spacing: -0.01em;
 }
 
 .VPHero .tagline {
   font-size: 16px !important;
-  line-height: 1.4 !important;
-  padding-top: 10px !important;
+  line-height: 1.45 !important;
+  padding-top: 14px !important;
 }
 
 .VPHero .actions {
-  padding-top: 20px !important;
+  padding-top: 28px !important;
   gap: 10px !important;
 }
 
 .VPHero .image-container,
 .VPHero .image-container .image-bg,
 .VPHero .image-container img {
-  max-width: 240px;
-  max-height: 240px;
+  max-width: 220px;
+  max-height: 220px;
 }
 
 /* -------------------------------------------------------
    FEATURES — base (mobile-first, < 640px)
    ------------------------------------------------------- */
 .VPFeatures {
-  padding: 4px 0 36px !important;
+  padding: 16px 0 56px !important;
+}
+
+.VPFeatures .container {
+  gap: 14px !important;
 }
 
 .VPFeatures .VPFeature {
@@ -162,7 +199,7 @@
 }
 
 .VPFeature {
-  padding: 20px 16px !important;
+  padding: 28px 22px !important;
 }
 
 .VPFeature .box {
@@ -174,20 +211,26 @@
 }
 
 .VPFeature .box .title {
-  font-size: 14px !important;
+  font-size: 15px !important;
   font-weight: 600;
   line-height: 1.4;
+  max-width: 22ch;
+  margin: 0 auto;
+  text-wrap: balance;
 }
 
 .VPFeature .box .details {
-  font-size: 12.5px !important;
-  line-height: 1.5;
-  padding-top: 4px;
+  font-size: 13px !important;
+  line-height: 1.55;
+  padding-top: 6px;
+  max-width: 32ch;
+  margin: 0 auto;
+  text-wrap: pretty;
 }
 
 .VPFeature .VPImage,
 .VPFeature .box > .VPImage {
-  margin-bottom: 8px !important;
+  margin-bottom: 12px !important;
   display: flex !important;
   justify-content: center !important;
   width: 100% !important;
@@ -195,8 +238,8 @@
 
 .VPFeature img,
 .VPFeature .VPImage img {
-  width: 40px !important;
-  height: 40px !important;
+  width: 52px !important;
+  height: 52px !important;
   object-fit: contain !important;
   image-rendering: pixelated;
   display: block !important;
