@@ -35,6 +35,11 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
+- [ ] Burst 87: Viewer SPA reads API base URL from `window.__KETCHUP_API__` so it can be embedded in non-localhost contexts
+- [ ] Burst 88: Scaffold `vscode/` extension workspace with `ketchup.openViewer` command
+- [ ] Burst 89: Extension spawns `events-viewer.js` child process and parses its port from stdout
+- [ ] Burst 90: Extension webview panel loads bundled SPA via `asWebviewUri` and injects `window.__KETCHUP_API__`
+- [ ] Burst 91: Extension build copies `viewer/dist/` into the extension package before vsce packages
 
 ## DONE
 
