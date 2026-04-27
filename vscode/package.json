@@ -1,0 +1,35 @@
+{
+  "name": "ketchup-vscode",
+  "displayName": "Ketchup Viewer",
+  "description": "Open the Ketchup events viewer inside VS Code",
+  "version": "0.0.0",
+  "private": true,
+  "publisher": "BeOnAuto",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "main": "./dist/extension.js",
+  "activationEvents": [],
+  "contributes": {
+    "commands": [
+      {
+        "command": "ketchup.openViewer",
+        "title": "Ketchup: Open Viewer"
+      }
+    ]
+  },
+  "scripts": {
+    "build": "tsc -p .",
+    "type-check": "tsc -p . --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.6.1"
+  }
+}
