@@ -140,21 +140,6 @@ importers:
         specifier: ^1.6.1
         version: 1.6.1(@types/node@20.19.30)(jsdom@25.0.1)(lightningcss@1.32.0)
 
-  vscode:
-    devDependencies:
-      '@types/node':
-        specifier: ^20.0.0
-        version: 20.19.30
-      '@types/vscode':
-        specifier: ^1.85.0
-        version: 1.116.0
-      typescript:
-        specifier: ^5.0.0
-        version: 5.9.3
-      vitest:
-        specifier: ^1.6.1
-        version: 1.6.1(@types/node@20.19.30)(jsdom@25.0.1)(lightningcss@1.32.0)
-
 packages:
 
   '@adobe/css-tools@4.4.4':
@@ -1348,9 +1333,6 @@ packages:
 
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
-
-  '@types/vscode@1.116.0':
-    resolution: {integrity: sha512-sYHp4MO6BqJ2PD7Hjt0hlIS3tMaYsVPJrd0RUjDJ8HtOYnyJIEej0bLSccM8rE77WrC+Xox/kdBwEFDO8MsxNA==}
 
   '@types/web-bluetooth@0.0.21':
     resolution: {integrity: sha512-oIQLCGWtcFZy2JW77j9k8nHzAOpqMHLQejDA48XXMWH6tjCQHz5RCFz1bzsmROyL6PUm+LLnUiI4BCn221inxA==}
@@ -4949,8 +4931,6 @@ snapshots:
       '@types/superagent': 8.1.9
 
   '@types/unist@3.0.3': {}
-
-  '@types/vscode@1.116.0': {}
 
   '@types/web-bluetooth@0.0.21': {}
 

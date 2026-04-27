@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 
-import { apiBase } from './lib/api-base';
 import { cn } from './lib/utils';
 
 export interface SessionSummary {
@@ -21,7 +20,7 @@ export function SessionPicker({
   const [sessions, setSessions] = useState<SessionSummary[]>([]);
 
   useEffect(() => {
-    fetch(`${apiBase()}/api/sessions`)
+    fetch('/api/sessions')
       .then((response) => response.json())
       .then((body: { sessions: SessionSummary[] }) => setSessions(body.sessions));
   }, []);

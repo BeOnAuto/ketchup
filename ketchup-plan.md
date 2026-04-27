@@ -35,9 +35,6 @@ Built on Tailwind + shadcn/ui primitives.
 
 ## TODO
 
-- [ ] Burst 89: Extension spawns `events-viewer.js` child process and parses its port from stdout
-- [ ] Burst 90: Extension webview panel loads bundled SPA via `asWebviewUri` and injects `window.__KETCHUP_API__`
-- [ ] Burst 91: Extension build copies `viewer/dist/` into the extension package before vsce packages
 
 ## DONE
 
@@ -130,5 +127,3 @@ Built on Tailwind + shadcn/ui primitives.
 - [x] Burst 84: Viewer auto-exits after idle timeout with no clients + README documents the viewer
 - [x] Burst 85: ThemeToggle uses light defaults so hover is subtle slate-50 in light mode
 - [x] Burst 86: Skill frontmatter names prefixed with `ketchup-` so commands are `/ketchup:view` etc.
-- [x] Burst 87: Viewer SPA reads API base URL from `window.__KETCHUP_API__` for embedding
-- [x] Burst 88: Scaffold `vscode/` extension workspace with `ketchup.openViewer` command
