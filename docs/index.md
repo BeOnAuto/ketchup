@@ -53,10 +53,6 @@ You observe an AI mistake, encode it as a rule, and AI can't repeat it.
 
 Ketchup makes that loop real with validators on every commit, reminders at the hook points you choose, and deny-lists for the files Claude shouldn't touch. The codebase gets permanently safer as you keep working, not just temporarily cleaner.
 
-```
-/plugin install ketchup
-```
-
 Ketchup is an open-source guardrail engine for Claude Code, from the team at [Auto](https://on.auto).
 
 > Today: Claude Code only. If your agent exposes hooks or an equivalent integration surface, [open an issue](https://github.com/BeOnAuto/ketchup/issues).
@@ -96,6 +92,11 @@ From within a Claude Code session:
 
 ```
 /plugin marketplace add BeOnAuto/auto-plugins
+```
+
+then
+
+```
 /plugin install ketchup
 ```
 
