@@ -22,7 +22,8 @@
     ]
   },
   "scripts": {
-    "build": "tsc -p .",
+    "copy:assets": "node scripts/copy-assets.js",
+    "build": "pnpm copy:assets && tsc -p .",
     "type-check": "tsc -p . --noEmit",
     "test": "vitest run"
   },

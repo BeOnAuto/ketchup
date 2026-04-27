@@ -4,6 +4,7 @@ dist/*
 dist/bundle/*
 !dist/bundle/scripts/
 vscode/dist/
+vscode/media/
 *.log
 .DS_Store
 coverage/

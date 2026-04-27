@@ -16,7 +16,7 @@ export function activate(context: vscode.ExtensionContext): void {
       activeViewer = null;
     }
 
-    const scriptPath = join(context.extensionPath, '..', 'dist', 'bundle', 'scripts', 'events-viewer.js');
+    const scriptPath = join(context.extensionPath, 'media', 'scripts', 'events-viewer.js');
     const dbPath = join(context.globalStorageUri.fsPath, 'events.db');
     try {
       activeViewer = await spawnViewer(scriptPath, dbPath, 4321, spawn);
@@ -30,7 +30,7 @@ export function activate(context: vscode.ExtensionContext): void {
       retainContextWhenHidden: true,
     });
 
-    const viewerDistDir = vscode.Uri.file(join(context.extensionPath, '..', 'viewer', 'dist'));
+    const viewerDistDir = vscode.Uri.file(join(context.extensionPath, 'media', 'viewer'));
     const indexHtml = readFileSync(join(viewerDistDir.fsPath, 'index.html'), 'utf8');
     const assetBase = panel.webview.asWebviewUri(viewerDistDir).toString();
     panel.webview.html = prepareWebviewHtml(indexHtml, {
