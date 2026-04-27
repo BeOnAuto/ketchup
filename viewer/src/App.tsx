@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 
+import { apiBase } from './lib/api-base';
 import { ScrollToBottomButton } from './ScrollToBottomButton';
 import { SessionHeader } from './SessionHeader';
 import { SessionPicker, type SessionSummary } from './SessionPicker';
@@ -11,7 +12,7 @@ export function App() {
   const [projectName, setProjectName] = useState<string>('');
 
   useEffect(() => {
-    fetch('/api/project')
+    fetch(`${apiBase()}/api/project`)
       .then((response) => response.json())
       .then((body: { name: string }) => setProjectName(body.name));
   }, []);

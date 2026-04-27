@@ -1,6 +1,7 @@
 import { type ReactNode, useEffect, useRef, useState } from 'react';
 
 import { buildEventTree, type TreeNode } from './event-tree';
+import { wsBase } from './lib/api-base';
 
 type Base = { timestamp: string; sessionId: string; source: unknown };
 
@@ -214,8 +215,7 @@ export function Timeline({ sessionId }: { sessionId: string }) {
   useEffect(() => {
     setEvents([]);
     isFirstScrollRef.current = true;
-    const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-    const ws = new WebSocket(`${protocol}//${window.location.host}/ws/sessions/${sessionId}/events`);
+    const ws = new WebSocket(`${wsBase()}/ws/sessions/${sessionId}/events`);
     ws.onmessage = (message) => {
       const payload = JSON.parse(message.data) as { events: SessionEvent[] };
       setEvents((prev) => [...prev, ...payload.events]);
