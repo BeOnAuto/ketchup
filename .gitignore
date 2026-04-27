@@ -3,6 +3,7 @@ dist/*
 !dist/bundle/
 dist/bundle/*
 !dist/bundle/scripts/
+vscode/dist/
 *.log
 .DS_Store
 coverage/
