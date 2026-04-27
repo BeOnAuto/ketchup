@@ -1,5 +1,11 @@
 # claude-ketchup
 
+## 0.22.4
+
+### Patch Changes
+
+- 40c6366: - Updated plugin installation instructions in the documentation for clearer setup guidance
+
 ## 0.22.3
 
 ### Patch Changes
