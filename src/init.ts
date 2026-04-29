@@ -77,6 +77,9 @@ export function formatInitResult(result: InitResult): string {
     );
   } else {
     lines.push(`✅ ${BRAND.displayName} is already initialized at ${result.autoDir}`);
+    if (result.permissionsUpdated) {
+      lines.push(`🔓 Added Ketchup Bash patterns to ~/.claude/settings.json allow list`);
+    }
   }
 
   return lines.join('\n');

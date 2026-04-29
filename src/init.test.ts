@@ -156,6 +156,18 @@ describe('formatInitResult', () => {
     expect(output).not.toContain('/ketchup:config');
   });
 
+  it('mentions the permissions update on already-initialized projects too', () => {
+    const output = formatInitResult({
+      created: false,
+      autoDir: '/project/.ketchup',
+      gitignoreAdvice: false,
+      permissionsUpdated: true,
+    });
+
+    expect(output).toContain('already initialized');
+    expect(output).toMatch(/Bash permission|allow list|~\/\.claude\/settings\.json/i);
+  });
+
   it('mentions the permissions update when Bash patterns were written', () => {
     const output = formatInitResult({
       created: true,

@@ -136,6 +136,9 @@ function formatInitResult(result2) {
     );
   } else {
     lines.push(`\u2705 ${BRAND.displayName} is already initialized at ${result2.autoDir}`);
+    if (result2.permissionsUpdated) {
+      lines.push(`\u{1F513} Added Ketchup Bash patterns to ~/.claude/settings.json allow list`);
+    }
   }
   return lines.join("\n");
 }
