@@ -3,26 +3,54 @@ import * as path from 'node:path';
 
 import { BRAND } from './brand.js';
 import { DEFAULT_HOOK_STATE } from './hook-state.js';
+import { buildKetchupAllowPatterns, mergeAllowList } from './permissions-allow.js';
+
+export interface InitOptions {
+  pluginRoot?: string;
+  userHomeDir?: string;
+}
 
 export interface InitResult {
   created: boolean;
   autoDir: string;
   gitignoreAdvice: boolean;
+  permissionsUpdated: boolean;
 }
 
-export function initKetchup(projectRoot: string): InitResult {
+export function initKetchup(projectRoot: string, options: InitOptions = {}): InitResult {
   const autoDir = path.join(projectRoot, BRAND.dataDir);
+  const created = !fs.existsSync(autoDir);
 
-  if (fs.existsSync(autoDir)) {
-    return { created: false, autoDir, gitignoreAdvice: checkGitignoreAdvice(projectRoot) };
+  if (created) {
+    fs.mkdirSync(autoDir, { recursive: true });
+    const stateFile = path.join(autoDir, BRAND.stateFile);
+    fs.writeFileSync(stateFile, `${JSON.stringify(DEFAULT_HOOK_STATE, null, 2)}\n`);
   }
 
-  fs.mkdirSync(autoDir, { recursive: true });
+  const permissionsUpdated =
+    options.pluginRoot && options.userHomeDir ? writeUserAllowList(options.userHomeDir, options.pluginRoot) : false;
 
-  const stateFile = path.join(autoDir, BRAND.stateFile);
-  fs.writeFileSync(stateFile, `${JSON.stringify(DEFAULT_HOOK_STATE, null, 2)}\n`);
+  return {
+    created,
+    autoDir,
+    gitignoreAdvice: checkGitignoreAdvice(projectRoot),
+    permissionsUpdated,
+  };
+}
 
-  return { created: true, autoDir, gitignoreAdvice: checkGitignoreAdvice(projectRoot) };
+function writeUserAllowList(userHomeDir: string, pluginRoot: string): boolean {
+  const claudeDir = path.join(userHomeDir, '.claude');
+  const settingsPath = path.join(claudeDir, 'settings.json');
+  const existing = fs.existsSync(settingsPath)
+    ? (JSON.parse(fs.readFileSync(settingsPath, 'utf-8')) as Record<string, unknown>)
+    : null;
+  const merged = mergeAllowList(existing, buildKetchupAllowPatterns(pluginRoot));
+  if (existing && JSON.stringify(existing) === JSON.stringify(merged)) {
+    return false;
+  }
+  fs.mkdirSync(claudeDir, { recursive: true });
+  fs.writeFileSync(settingsPath, `${JSON.stringify(merged, null, 2)}\n`);
+  return true;
 }
 
 export function formatInitResult(result: InitResult): string {
@@ -31,6 +59,10 @@ export function formatInitResult(result: InitResult): string {
   if (result.created) {
     lines.push(`✅ Initialized ${BRAND.displayName} at ${result.autoDir}`);
     lines.push(`🎯 Default configuration written to ${BRAND.dataDir}/${BRAND.stateFile}`);
+
+    if (result.permissionsUpdated) {
+      lines.push(`🔓 Added Ketchup Bash patterns to ~/.claude/settings.json allow list`);
+    }
 
     if (result.gitignoreAdvice) {
       lines.push('');

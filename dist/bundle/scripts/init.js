@@ -23,6 +23,9 @@ var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__ge
   mod
 ));
 
+// scripts/init.ts
+var import_node_os = require("node:os");
+
 // src/init.ts
 var fs = __toESM(require("node:fs"));
 var path = __toESM(require("node:path"));
@@ -65,23 +68,62 @@ var DEFAULT_HOOK_STATE = {
   }
 };
 
-// src/init.ts
-function initKetchup(projectRoot) {
-  const autoDir = path.join(projectRoot, BRAND.dataDir);
-  if (fs.existsSync(autoDir)) {
-    return { created: false, autoDir, gitignoreAdvice: checkGitignoreAdvice(projectRoot) };
+// src/permissions-allow.ts
+function buildKetchupAllowPatterns(pluginRoot) {
+  return [`Bash(node "${pluginRoot}/*")`, `Bash(node "${pluginRoot}/*" *)`];
+}
+function mergeAllowList(settings, patterns) {
+  const base = settings ?? {};
+  const existingAllow = base.permissions?.allow ?? [];
+  const allow = [...existingAllow];
+  for (const pattern of patterns) {
+    if (!allow.includes(pattern)) allow.push(pattern);
   }
-  fs.mkdirSync(autoDir, { recursive: true });
-  const stateFile = path.join(autoDir, BRAND.stateFile);
-  fs.writeFileSync(stateFile, `${JSON.stringify(DEFAULT_HOOK_STATE, null, 2)}
+  return {
+    ...base,
+    permissions: { ...base.permissions ?? {}, allow }
+  };
+}
+
+// src/init.ts
+function initKetchup(projectRoot, options = {}) {
+  const autoDir = path.join(projectRoot, BRAND.dataDir);
+  const created = !fs.existsSync(autoDir);
+  if (created) {
+    fs.mkdirSync(autoDir, { recursive: true });
+    const stateFile = path.join(autoDir, BRAND.stateFile);
+    fs.writeFileSync(stateFile, `${JSON.stringify(DEFAULT_HOOK_STATE, null, 2)}
 `);
-  return { created: true, autoDir, gitignoreAdvice: checkGitignoreAdvice(projectRoot) };
+  }
+  const permissionsUpdated = options.pluginRoot && options.userHomeDir ? writeUserAllowList(options.userHomeDir, options.pluginRoot) : false;
+  return {
+    created,
+    autoDir,
+    gitignoreAdvice: checkGitignoreAdvice(projectRoot),
+    permissionsUpdated
+  };
+}
+function writeUserAllowList(userHomeDir, pluginRoot) {
+  const claudeDir = path.join(userHomeDir, ".claude");
+  const settingsPath = path.join(claudeDir, "settings.json");
+  const existing = fs.existsSync(settingsPath) ? JSON.parse(fs.readFileSync(settingsPath, "utf-8")) : null;
+  const merged = mergeAllowList(existing, buildKetchupAllowPatterns(pluginRoot));
+  if (existing && JSON.stringify(existing) === JSON.stringify(merged)) {
+    return false;
+  }
+  fs.mkdirSync(claudeDir, { recursive: true });
+  fs.writeFileSync(settingsPath, `${JSON.stringify(merged, null, 2)}
+`);
+  return true;
 }
 function formatInitResult(result2) {
   const lines = [];
   if (result2.created) {
     lines.push(`\u2705 Initialized ${BRAND.displayName} at ${result2.autoDir}`);
     lines.push(`\u{1F3AF} Default configuration written to ${BRAND.dataDir}/${BRAND.stateFile}`);
+    if (result2.permissionsUpdated) {
+      lines.push(`\u{1F513} Added Ketchup Bash patterns to ~/.claude/settings.json allow list`);
+    }
     if (result2.gitignoreAdvice) {
       lines.push("");
       lines.push(`\u{1F4CC} Note: ${BRAND.dataDir} is not in your .gitignore.`);
@@ -108,5 +150,8 @@ function checkGitignoreAdvice(projectRoot) {
 }
 
 // scripts/init.ts
-var result = initKetchup(process.cwd());
+var result = initKetchup(process.cwd(), {
+  pluginRoot: process.env.CLAUDE_PLUGIN_ROOT,
+  userHomeDir: (0, import_node_os.homedir)()
+});
 console.log(formatInitResult(result));

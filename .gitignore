@@ -31,3 +31,8 @@ docs/.vitepress/cache
 # Ketchup plans
 ketchup-plan.md
 .ketchup/
+
+# Event store database
+events.db
+events.db-shm
+events.db-wal
